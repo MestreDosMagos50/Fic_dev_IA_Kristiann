@@ -1,4 +1,5 @@
 temperatura = 28
+print("Temperatura:", temperatura)
 
 if temperatura >= 35:
     print("Calor extremo! Hidrate-se.")
@@ -31,4 +32,4 @@ print(f"Média: {media:.1f} | Presença: {percentual_presenca:.1f}%")
 # If ternário
 idade = 20
 status = "Maior de idade" if idade >= 18 else "Menor de idade"
-print(status)
+print(f"Idade {idade}: {status}")

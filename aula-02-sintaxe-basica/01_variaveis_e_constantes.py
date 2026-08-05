@@ -17,3 +17,8 @@ print(type(nome_completo))
 print(type(idade_usuario))
 print(type(TAXA_IMPOSTO))
 print(type(produto_disponivel))
+
+# Imprimindo constantes e atribuição múltipla
+print(TAXA_IMPOSTO, VELOCIDADE_LUZ, PI)
+print(x, y, z)
+print(a, b, c)

@@ -8,12 +8,14 @@ print(len(nome_completo))
 print("Silva" in nome_completo)
 
 texto = "  python para inteligência artificial  "
+print(texto)
 print(texto.strip())
 print(texto.strip().upper())
 print(texto.strip().title())
 print(texto.replace("inteligência", "IA"))
 
 cpf_formatado = "123.456.789-00"
+print(cpf_formatado)
 cpf_limpo = cpf_formatado.replace(".", "").replace("-", "")
 print(cpf_limpo)
 

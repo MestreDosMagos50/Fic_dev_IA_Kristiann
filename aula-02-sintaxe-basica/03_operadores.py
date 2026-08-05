@@ -1,4 +1,5 @@
 a, b = 17, 5
+print(a, b)
 
 # Operadores aritméticos
 print(a + b)
@@ -16,6 +17,7 @@ print(a > b)
 print(a <= b)
 
 idade = 25
+print(idade)
 print(18 <= idade <= 65)
 
 # Operadores lógicos
