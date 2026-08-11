@@ -1,0 +1,19 @@
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors (PEP 8)
+    "F",   # pyflakes (imports não usados, variáveis não definidas)
+    "I",   # isort (ordenação de imports)
+    "N",   # pep8-naming (convenções de nomenclatura)
+    "UP",  # pyupgrade (modernizar sintaxe Python)
+]
+ignore = [
+    "E501", # comprimento de linha (gerenciado pelo formatter)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
