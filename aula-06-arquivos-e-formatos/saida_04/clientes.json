@@ -1,0 +1,16 @@
+[
+  {
+    "nome":"Ana Silva",
+    "email":"ana@email.com",
+    "telefone":11987654321,
+    "cidade":"São Paulo",
+    "dominio":"email.com"
+  },
+  {
+    "nome":"Bruno Costa",
+    "email":"bruno@email.com",
+    "telefone":21912345678,
+    "cidade":"Recife",
+    "dominio":"email.com"
+  }
+]

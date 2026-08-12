@@ -1,0 +1,45 @@
+============================================================
+RELATÓRIO DE EXTRAÇÃO
+============================================================
+
+Data da extração:
+2026-08-11 15:39:15.026075
+
+Total de CPFs: 8
+Total de Telefones: 11
+Total de E-mails: 10
+
+CPFs encontrados:
+ • 123.456.789-09
+ • 987.654.321-00
+ • 456.789.012-34
+ • 789.012.345-67
+ • 234.567.890-12
+ • 119.123.456-78
+ • 345.678.901-23
+ • 567.890.123-45
+
+Telefones encontrados:
+ • (11) 9 8765-4321
+ • (21) 98765-1234
+ • (31) 3344-5566
+ • 78901234567
+ • 11 987654321
+ • 11912345678
+ • (41) 9 1234-5678
+ • (41) 3344-7788
+ • 4567890123
+ • (51) 9 8765-4321
+ • (61) 99876-5432
+
+E-mails encontrados:
+ • ana.paula@empresa.com.br
+ • brunocosta@gmail.com
+ • c.mendes@corp.org
+ • carla.mendes1990@hotmail.com
+ • d.ferreira@startup.io
+ • elisa.santos@tech.com
+ • f.oliveira@data.com.br
+ • fernando@work.net
+ • gabriela.lima@consultoria.org
+ • henrique.souza@empresa.gov
