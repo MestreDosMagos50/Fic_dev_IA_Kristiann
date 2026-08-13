@@ -1,0 +1,17 @@
+O Capítulo 4 do PDF explica a Estrutura de Projeto em Python e a criação do arquivo pyproject.toml.
+
+Todos esses conceitos foram implementados dentro da pasta `meu_projeto` que está neste diretório.
+
+A estrutura criada dentro de `meu_projeto/` é:
+meu_projeto/
+├── pyproject.toml (Configuração centralizada)
+├── analise/ (Pacote principal do projeto)
+│   ├── __init__.py
+│   ├── __main__.py (Torna o pacote executável via python -m analise)
+│   ├── calculos.py
+│   └── validacao.py
+└── tests/ (Testes automatizados)
+    └── test_calculos.py
+
+Para rodar o pacote como script (como mostrado no capítulo 3.3 e 4), você pode entrar na pasta meu_projeto e rodar:
+python -m analise 8.5 9.0 7.5

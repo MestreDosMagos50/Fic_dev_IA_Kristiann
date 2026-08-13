@@ -1,0 +1,38 @@
+[
+    {
+        "nome": "Ana Lima",
+        "curso": "Ciência de Dados",
+        "media": 8.33,
+        "status": "Aprovado"
+    },
+    {
+        "nome": "Bruno Costa",
+        "curso": "Engenharia de Software",
+        "media": 6.17,
+        "status": "Reprovado"
+    },
+    {
+        "nome": "Carla Souza",
+        "curso": "Ciência de Dados",
+        "media": 9.77,
+        "status": "Aprovado"
+    },
+    {
+        "nome": "Diego Faria",
+        "curso": "Sistemas de Informação",
+        "media": 7.5,
+        "status": "Aprovado"
+    },
+    {
+        "nome": "Elena Ramos",
+        "curso": "Engenharia de Software",
+        "media": 4.17,
+        "status": "Reprovado"
+    },
+    {
+        "nome": "Felipe Neto",
+        "curso": "Ciência de Dados",
+        "media": 6.5,
+        "status": "Reprovado"
+    }
+]
