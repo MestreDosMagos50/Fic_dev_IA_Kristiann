@@ -10,13 +10,11 @@ def calcular_juros(capital):
     resultado = capital * taxa_juros  # lê a variável global
     return resultado
 
-print("Cálculo de juros (capital 1000):", calcular_juros(1000))
+resultado = calcular_juros(1000)
+print("Cálculo de juros (capital 1000):", resultado)
 
-# Demonstrando o erro acontecendo ao vivo:
-try:
-    print(resultado)  # Tenta acessar variável local no escopo global
-except NameError as e:
-    print("-> Erro capturado:", e)
+# Agora a variável 'resultado' foi declarada no escopo global recebendo o retorno da função
+print("Acessando variável no escopo global:", resultado)
 
 
 

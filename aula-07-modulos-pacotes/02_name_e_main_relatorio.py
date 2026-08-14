@@ -1,4 +1,7 @@
-from calculos_simples import media, aprovado
+import importlib
+calculos_simples = importlib.import_module('02_name_e_main_calculos')
+media = calculos_simples.media
+aprovado = calculos_simples.aprovado
 
 alunos = [
     {'nome': 'Ana',   'notas': [8.5, 9.0, 7.5]},
