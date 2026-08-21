@@ -1,0 +1,240 @@
+{
+  "documento": {
+    "arquivo": "9-ebook.pdf",
+    "n_paginas": 32,
+    "titulo": "9-ebook",
+    "autor": "Desconhecido",
+    "produtor": "Adobe PDF Library 15.0",
+    "extraido_em": "2026-08-20T15:44:13",
+    "biblioteca": "pdfplumber",
+    "metodo_chunk": "tamanho_fixo",
+    "chunk_size": 1000,
+    "chunk_overlap": 200
+  },
+  "paginas": [
+    {
+      "pagina": 1,
+      "texto": "Como ser aprovado em processos seletivos",
+      "n_chars": 40,
+      "n_tokens_est": 10,
+      "vazia": false
+    },
+    {
+      "pagina": 2,
+      "texto": "Como ser aprovado em processos seletivos Como ser aprovado em processos seletivos Pra começar a conversa 3 O que esperar das principais etapas? 6 8 dicas pra arrasar nos processos seletivos 17 Vem pra Pós-Graduação Online no Descomplica! 26 2",
+      "n_chars": 242,
+      "n_tokens_est": 60,
+      "vazia": false
+    },
+    {
+      "pagina": 3,
+      "texto": "Como ser aprovado em processos seletivos pra começar a conversa Você tá a fim de trabalhar no lugar dos seus sonhos, fazendo o que que gosta? Sabemos o quanto esse momento é importante pra você conseguir o que você quer e estamos aqui pra dar aquela ajuda pra você alcançar o seu objetivo! Criar uma estratégia que faça sentido pra você entrar na empresa pode fazer toda a diferença! Estudar e se dedicar são atitudes que você precisa colocar em prática antes mesmo de começar um processo seletivo! A ideia é começar a preparação quando você ainda busca a melhor vaga para se candidatar. Se você se encaixa bem na vaga e se preparou para o processo seletivo, você tem mais chances de engajar o recrutador, se destacar e conseguir a vaga que tanto quer. Mas saiba o seguinte: não existe receita de bolo - a maioria dos processos seletivos está em constante modificação e não tem como adivinhar o que cada um vai apresentar. É por isso que criamos um material supercompleto com dicas pra você saber o que fazer antes e durante o processo seletivo pra alcançar a sua meta! Vem com a gente! Pra começar a conversa 3",
+      "n_chars": 1111,
+      "n_tokens_est": 277,
+      "vazia": false
+    },
+    {
+      "pagina": 4,
+      "texto": "Como ser aprovado em processos seletivos Processo seletivo? Partiu! Olha, o que não faltam são tipos diferentes de processos seletivos. Alguns são mais longos, com quatro etapas ou mais (seleção de currículo, testes, dinâmica de grupo, entrevistas com RH, com gestores e com diretor), e outros são mais rápidos e contam somente com entrevista e conversa com gestor, por exemplo. Essa duração pode variar bastante - de acordo com a urgência que a empresa tem de preencher a vaga, perfil que ela precisa e possíveis indicações que acabam encurtando ou alongando os processos. Uma coisa é certa: as empresas buscam cada vez mais recrutamentos personalizados e alinhados ao seu negócio pra montar um time de colaboradores dos sonhos. Você já deve ter visto também que o recrutamento e a seleção costumam seguir um script: triagem de currículos, testes, dinâmicas de grupo e entrevistas. Mas muitas organizações já apostam em formatos que saem da caixinha pra identificar os melhores talentos. Pra começar a conversa 4",
+      "n_chars": 1013,
+      "n_tokens_est": 253,
+      "vazia": false
+    },
+    {
+      "pagina": 5,
+      "texto": "Como ser aprovado em processos seletivos Recrutamento online Esse é um recurso que tem sido bastante usado tanto pelas empresas que buscam novos talentos quanto pelos profissionais que buscam emprego. Nesse caso, a atração dos candidatos é feita pela web com plataformas especializadas, formulários, sites de emprego e redes sociais.. Esses processos costumam otimizar o tempo de todo mundo e facilita o match entre empresa e candidato. Olha a dica: O que você publica nas redes sociais podem colaborar (ou não) pra você conquistar a vaga, viu? Por isso, só deixe em suas redes aquilo que possa contribuir com sua entrada na empresa. Nada de comentários preconceituosos e fotos constrangedoras, hein? Isso tudo pode indicar tendências de comportamento que não são bacanas pra empresa. Muitas empresas investem tempo também pra ver quais grupos ou perfis você segue, o que já pode adiantar muito sobre o seu perfil. Pra começar a conversa 5",
+      "n_chars": 939,
+      "n_tokens_est": 234,
+      "vazia": false
+    },
+    {
+      "pagina": 6,
+      "texto": "Como ser aprovado em processos seletivos O que esperar das principais etapas? Dicas pra se dar bem em cada uma delas Tá bom... existem vários processos seletivos, mas dá pra saber um pouco sobre as principais etapas? Claro! A ordem em que elas acontecem vai depender de cada empresa, mas adiantamos algumas pra que você possa se preparar. Vamos lá? O que esperar das principais etapas? 6",
+      "n_chars": 387,
+      "n_tokens_est": 96,
+      "vazia": false
+    },
+    {
+      "pagina": 7,
+      "texto": "Como ser aprovado em processos seletivos Envio do currículo Tudo que é bom pode ficar ainda melhor, não é? E seu currículo é uma dessas coisas. Ele é o seu primeiro contato com a empresa e, por isso, cuide muito bem dele pra passar para as próximas fases! Ah! Antes de se candidatar, pense se você realmente se vê trabalhando ali, se vocês combinam, se você é o tipo de profissional que eles estão buscando. Aqui vão dicas pra deixar seu currículo bem TOP! Já se formou há mais de três anos? Então evite incluir a data da sua graduação! O mais importante é que os recrutadores saibam que você tem um diploma acadêmico. Coloque a seção “Educação” depois de “Experiências”. Isso porque as informações sobre seus dois últimos empregos são mais relevantes. Só faça diferente se você se formou recentemente. O que esperar das principais etapas? 7",
+      "n_chars": 841,
+      "n_tokens_est": 210,
+      "vazia": false
+    },
+    {
+      "pagina": 8,
+      "texto": "Como ser aprovado em processos seletivos Se possível, seja uma das primeiras pessoas a enviar o currículo. Em alguns processos, isso pode te ajudar a ser notado mais rápido. Aumente o espaço entre as linhas pra facilitar a leitura. Pode tirar o seu endereço, tá? Pra que isso? Porque se você não for da região, pode ser que os recrutadores já eliminem você sem ler todo o conteúdo. E no lugar do endereço, coloque um link para o seu perfil no LinkedIn ou de outras redes sociais relevantes. Crie uma URL customizada para o seu perfil público no LinkedIn com apenas /seunome (ou alguma variação mais simples se alguém já usa o seu username). Teste todos os hiperlinks que estão no seu currículo! A ideia é que todos eles estejam funcionando direitinho (LinkedIn, e-mail, site pessoal, outros perfis nas redes, etc.). O que esperar das principais etapas? 8",
+      "n_chars": 854,
+      "n_tokens_est": 213,
+      "vazia": false
+    },
+    {
+      "pagina": 9,
+      "texto": "Como ser aprovado em processos seletivos Testes online Os testes online podem dar aquela agilizada no processo. Muitas empresas grandes escolhem esse tipo como uma espécie de peneira. Elas são ferramentas criadas pra avaliar o conhecimento dos candidatos na parte das competências técnicas e comportamentais. Quando os testes são colocados em prática da melhor forma, eles aumentam as chances de uma contratação bem-sucedida na empresa. Os testes online podem acontecer em plataformas digitais que são associadas ao site da empresa ou em outras ferramentas, como os softwares de recrutamento e seleção. Nessas plataformas, os testes são agendados e os candidatos convidados a responder às questões. Conhece gamification? Muitas empresas desenvolvem jogos online para buscar novos talentos. Ao jogar, a equipe de seleção pode observar seus conhecimentos e comportamentos; apurar a sua personalidade, suas atitudes e habilidades técnicas. É possível, por exemplo, mapear o grau de competitividade, o que te motiva e o que te desmotiva. O que esperar das principais etapas? 9",
+      "n_chars": 1072,
+      "n_tokens_est": 268,
+      "vazia": false
+    },
+    {
+      "pagina": 10,
+      "texto": "Como ser aprovado em processos seletivos Chegou a hora do teste? Reserve um momento do dia que o seu cérebro funciona melhor! Pegue papel e caneta pra deixar pertinho de você! Assim você pode ganhar tempo na hora de responder algumas perguntas. Se for preciso fazer algum cálculo, fazer tabela ou qualquer outra anotação, você já se adiantou! Lembre-se: a dificuldade pode aumentar de acordo com seu andamento no processo. Um celular ou uma calculadora em mãos, nesse caso, pode ajudar bastante! Método DISC Esse é um dos testes online mais utilizados nos processos de recrutamento e seleção das companhias. Nele, o profissional de RH consegue prever qual perfil de comportamento o candidato mais reproduz no dia a dia: dominância, influência, estabilidade e conformidade. Conhecimento técnico Esse avalia os seus conhecimentos sobre questões alinhadas ao cargo oferecido. Esse método costuma agilizar a seleção de pessoas para as entrevistas. Os testes de conhecimentos gerais, raciocínio lógico e inglês são os mais utilizados hoje em dia. Uma dica? Treine bastante! Você encontra vários sites na web com esses testes! O que esperar das principais etapas? 10",
+      "n_chars": 1160,
+      "n_tokens_est": 290,
+      "vazia": false
+    },
+    {
+      "pagina": 11,
+      "texto": "Como ser aprovado em processos seletivos ADT - Inventário de Administração de Tempo Esse método avalia como os candidatos vão utilizar o próprio tempo no cotidiano do trabalho. Costuma ser aplicado por psicólogos e também pode contar com adaptação para plataformas online. QUATI - Questionário de Avaliação Tipológica É um teste que ajuda a identificar as inclinações comportamentais de uma pessoa. Com ele, o profissional de RH pode saber o grau de desempenho do candidato em uma tarefa específica por meio da sua personalidade. Redação Mas por que muitas empresas pedem redação? Quando isso acontece, geralmente é porque elas querem avaliar alguns pontos, como: Como você organiza as suas ideias e desenvolve sua argumentação. A sua capacidade de se expressar de forma escrita. O domínio que você tem da gramática e do idioma. Ah, e é sempre bom lembrar: muita atenção pra não cometer erros de português, hein? O que esperar das principais etapas? 11",
+      "n_chars": 952,
+      "n_tokens_est": 238,
+      "vazia": false
+    },
+    {
+      "pagina": 12,
+      "texto": "Como ser aprovado em processos seletivos A redação geralmente tem de 20 a 30 linhas. E o tema pode ser prédeterminado ou livre. O esquema é muito parecido com aquele que você aprendeu na época quando treinava para o vestibular, sabe? Separamos algumas dicas pra você lembrar: Se o tema for livre, escolha um assunto que seja confortável pra você. Leve em conta, claro, o perfil da empresa, que você já deu uma estudada, claro. Escolha algo que você domine. Se couber, compartilhe alguma experiência pessoal - é uma parte que pode super te destacar em relação aos outros candidatos. E atenção: melhor evitar assuntos polêmicos (política, religião, futebol, etc.) ou que podem ser mal interpretados, tá? Organize o texto com a divisão em três partes: ideia, argumentação e conclusão. Para não se perder, crie um esquema do que pretende escrever em cada parte - mentalmente ou no cantinho da página. Use linguagem direta, simples e acessível. Não precisa usar palavras rebuscadas, dê preferência pra ordem direta, frases mais curtas (seguindo a fórmula sujeito + verbo + complemento). Seja objetivo. Não use gírias e não abuse dos termos em inglês (mesmo se você for fluente no idioma, evite os termos que não são muito usados por aqui). Que tal treinar? Escrever é uma habilidade que você desenvolve praticando. O que esperar das principais etapas? 12",
+      "n_chars": 1349,
+      "n_tokens_est": 337,
+      "vazia": false
+    },
+    {
+      "pagina": 13,
+      "texto": "Como ser aprovado em processos seletivos Dinâmicas de Grupo Não existe fórmula perfeita pra mandar bem na dinâmica de grupo, mas temos algumas dicas boas pra você se destacar positivamente e mostrar seu potencial. Seja você mesmo. Muita gente acaba vestindo um personagem pra tentar se dar bem. Não adianta usar máscaras porque você e a empresa vão acabar perdendo tempo. Estude a empresa. Antes mesmo de se candidatar, invista seu tempo em pesquisar sobre ela. Fique por dentro do que ela faz, sobre o propósito e missão dela, qual é a sua cultura, a qual segmento ela faz parte, etc. Participe das atividades de forma colaborativa. Como os recrutadores vão te avaliar se você não interagir? Esse é o momento de mostrar suas ideias de forma inteligente e demonstrar seu potencial. O que esperar das principais etapas? 13",
+      "n_chars": 821,
+      "n_tokens_est": 205,
+      "vazia": false
+    },
+    {
+      "pagina": 14,
+      "texto": "Como ser aprovado em processos seletivos Você já sabe seus pontos fortes e fracos? Faça essa reflexão! Durante a dinâmica, se você tem consciência dessas partes, pode destacar o que tem de melhor e ganhar pontos com essa atitude. Use seu bom senso e interaja de forma natural, participando no momento certo. Muita calma nessa hora. Tem gente que acha que o melhor é falar o tempo todo. Isso é mito e pode ir contra você, parecendo que é uma pessoa ansiosa e mal educada. Foque no presente para entender o objetivo e as regras da dinâmica de forma clara. Entrevista com o RH Esse momento é essencial pra você brilhar e seguir as próximas etapas do processo seletivo. Quais são os motivos que levam os recrutadores a eliminar candidatos logo na primeira entrevista? A resposta dessa pergunta foi publicada na pesquisa feita pela empresa de consultoria em Recursos Humanos Robert Half, divulgada na 7ª edição do Índice de Confiança Robert Half (ICRH). O que esperar das principais etapas? 14",
+      "n_chars": 988,
+      "n_tokens_est": 247,
+      "vazia": false
+    },
+    {
+      "pagina": 15,
+      "texto": "Como ser aprovado em processos seletivos Perceber que o candidato 33% mentiu no currículo Identificar que o candidato não se en23% caixa na cultura e no clima da empresa Quando o candidato não demonstra 12% interesse na vaga Quando o candidato fala mal da 12% empresa/empregador anterior Quando o candidato não sabe se 9% comunicar 6% Quando o candidato não sabe ouvir Perceber que o candidato não se 3% preparou para a entrevista 2% Outros motivos Viu? Percebe que todos os itens já são dicas potentes pra você não repetir os mesmos erros e aumentar as chances de fazer uma ótima entrevista? O que esperar das principais etapas? 15",
+      "n_chars": 632,
+      "n_tokens_est": 158,
+      "vazia": false
+    },
+    {
+      "pagina": 16,
+      "texto": "Como ser aprovado em processos seletivos Entrevista com gestão ou diretoria Quem nunca teve frio na barriga pra ter aquela conversa com o gestor durante um processo seletivo? Você passou por praticamente todas as etapas do processo seletivo e agora chegou neste momento da entrevista com o gestor. O momento é de alegria e também de muita atenção. Antes de qualquer coisa, busque criar conexão com o entrevistador de forma natural, sem forçar nada. Converse e tente se conectar de alguma forma: um curso, uma viagem, um hobby ou outro ponto em comum que surgir durante a entrevista. Siga o fluxo da conversa de forma leve. Outro ponto importante é treinar a sua negociação e habilidade em sair de situações inusitadas. É o famoso improviso pra você colocar em prática se precisar solucionar um desafio de um momento ou pergunta que não estava esperando. Ninguém gosta de conversar com pessoas que não se interessam por elas. Isso não vai ser diferente em uma entrevista. Busque mostrar interesse na conversa, esteja presente, se expresse com propriedade, fale o que tem certeza. Quando possível, fale o nome do entrevistador. Isso vai ajudar na conexão entre vocês. O que esperar das principais etapas? 16",
+      "n_chars": 1205,
+      "n_tokens_est": 301,
+      "vazia": false
+    },
+    {
+      "pagina": 17,
+      "texto": "Como ser aprovado em processos seletivos 8 dicas PRA ARRASAR NOS PROCESSOS SELETIVOS Já parou pra pensar que com algumas mudanças rápidas, você pode dar uma sacudida na sua vida profissional? Sabemos que não tem mágica e, sim, muito trabalho e dedicação pra conseguir passar nos processos seletivos. Confira 8 dicas que podem te apoiar nessa jornada! O que esperar das principais etapas? 17",
+      "n_chars": 390,
+      "n_tokens_est": 97,
+      "vazia": false
+    },
+    {
+      "pagina": 18,
+      "texto": "Como ser aprovado em processos seletivos 1 Conheça bem a empresa É essencial que você saiba tudo o que puder sobre a empresa que você está se candidatando, conhecer a sua trajetória e se preparar pra falar sobre ela de forma objetiva e clara. Entre no site, busque os perfis dela nas redes sociais, toda pesquisa é muito bem-vinda! Outro ponto é saber bem o motivo de querer a vaga e como a empresa pode te ajudar a alcançar seus objetivos profissionais. Pode acreditar que essas respostas podem fazer total diferença no processo seletivo. 2 Olá, networking! Estar por dentro do que acontece na sua área é uma ação que precisa estar sempre na sua lista de tarefas. Isso vai te ajudar a fazer contatos com profissionais que podem colaborar com sua jornada; você pode trocar ideias, participar de eventos e debates online, por exemplo; Você pode também procurar pessoas que trabalhem na área ou empresa que você deseja conseguir a vaga. A maioria das aplicações perguntam se houve indicação. O que esperar das principais etapas? 18",
+      "n_chars": 1029,
+      "n_tokens_est": 257,
+      "vazia": false
+    },
+    {
+      "pagina": 19,
+      "texto": "Como ser aprovado em processos seletivos 3 Compartilhe sua história Busque contar a sua história de uma forma coesa e fluida. Ao invés de listar os lugares que você trabalhou e estudou, prefira destacar seus principais momentos da sua vida acadêmica e profissional. Quando você faz essa conexão, a sua história ganha mais sentido e as pessoas lembram com mais facilidade. Você pode também compartilhar tudo isso explicando o motivo de ter escolhido a empresa, falando sobre seus interesses, perfil com elementos de conexão com o que pesquisou sobre a organização. Pra que essa coerência seja real e seu brilho nos olhos se destaquem durante a entrevista, invista no autoconhecimento. Assim seus desafios e pontos de destaque vão estar sempre na ponta da língua! Responda estas perguntas: O que aprendeu com as suas Quais são as suas experiências? limitações? O que você já sabe que O que tem vontade de precisa desenvolver? aprender? O que gostaria de destacar Tem um plano de como ponto forte? curto prazo? O que já aprendeu com Quais são e onde busca seus erros? referências? O que esperar das principais etapas? 19",
+      "n_chars": 1117,
+      "n_tokens_est": 279,
+      "vazia": false
+    },
+    {
+      "pagina": 20,
+      "texto": "Como ser aprovado em processos seletivos 4 Aposte na sinceridade Seja sincero em qualquer etapa do processo seletivo. O mundo precisa de pessoas verdadeiras e as empresas querem profissionais assim. Na hora que você estiver na frente do recrutador, por exemplo, busque olhá-lo nos olhos, falar com clareza e manter a calma. Nunca minta. Além de não ser uma atitude ética, os seus gestos podem denunciar que existe algo errado na mensagem que você transmitiu e o recrutador acaba percebendo. 5 De olho nas habilidades Aos poucos, você vai perceber que cada empresa tem o seu conjunto de habilidades comportamentais (as soft skills) já mapeadas para as vagas. Ah! Fique sabendo também que a equipe de seleção já vai ver isso com as competências técnicas logo na triagem do currículo, nos testes e entrevistas. Mesmo assim, algumas delas são muito valorizadas pelo mercado e não custa nada saber quais são e, se for preciso, buscar desenvolvê-las, colocá-las no currículo e em prática no novo trabalho, não é mesmo? Se liga aqui: a Revelo contou pra gente as top 5 habilidades buscadas pelos recrutadores! O que esperar das principais etapas? 20",
+      "n_chars": 1142,
+      "n_tokens_est": 285,
+      "vazia": false
+    },
+    {
+      "pagina": 21,
+      "texto": "Como ser aprovado em processos seletivos Autonomia As mudanças globais no modelo de trabalho exigem autonomia dos profissionais pra priorizar tarefas e equilibrar as ações sozinho. A pessoa que é autônoma no trabalho tem liberdade para agir onde atua. Não é fazer apenas o que quer e quando quer. É fazer as tarefas que precisam ser feitas sempre alinhadas à sua autogestão. Comunicação Que tal trabalhar pra tornar a sua comunicação mais fluida, cada vez mais objetiva, clara e leve? Se for pra escolher um caminho, esse é um dos melhores e pode te salvar de muitos desafios. Pode confiar. A comunicação por mensagens de texto por celular e e-mail podem gerar muitos problemas. Por isso, com uma comunicação sem barreiras e acessível você tem mais chances de atingir seus objetivos! Resiliência O estresse do dia a dia que vivemos exige muita resiliência dos profissionais. Quem nunca passou por situações desafiadoras, não é mesmo? As pessoas que conseguem se destacar são aquelas que conseguem respirar fundo, dar uma volta por cima e encontrar novos caminhos e soluções. Ei, é bom lembrar também que é importante ser resiliente para conseguir a vaga ou emprego que você tanto quer. Ter um bom desempenho em processos seletivos, muitas vezes, é uma questão de treino. Não tenha vergonha de pedir feedbacks sobre os processos que você O que esperar das principais etapas? 21",
+      "n_chars": 1376,
+      "n_tokens_est": 344,
+      "vazia": false
+    },
+    {
+      "pagina": 22,
+      "texto": "Como ser aprovado em processos seletivos participou. Quando sabemos o motivo de não termos sido selecionados, podemos melhorar nas próximas oportunidades! Além disso, demonstra proatividade. Resolução de problemas O assunto é futuro do mercado? Então uma coisa é certa: ele será cheio de mudanças. Se você vai até o seu líder com a solução de um problema, isso faz toda a diferença. Economiza tempo, mostra proatividade e criatividade, entre outros pontos positivos pra sua carreira. Se você tem essa habilidade desenvolvida, ótimo! Mas se não tiver, que tal desenvolver? Um bom começo é estudar com materiais bibliográficos e em cursos que vão colaborar pra entender o problema. Outro ponto é entender as tendências e desafios da área que você atua, por exemplo. Autodesenvolvimento O autodesenvolvimento (o pessoal e o profissional) é um processo que pode colaborar (e muito) com um conhecimento aprofundado sobre quem você é, suas preferências e gostos, qualidades e defeitos, habilidades. E é a partir da análise de tudo isso que você pode estimular outras áreas da sua vida. Mas como começar? Diga sim aos estudos! Vai fundo e faça especializações para se destacar nos processos seletivos. Exemplo: você pode fazer uma pós em Gestão de Redes Sociais e aplicar isso na própria rede social ou de algum projeto voluntário. O que esperar das principais etapas? 22",
+      "n_chars": 1364,
+      "n_tokens_est": 341,
+      "vazia": false
+    },
+    {
+      "pagina": 23,
+      "texto": "Como ser aprovado em processos seletivos Sorria! Você está sendo 6 entrevistado! Sabia que seu corpo dá muitos recados durante uma entrevista de emprego? Pois saiba que a sua linguagem corporal diz bastante sobre você e impacta de forma consciente ou inconsciente a avaliação do recrutador. Algumas dicas: Faça movimentos discretos de concordância com a cabeça Abra um leve sorriso e cumprimente todos que estão na sala. Essa ação mostra segurança e simpatia. Nada de cruzar os braços. Ao cruzar os braços, você pode passar a impressão de que você quer se defender da outra pessoa. Pode também denotar impaciência. Lembre-se de ficar com a coluna ereta ou ligeiramente inclinada na direção do outro. Ao ouvir uma pergunta, evite se recostar pra trás porque pode mostrar que você tá na defensiva. E não agarre os braços da cadeira porque pode transmitir insegurança, tensão e ansiedade. Elimine hábitos que mostrem nervosismo, como roer unhas, mexer no celular, colocar a mão na boca, morder a ponta de uma caneta ou brincar com algum acessório, como relógios e pulseiras. Mantenha uma expressão neutra, confiável e serena. Lembre-se: não é ficar sem expressão ou reagir a tudo o que o entrevistador fala. O que esperar das principais etapas? 23",
+      "n_chars": 1244,
+      "n_tokens_est": 311,
+      "vazia": false
+    },
+    {
+      "pagina": 24,
+      "texto": "Como ser aprovado em processos seletivos Prepare-se para os 7 processos seletivos online Tá liberado! Traje executivo pra ficar dentro de casa? Tá valendo! Roteiro sempre, tá? Pra vídeos e entrevistas também. O melhor lugar é onde o modem está. Teste vídeo e som. Show? Não rola! 5 minutos de vídeo são cinco minutos. Sem stress se o wi-fi cair ou seu gato aparecer. Não se distraia. Tentar se parecer com alguém é furada. Mostre o seu diferencial. O que esperar das principais etapas? 24",
+      "n_chars": 488,
+      "n_tokens_est": 122,
+      "vazia": false
+    },
+    {
+      "pagina": 25,
+      "texto": "Como ser aprovado em processos seletivos 8 Controle suas emoções Parece óbvio, mas é sempre importante lembrar, não é? As emoções estão aí, estão com a gente o tempo inteiro. Lembre-se sempre que frustrações acontecem e que nem sempre você vai receber resposta positiva para os processos que participou. Pare, medite, reflita sobre eles, trabalhe sua autoconfiança e siga em frente! Curtiu as dicas? Pra te ajudar a se especializar e a se preparar para o mercado de trabalho, a gente tem um convite pra te fazer! O que esperar das principais etapas? 25",
+      "n_chars": 552,
+      "n_tokens_est": 138,
+      "vazia": false
+    },
+    {
+      "pagina": 26,
+      "texto": "Como ser aprovado em processos seletivos Vem pra Pós-Graduação Online no Descomplica! Vem pra Pós-Graduação Online no Descomplica! 26",
+      "n_chars": 133,
+      "n_tokens_est": 33,
+      "vazia": false
+    },
+    {
+      "pagina": 27,
+      "texto": "Como ser aprovado em processos seletivos Na Pós Descomplica, você garante uma especialização com nota máxima no MEC e totalmente online. Além disso, você pega seu certificado de conclusão rapidinho - a partir de 6 meses -, e isso faz com que, em pouco tempo, você já se torne especialista na sua área. Ah, e tem mais! Tudo isso sem sair de casa, fazendo sua grade horária da melhor forma possível para se encaixar na sua rotina. Estude onde quiser! A nossa plataforma se adapta à sua rotina. Estude no seu computador ou até offline pelo nosso aplicativo sem gastar sua internet. Os cursos são totalmente online, incluindo as avaliações. Aqui você faz tudo no conforto da sua casa! Conheça os nossos cursos: Educação Com uma pós em Educação, você começa a enxergar o aprendizado de um jeito inovador! A especialização vai te capacitar a coordenar instituições, estar atualizado sobre metodologias originais e ensinar novos conteúdos para a geração atual. Pós em Psicopedagogia MBA em Docência do Ensino Superior e Metodologias Ativas de Aprendizagem Pós em Pedagogia Empresarial e Educação Corporativa Vem pra Pós-Graduação Online no Descomplica! 27",
+      "n_chars": 1148,
+      "n_tokens_est": 287,
+      "vazia": false
+    },
+    {
+      "pagina": 28,
+      "texto": "Como ser aprovado em processos seletivos Gestão Seja para o seu empreendimento ou trabalhando em empresas, ser um especialista na área de gestão pode te colocar mais perto do seu objetivo. Com uma pós-graduação, você vai estar mais apto a saber negociar, liderar pessoas e prosperar negócios. Pós em Gestão de Pessoas, Liderança e Coaching MBA em RH - Rotinas e Cálculos Trabalhistas MBA em Gestão Financeira e Controladoria Engenharia Formamos muitos engenheiros ano após ano, por isso uma especialização no currículo pode te diferenciar dos demais! Na Pós Descomplica, você encontra cursos nas diversas áreas da engenharia, 100% online pra se adaptar à sua rotina. Pós em Engenharia de Segurança do Trabalho Pós em Especialização em Perícias na Área da Construção Civil Pós em Orçamentação, Planejamento e Controle na Construção Civil Vem pra Pós-Graduação Online no Descomplica! 28",
+      "n_chars": 884,
+      "n_tokens_est": 221,
+      "vazia": false
+    },
+    {
+      "pagina": 29,
+      "texto": "Como ser aprovado em processos seletivos Saúde Mesmo que os serviços de saúde sejam essenciais e necessitem apenas de uma graduação, uma pós na área pode te ajudar a assumir cargos de liderança em hospitais ou ter insumos necessários para abrir seu próprio negócio. Pós em Enfermagem em UTI Pós em Neuropsicologia Clínica Pós em Psicologia Organizacional Diversidade Atualmente, muitas empresas contam com ações e políticas de Diversidade e Inclusão. Ter uma pós na área é um diferencial para se dar bem nesses cargos. Pós em Diversidade Sexual e de Gênero Pós em Diversidade Religiosa Pós em Diversidade Étnico-Cultural Vem pra Pós-Graduação Online no Descomplica! 29",
+      "n_chars": 668,
+      "n_tokens_est": 167,
+      "vazia": false
+    },
+    {
+      "pagina": 30,
+      "texto": "Como ser aprovado em processos seletivos Marketing Na área de Marketing, ter um portfólio é extremamente importante para o sucesso profissional! A pós-graduação, além de trazer um novo olhar para o seu currículo, também é uma oportunidade de aplicar novos aprendizados para se tornar mais empregável. MBA em Marketing Digital Estratégico MBA em Marketing e Redes Sociais MBA em Marketing Digital e Vendas Tecnologia Tecnologia e inovação é uma das áreas que mais cresce no Brasil e no mundo! Tornar-se especialista no setor significa sair na frente em processos seletivos disputados e com salários bem acima da média do mercado. O Descomplica nasceu da tecnolgoia e pode te ajudar a alcançar seus objetivos. Pós em Segurança da Informação Pós em Análise de Dados Pós em Big Data Vem pra Pós-Graduação Online no Descomplica! 30",
+      "n_chars": 826,
+      "n_tokens_est": 206,
+      "vazia": false
+    },
+    {
+      "pagina": 31,
+      "texto": "Como ser aprovado em processos seletivos Direito Você sabia que uma pós-graduação em Direito garante pontuação extra em concursos e te aproxima de áreas aquecidas no setor? Esse diferencial no currículo te coloca em vantagem na vaga daquele escritório que você tanto sonha ou, também pode te auxiliar na abertura do seu próprio negócio. Pós em Direito e Processo Penal Pós em Direito da Família e Sucessões Pós em Investigação Criminal e Psicologia Forense Gostou? Então entre no site da Pós-Graduação Online Descomplica! Vem pra Pós-Graduação Online no Descomplica! 31",
+      "n_chars": 569,
+      "n_tokens_est": 142,
+      "vazia": false
+    },
+    {
+      "pagina": 32,
+      "texto": "descomplica.com.br/pos-graduacao FACEBOOK-SQUARE descomplica.pos Instagram descomplica.pos Twitter descomplicapos YOUTUBE faculdadedescomplica",
+      "n_chars": 142,
+      "n_tokens_est": 35,
+      "vazia": false
+    }
+  ]
+}
