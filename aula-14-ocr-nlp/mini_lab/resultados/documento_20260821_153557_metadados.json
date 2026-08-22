@@ -1,0 +1,49 @@
+{
+  "arquivo_origem": "../documento.png",
+  "processado_em": "2026-08-21T15:35:58.128988",
+  "ocr": {
+    "caracteres_brutos": 57,
+    "modo_usado": "opencv (fallback)"
+  },
+  "nlp": {
+    "total_palavras": 11,
+    "total_tokens": 5,
+    "vocabulario_unico": 5,
+    "top_termos": [
+      [
+        "recibo",
+        1
+      ],
+      [
+        "pagamento",
+        1
+      ],
+      [
+        "veloc",
+        1
+      ],
+      [
+        "dar",
+        1
+      ],
+      [
+        "marcod",
+        1
+      ]
+    ],
+    "entidades": {
+      "MISC": [
+        "RECIBO",
+        "Der 16",
+        "Marcod"
+      ],
+      "PER": [
+        "Veloc"
+      ]
+    }
+  },
+  "saidas": {
+    "texto_bruto": "resultados/documento_20260821_153557_bruto.txt",
+    "texto_limpo": "resultados/documento_20260821_153557_limpo.txt"
+  }
+}
