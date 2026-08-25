@@ -1,0 +1,50 @@
+[
+  {
+    "chunk_id": "contrato_c001",
+    "fonte": "contrato_servicos.pdf",
+    "pagina": 1,
+    "texto": "O presente contrato de prestação de serviços tem vigência de\n24 meses, contados a partir da data de assinatura. Qualquer\nrescisão antecipada por parte do contratante implicará multa\nequivalente a 20% do valor total remanescente do contrato."
+  },
+  {
+    "chunk_id": "contrato_c002",
+    "fonte": "contrato_servicos.pdf",
+    "pagina": 1,
+    "texto": "O pagamento deverá ser efetuado mensalmente, até o dia 10 \nde cada mês, mediante emissão de nota fiscal. O atraso no \npagamento acarretará juros de 1% ao mês e multa moratória \nde 2% sobre o valor em atraso."
+  },
+  {
+    "chunk_id": "contrato_c003",
+    "fonte": "contrato_servicos.pdf",
+    "pagina": 2,
+    "texto": "As partes elegem o foro da comarca de São Paulo para dirimir\nquaisquer litígios decorrentes deste instrumento, com renúncia \nexpressa a qualquer outro, por mais privilegiado que seja."
+  },
+  {
+    "chunk_id": "manual_c001",
+    "fonte": "manual_produto.pdf",
+    "pagina": 3,
+    "texto": "Para instalar o software, execute o instalador como \nadministrador e siga as instruções na tela. O sistema \nrequer Windows 10 ou superior, com mínimo de 8 GB de RAM \ne 20 GB de espaço em disco."
+  },
+  {
+    "chunk_id": "manual_c002",
+    "fonte": "manual_produto.pdf",
+    "pagina": 5,
+    "texto": "Em caso de falha durante a instalação, verifique se o \nantivírus está desativado temporariamente. Erros comuns \nincluem: permissão negada, porta em uso e dependência \nausente. Consulte o log em C:\\Temp\\install.log."
+  },
+  {
+    "chunk_id": "relatorio_c001",
+    "fonte": "relatorio_q1.pdf",
+    "pagina": 1,
+    "texto": "A receita líquida do primeiro trimestre de 2025 atingiu \nR$ 42,3 milhões, representando crescimento de 18% em \nrelação ao mesmo período do ano anterior. O resultado \noperacional foi de R$ 8,7 milhões, com margem de 20,6%."
+  },
+  {
+    "chunk_id": "relatorio_c002",
+    "fonte": "relatorio_q1.pdf",
+    "pagina": 2,
+    "texto": "Os custos operacionais cresceram 12% no trimestre, \nprincipalmente devido ao aumento nos preços de matéria-prima\ne ao reajuste salarial aplicado em janeiro. A empresa \nimplementou medidas de eficiência que devem gerar economia \nde R$ 2 milhões anuais a partir do segundo semestre."
+  },
+  {
+    "chunk_id": "relatorio_c003",
+    "fonte": "relatorio_q1.pdf",
+    "pagina": 3,
+    "texto": "As vendas no canal digital cresceram 45% no trimestre, \nrespondendo agora por 32% da receita total. O aplicativo \nmobile registrou 1,2 milhão de downloads e avaliação \nmédia de 4,7 estrelas nas lojas de aplicativos."
+  }
+]
