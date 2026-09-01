@@ -1,0 +1,28 @@
+# .gitignore — colocar na raiz do projeto
+# Credenciais e configuracoes locais
+.env
+.env.local
+
+# Ambiente virtual Python
+.venv/
+venv/
+env/
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Bases de dados locais e arquivos gerados
+*.db
+*.sqlite
+faiss_index/
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

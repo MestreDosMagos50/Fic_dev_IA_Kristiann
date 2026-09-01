@@ -1,0 +1,5 @@
+List comprehension e uma forma concisa de criar listas em Python.
+Exemplo: quadrados = [x**2 for x in range(10)]
+Decoradores sao funcoes que modificam o comportamento de outras funcoes.
+O FastAPI e um framework moderno para criar APIs REST com Python.
+O Pandas e usado para manipulacao e analise de dados tabulares.
