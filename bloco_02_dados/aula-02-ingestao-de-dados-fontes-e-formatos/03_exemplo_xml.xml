@@ -1,0 +1,10 @@
+<pessoas>
+ <pessoa id="1">
+ <nome>Alice</nome>
+ <idade>30</idade>
+ </pessoa>
+ <pessoa id="2">
+ <nome>Bob</nome>
+ <idade>24</idade>
+ </pessoa>
+</pessoas

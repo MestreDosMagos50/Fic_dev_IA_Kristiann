@@ -1,0 +1,15 @@
+[
+ {
+ "id": 1,
+ "nome": "Alice",
+ "idade": 30,
+ "enderecos": [
+ {"tipo": "casa", "rua": "Rua A"}
+ ]
+ },
+ {
+ "id": 2,
+ "nome": "Bob",
+ "idade": 24
+ }
+]

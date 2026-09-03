@@ -1,0 +1,4 @@
+# O Roteiro Prático foi executado diretamente no psql e no mongosh.
+# Se for criar scripts Python futuramente, instale as bibliotecas abaixo:
+psycopg2-binary
+pymongo
