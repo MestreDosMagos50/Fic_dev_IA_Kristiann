@@ -1,0 +1,6 @@
+id,secretaria,servico,descricao,prazo_dias
+1,Secretaria de Obras,"Operação Tapa-Buraco","Reparo asfáltico e correção de buracos e pavimentação em ruas e avenidas.",10
+2,Secretaria de Saúde,"Agendamento de Especialidades","Consulta médica com especialistas e exames laboratoriais na rede municipal.",15
+3,Secretaria de Educação,"Vaga em Creche e Escola","Inscrição e matrícula de crianças de 0 a 5 anos na rede pública de ensino.",7
+4,Secretaria de Meio Ambiente,"Poda e Supressão de Árvores","Remoção de galhos secos com risco de queda e manejo de vegetação urbana.",5
+5,Secretaria de Mobilidade e Trânsito,"Manutenção de Semáforos","Conserto de semáforos apagados ou em sinal amarelo intermitente.",2

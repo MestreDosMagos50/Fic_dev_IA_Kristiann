@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Portal do Cliente - Dashboard de Vendas</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f6f8;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h2>Relatório de Vendas em Tempo Real</h2>
+        <!-- Substitua pelo IP da sua VM e o ID do seu dashboard -->
+        <iframe src="http://localhost:8088/superset/dashboard/deck/?standalone=true" allowtransparency="true">
+        </iframe>
+    </div>
+</body>
+
+</html>

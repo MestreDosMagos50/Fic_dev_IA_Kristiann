@@ -1,0 +1,23 @@
+[
+ {
+ "protocolo": "OUV-2026-001",
+ "bairro": "Centro",
+ "texto_relato": "Tem uma cratera enorme na pista em frente à minha casa que quase causou um acidente grave com um motociclista.",
+ "canal": "App Cidadão",
+ "severidade_declarada": 5
+ },
+ {
+ "protocolo": "OUV-2026-002",
+ "bairro": "Jardim das Flores",
+ "texto_relato": "Gostaria de matricular minha filha de 3 anos numa creche próxima da minha residência para o próximo semestre.",
+ "canal": "Portal Web",
+ "severidade_declarada": 3
+ },
+ {
+ "protocolo": "OUV-2026-003",
+ "bairro": "Bela Vista",
+ "texto_relato": "O semáforo no cruzamento da escola está piscando alerta amarelo há 3 dias, risco iminente de atropelamento.",
+ "canal": "Telefone 156",
+ "severidade_declarada": 5
+ }
+]
