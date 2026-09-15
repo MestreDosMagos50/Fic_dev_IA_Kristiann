@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Cloud Pulse | Nuvem de Palavras - Apache Superset</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-glow top-left"></div>
+    <div class="background-glow bottom-right"></div>
+
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-badge">AULA 12 • ATIVIDADE EXTRA</div>
+            <h1 class="brand-title">Tech Cloud <span class="gradient-text">Pulse</span></h1>
+            <p class="brand-subtitle">Nuvem de Palavras sobre Tecnologia integrada ao Apache Superset com sincronização a cada 5 minutos.</p>
+        </div>
+        <div class="header-actions">
+            <a href="http://localhost:8088" target="_blank" class="btn btn-secondary" id="btn-open-superset">
+                <span class="btn-icon">⚡</span> Abrir Superset (8088)
+            </a>
+            <button class="btn btn-primary" id="btn-sync-now">
+                <span class="btn-icon">🔄</span> Sincronizar Agora
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Dashboard Top Metrics Cards -->
+        <section class="metrics-grid">
+            <div class="card metric-card timer-card">
+                <div class="card-header">
+                    <span class="card-icon">⏱️</span>
+                    <span class="card-label">Ciclo de Atualização Automática</span>
+                    <span class="live-dot" title="Worker Ativo"></span>
+                </div>
+                <div class="timer-display">
+                    <span id="countdown-timer">05:00</span>
+                    <div class="timer-unit">minutos restantes</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="timer-progress-bar"></div>
+                </div>
+                <div class="card-footer-note">Intervalo padrão da atividade: 5 minutos (300s)</div>
+            </div>
+
+            <div class="card metric-card">
+                <div class="card-header">
+                    <span class="card-icon">🏷️</span>
+                    <span class="card-label">Total de Termos Tech</span>
+                </div>
+                <div class="metric-value" id="metric-total-words">28</div>
+                <div class="metric-trend positive">
+                    <span class="trend-icon">↑</span> Atualizado dinamicamente
+                </div>
+                <div class="card-footer-note" id="metric-last-sync">Última carga: há poucos segundos</div>
+            </div>
+
+            <div class="card metric-card">
+                <div class="card-header">
+                    <span class="card-icon">🚀</span>
+                    <span class="card-label">Termo Líder da Rodada</span>
+                </div>
+                <div class="metric-value leader-text" id="metric-top-word">Inteligência Artificial</div>
+                <div class="badge badge-category" id="metric-top-category">IA & Machine Learning</div>
+                <div class="card-footer-note" id="metric-top-weight">Peso de Relevância: 115 pts</div>
+            </div>
+
+            <div class="card metric-card">
+                <div class="card-header">
+                    <span class="card-icon">🗄️</span>
+                    <span class="card-label">Origem & Destino</span>
+                </div>
+                <div class="status-list">
+                    <div class="status-item">
+                        <span class="status-bullet active"></span>
+                        <span class="status-name">PostgreSQL (nuvem_palavras_tech)</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-bullet active"></span>
+                        <span class="status-name">Superset Word Cloud Chart</span>
+                    </div>
+                </div>
+                <div class="card-footer-note">Banco: superset_data • Porta: 5432</div>
+            </div>
+        </section>
+
+        <!-- Category Filters -->
+        <section class="filters-bar">
+            <span class="filter-title">Filtrar Categoria:</span>
+            <div class="filter-chips" id="filter-chips">
+                <button class="chip active" data-category="ALL">Todas as Tecnologias</button>
+                <button class="chip" data-category="IA & Machine Learning">IA & ML</button>
+                <button class="chip" data-category="Engenharia de Dados">Engenharia de Dados</button>
+                <button class="chip" data-category="Cloud & DevOps">Cloud & DevOps</button>
+                <button class="chip" data-category="Linguagens & Frameworks">Linguagens</button>
+                <button class="chip" data-category="Bancos de Dados & Storage">Bancos de Dados</button>
+            </div>
+        </section>
+
+        <!-- Main Display: Word Cloud & Superset Embedded -->
+        <section class="visualizer-grid">
+            <!-- Interactive Word Cloud Canvas -->
+            <div class="card visualizer-card">
+                <div class="visualizer-header">
+                    <div class="visualizer-title-group">
+                        <h2 class="card-title">Nuvem de Palavras Dinâmica</h2>
+                        <span class="card-caption">Termos com escala de tamanho proporcional ao peso (frequência) coletado</span>
+                    </div>
+                    <div class="visualizer-controls">
+                        <button class="btn-sm" id="btn-reorder">🔀 Reordenar Layout</button>
+                    </div>
+                </div>
+
+                <div class="word-cloud-container" id="word-cloud-wrapper">
+                    <div id="word-cloud-canvas" class="word-cloud-canvas">
+                        <!-- Rendered by app.js -->
+                    </div>
+                </div>
+
+                <div class="word-cloud-footer">
+                    <div class="legend-items">
+                        <span class="legend-tag tag-ia"><span class="dot"></span> IA & ML</span>
+                        <span class="legend-tag tag-data"><span class="dot"></span> Engenharia de Dados</span>
+                        <span class="legend-tag tag-cloud"><span class="dot"></span> Cloud & DevOps</span>
+                        <span class="legend-tag tag-dev"><span class="dot"></span> Linguagens</span>
+                        <span class="legend-tag tag-db"><span class="dot"></span> Bancos de Dados</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Superset Integration & Guide Panel -->
+            <div class="card guide-card">
+                <h2 class="card-title">Integração com Apache Superset</h2>
+                <p class="card-caption">Instruções para configurar a atualização automática no Superset:</p>
+
+                <div class="stepper">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <strong>Dataset no SQL Lab</strong>
+                            <p>Crie um dataset derivado da tabela <code>nuvem_palavras_tech</code> com a consulta agregada.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <strong>Gráfico Word Cloud</strong>
+                            <p>Selecione o tipo de visualização <strong>Word Cloud</strong>, Dimensão: <code>palavra</code> e Métrica: <code>SUM(frequencia)</code>.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <strong>Auto-Refresh a cada 5 minutos</strong>
+                            <p>No Dashboard, clique nos 3 pontinhos <strong>... -> Edit Dashboard -> Settings</strong> e marque <strong>Auto-refresh: 5 minutes</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="superset-preview-box">
+                    <div class="preview-header">
+                        <span>Apache Superset • Dashboard Preview</span>
+                        <span class="badge badge-pulse">Embarcado</span>
+                    </div>
+                    <div class="preview-frame-container">
+                        <iframe id="superset-iframe" src="http://localhost:8088/superset/dashboard/nuvem_palavras_tech_5min/?standalone=true" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Raw Data Table Modal / Drawer -->
+        <section class="card table-card">
+            <div class="table-header">
+                <h3 class="card-title">Tabela de Termos Ativos (PostgreSQL: nuvem_palavras_tech)</h3>
+                <span class="badge" id="table-row-count">Carregando...</span>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table" id="words-table">
+                    <thead>
+                        <tr>
+                            <th>Termo Tecnológico</th>
+                            <th>Categoria</th>
+                            <th>Frequência (Métrica)</th>
+                            <th>Horário da Coleta</th>
+                        </tr>
+                    </thead>
+                    <tbody id="words-table-body">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>FIC DEV IA • Engenharia de Dados | Aula 12 — Storytelling com Dados, SQL Lab e Funcionalidades Avançadas</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
