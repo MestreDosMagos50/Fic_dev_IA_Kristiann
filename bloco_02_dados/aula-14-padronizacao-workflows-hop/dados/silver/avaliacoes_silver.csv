@@ -1,0 +1,12 @@
+id_avaliacao;codigo_produto;nota;comentario;data_avaliacao
+REV-001;P001;5;Excelente notebook, super rápido e silencioso!;2026-08-16
+REV-002;P002;4;Ótimo custo benefício para home office.;2026-08-17
+REV-004;P004;5;Cadeira super confortável para a lombar.;2026-08-19
+REV-006;P006;3;Cafeteira boa, mas um pouco barulhenta.;2026-08-21
+REV-007;P007;5;Tênis muito leve para treinos de 10km.;2026-08-22
+REV-008;P008;2;Imagem boa, mas sistema operacional lento.;2026-08-23
+REV-010;P010;5;Cancelamento de ruído impressionante!;2026-08-25
+REV-011;P011;4;Ótimo monitor para programação e produtividade.;2026-08-26
+REV-012;P012;5;Melhor livro de engenharia de software em Python.;2026-08-27
+REV-013;P013;1;Veio com defeito no conector elétrico.;2026-08-28
+REV-014;P014;4;Mochila resistente com bom acabamento.;2026-08-29

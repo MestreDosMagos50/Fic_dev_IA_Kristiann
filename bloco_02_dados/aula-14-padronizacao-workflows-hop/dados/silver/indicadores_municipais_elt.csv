@@ -1,0 +1,21 @@
+cod_mun_6;nome_municipio;uf;regiao;populacao;total_casos;taxa_incidencia_100k;chuva_mm;leitos_uti;classificacao_risco
+510340;Cuiabá;MT;Centro-Oeste;650912;1020;156.70;220.00;230;Médio Risco
+520870;Goiânia;GO;Centro-Oeste;1437237;1650;114.80;175.20;510;Médio Risco
+530010;Brasília;DF;Centro-Oeste;2817068;2890;102.59;190.00;820;Médio Risco
+354340;Ribeirão Preto;SP;Sudeste;698259;680;97.39;98.40;280;Baixo Risco
+500270;Campo Grande;MS;Centro-Oeste;897938;860;95.77;188.40;290;Baixo Risco
+310620;Belo Horizonte;MG;Sudeste;2315560;2100;90.69;210.50;980;Baixo Risco
+317020;Uberlândia;MG;Sudeste;713232;490;68.70;165.00;260;Baixo Risco
+350950;Campinas;SP;Sudeste;1138309;720;63.25;130.50;390;Baixo Risco
+354980;São José Dos Campos;SP;Sudeste;697428;380;54.49;142.00;240;Baixo Risco
+320530;Vitória;ES;Sudeste;322869;170;52.65;105.60;170;Baixo Risco
+261160;Recife;PE;Nordeste;1488920;530;35.60;110.00;570;Baixo Risco
+230440;Fortaleza;CE;Nordeste;2428678;440;18.12;65.00;690;Baixo Risco
+150140;Belém;PA;Norte;1303389;210;16.11;310.80;430;Baixo Risco
+292740;Salvador;BA;Nordeste;2418005;380;15.72;95.40;650;Baixo Risco
+410690;Curitiba;PR;Sul;1773733;260;14.66;120.60;610;Baixo Risco
+420540;Florianópolis;SC;Sul;537213;75;13.96;155.20;210;Baixo Risco
+330455;Rio De Janeiro;RJ;Sudeste;6211423;820;13.20;180.20;1850;Baixo Risco
+355030;São Paulo;SP;Sudeste;11451245;1150;10.04;145.80;3200;Baixo Risco
+130260;Manaus;AM;Norte;2063547;150;7.27;280.40;480;Baixo Risco
+431490;Porto Alegre;RS;Sul;1332570;95;7.13;135.00;540;Baixo Risco

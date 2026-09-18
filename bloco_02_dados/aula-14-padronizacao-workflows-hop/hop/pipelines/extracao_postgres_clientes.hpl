@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>extracao_postgres_clientes</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>Table Input Clientes</from><to>Gravar staging.clientes</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>Table Input Clientes</name>
+    <type>TableInput</type>
+    <connection>PostgreSQL</connection>
+    <sql>SELECT 'CLI01' as id, 'Cliente Padrao' as nome</sql>
+  </transform>
+  <transform>
+    <name>Gravar staging.clientes</name>
+    <type>Dummy</type>
+  </transform>
+</pipeline>

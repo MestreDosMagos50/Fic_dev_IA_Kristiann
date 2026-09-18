@@ -1,0 +1,40 @@
+{
+  "timestamp_execucao": "2026-09-18T15:14:37.222939",
+  "mes_referencia": "2026-08",
+  "camadas": {
+    "bronze": {
+      "fontes_count": 5,
+      "detalhe_fontes": {
+        "1_ibge_municipios_censo": 23,
+        "2_datasus_dengue_mes": 24,
+        "3_inmet_clima_chuva": 22,
+        "4_cnes_leitos_sus_postgres": 20,
+        "5_vigilancia_alertas_mongodb": 10
+      },
+      "total_registros_brutos": 99
+    },
+    "silver": {
+      "municipios": 20,
+      "dengue_notificacoes": 20,
+      "inmet_chuva": 20,
+      "cnes_leitos": 20,
+      "alertas_vigilancia": 9,
+      "total_registros_limpos": 89
+    },
+    "quarentena": {
+      "total_rejeitados": 8,
+      "taxa_rejeicao_pct": 8.08,
+      "por_pipeline": {
+        "padroniza_datasus_dengue": 3,
+        "padroniza_ibge_municipios": 2,
+        "padroniza_inmet_chuva": 2,
+        "padroniza_alertas_vigilancia": 1
+      }
+    },
+    "elt": {
+      "indicadores_gerados": 20,
+      "formula": "(total_casos / populacao) * 100.000",
+      "motor": "PostgreSQL Nativo (JOINs e agregação SQL no storage)"
+    }
+  }
+}

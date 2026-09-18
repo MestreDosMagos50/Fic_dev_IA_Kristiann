@@ -1,0 +1,10 @@
+id_alerta;cod_mun_6;cidade;nivel_risco;acao;data
+ALT-001;530010;Brasília;Epidemia;Ativação de tenda de hidratação e nebulização espacial;2026-08-16
+ALT-002;310620;Belo Horizonte;Epidemia;Abertura de centros de atendimento 24h;2026-08-17
+ALT-003;520870;Goiânia;Alto Risco;Mutirão de limpeza e bloqueio de focos;2026-08-18
+ALT-004;510340;Cuiabá;Alto Risco;Visitas domiciliares intensificadas;2026-08-19
+ALT-005;500270;Campo Grande;Alto Risco;Monitoramento de larvas em reservatórios;2026-08-20
+ALT-006;355030;São Paulo;Médio Risco;Campanha de conscientização em mídias;2026-08-21
+ALT-007;330455;Rio de Janeiro;Médio Risco;Fiscalização de ferros-velhos e terrenos;2026-08-22
+ALT-008;431490;Porto Alegre;Baixo Risco;Monitoramento de rotina quinzenal;2026-08-23
+ALT-009;420540;Florianópolis;Baixo Risco;Inspeções preventivas regulares;2026-08-24

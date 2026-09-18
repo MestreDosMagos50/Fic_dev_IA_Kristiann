@@ -1,0 +1,21 @@
+cod_mun_6;municipio;temp_inmet_original;temp_cptec_original;temperatura_eleita;fonte_eleita;status_arbitragem;data_processamento
+130260;Manaus;;31.50;31.50;CPTEC_SATELITE;Fallback acionado: Sensor físico INMET ausente/offline -> Utilizado satélite CPTEC;2026-09-18 15:34:12.688294
+150140;Belém;31.20;30.80;31.20;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+230440;Fortaleza;29.80;29.20;29.80;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+261160;Recife;28.50;28.10;28.50;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+292740;Salvador;99.90;28.00;28.00;CPTEC_SATELITE;Fallback acionado: Leitura INMET anômala (99.9°C) isolada na Quarentena -> Utilizado satélite CPTEC;2026-09-18 15:34:12.688294
+310620;Belo Horizonte;24.30;23.90;24.30;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+317020;Uberlândia;26.10;25.80;26.10;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+320530;Vitória;27.00;26.50;27.00;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+330455;Rio De Janeiro;28.20;27.80;28.20;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+350950;Campinas;-85.00;22.40;22.40;CPTEC_SATELITE;Fallback acionado: Leitura INMET anômala (-85.0°C) isolada na Quarentena -> Utilizado satélite CPTEC;2026-09-18 15:34:12.688294
+354340;Ribeirão Preto;29.40;28.90;29.40;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+354980;São José Dos Campos;23.10;22.70;23.10;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+355030;São Paulo;22.80;22.10;22.80;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+410690;Curitiba;17.50;17.10;17.50;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+420540;Florianópolis;21.00;20.80;21.00;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+431490;Porto Alegre;;19.20;19.20;CPTEC_SATELITE;Fallback acionado: Sensor físico INMET ausente/offline -> Utilizado satélite CPTEC;2026-09-18 15:34:12.688294
+500270;Campo Grande;27.80;27.20;27.80;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+510340;Cuiabá;35.20;34.80;35.20;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+520870;Goiânia;30.10;29.70;30.10;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294
+530010;Brasília;25.60;25.10;25.60;INMET_TERRESTRE;Arbitragem nominal: Leitura física do INMET consistente e validada como Golden Record;2026-09-18 15:34:12.688294

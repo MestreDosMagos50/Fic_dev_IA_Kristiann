@@ -1,0 +1,16 @@
+{
+  "metadataBaseFolder": "${PROJECT_HOME}/metadata",
+  "unitTestsBasePath": "${PROJECT_HOME}",
+  "dataSetsCsvFolder": "${PROJECT_HOME}/datasets",
+  "enforcingExecutionInHome": false,
+  "parentProjectName": "",
+  "config": {
+    "variables": [
+      {
+        "name": "MES_REF",
+        "value": "2026-08",
+        "description": "Mes de referencia"
+      }
+    ]
+  }
+}

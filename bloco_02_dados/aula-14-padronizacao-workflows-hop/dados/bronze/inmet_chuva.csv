@@ -1,0 +1,23 @@
+cod_mun_6;chuva_acumulada_mm;dias_com_chuva;estacao_monitorada
+355030;145,8;14;São Paulo - Mirante de Santana
+330455;180,2;16;Rio de Janeiro - Marambaia
+310620;210,5;18;Belo Horizonte - Pampulha
+530010;190,0;15;Brasília - Plano Piloto
+292740;95,4;10;Salvador - Ondina
+230440;65,0;7;Fortaleza - Aeroporto
+410690;120,6;12;Curitiba - Centro
+130260;280,4;22;Manaus - Ponta Negra
+261160;110,0;11;Recife - Curado
+520870;175,2;14;Goiânia - Autódromo
+150140;310,8;24;Belém - Marco
+431490;135,0;13;Porto Alegre - Belém Novo
+350950;130,5;12;Campinas - IAC
+354980;142,0;13;São José dos Campos - CTA
+354340;98,4;9;Ribeirão Preto - Aeroporto
+317020;165,0;15;Uberlândia - UFU
+420540;155,2;14;Florianópolis - São José
+320530;105,6;11;Vitória - Goiabeiras
+500270;188,4;16;Campo Grande - Embrapa
+510340;220,0;19;Cuiabá - CPA
+355030;-50,0;5;Estacao Chuva Negativa
+330455;VALOR_TEXTO_INVALIDO;0;Sensor Quebrado

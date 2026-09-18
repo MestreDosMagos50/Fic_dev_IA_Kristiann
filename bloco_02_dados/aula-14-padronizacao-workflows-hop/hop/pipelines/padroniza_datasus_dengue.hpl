@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>padroniza_datasus_dengue</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>Ler staging.datasus_dengue</from><to>Validar e Converter Tipos</to><enabled>Y</enabled></hop>
+    <hop><from>Validar e Converter Tipos</from><to>Gravar silver.notificacoes_dengue</to><enabled>Y</enabled></hop>
+    <hop><from>Validar e Converter Tipos</from><to>Motivo Quarentena DataSUS</to><enabled>Y</enabled><error_handling>Y</error_handling></hop>
+    <hop><from>Motivo Quarentena DataSUS</from><to>Gravar Quarentena DataSUS</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>Ler staging.datasus_dengue</name>
+    <type>TableInput</type>
+    <connection>PostgreSQL</connection>
+    <sql>SELECT id_notificacao, cod_mun_6, data_notificacao, casos_notificados, casos_confirmados, classificacao FROM staging.datasus_dengue</sql>
+  </transform>
+  <transform>
+    <name>Validar e Converter Tipos</name>
+    <type>SelectValues</type>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>id_notificacao</name><type>String</type>
+      </meta>
+      <meta>
+        <name>cod_mun_6</name><type>String</type>
+      </meta>
+      <meta>
+        <name>data_notificacao</name><type>Date</type><conversion_mask>yyyy-MM-dd</conversion_mask>
+      </meta>
+      <meta>
+        <name>casos_notificados</name><type>Integer</type><conversion_mask>#</conversion_mask>
+      </meta>
+      <meta>
+        <name>casos_confirmados</name><type>Integer</type><conversion_mask>#</conversion_mask>
+      </meta>
+      <meta>
+        <name>classificacao</name><type>String</type>
+      </meta>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar silver.notificacoes_dengue</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>silver</schema>
+    <table>notificacoes_dengue</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>id_notificacao</column_name><stream_name>id_notificacao</stream_name></field>
+      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
+      <field><column_name>data_notificacao</column_name><stream_name>data_notificacao</stream_name></field>
+      <field><column_name>casos_notificados</column_name><stream_name>casos_notificados</stream_name></field>
+      <field><column_name>casos_confirmados</column_name><stream_name>casos_confirmados</stream_name></field>
+      <field><column_name>classificacao</column_name><stream_name>classificacao</stream_name></field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Motivo Quarentena DataSUS</name>
+    <type>Constant</type>
+    <fields>
+      <field>
+        <name>pipeline_origem</name><type>String</type><nullif>padroniza_datasus_dengue</nullif><length>50</length><precision>-1</precision><set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>motivo_erro</name><type>String</type><nullif>Data de notificacao fora do formato YYYY-MM-DD ou casos invalidos</nullif><length>255</length><precision>-1</precision><set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar Quarentena DataSUS</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>silver</schema>
+    <table>rejeitados</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>pipeline_origem</column_name><stream_name>pipeline_origem</stream_name></field>
+      <field><column_name>motivo_erro</column_name><stream_name>motivo_erro</stream_name></field>
+      <field><column_name>registro_bruto</column_name><stream_name>id_notificacao</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>

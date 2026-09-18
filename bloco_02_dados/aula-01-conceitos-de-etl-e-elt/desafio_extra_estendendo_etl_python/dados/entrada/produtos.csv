@@ -1,0 +1,20 @@
+codigo;nome;preco;categoria;data_cadastro
+P001;Smartphone Galaxy S23;R$ 4.599,00;eletronicos;10/01/2026
+P002;  livro clean code  ;R$ 89,90;livros;12/01/2026
+P003;Smart TV 55 4K;R$ 2.799,99;eletronicos;15/01/2026
+P004;Aspirador Robo;R$ 1.250,50;casa;18/01/2026
+P005;Bola de Futebol Pro;R$ 149,90;esporte;20/01/2026
+P006;Camisa Polo Masculina;R$ 119,00;moda;22/01/2026
+P007;;R$ 350,00;casa;24/01/2026
+P008;   ;R$ 79,90;livros;25/01/2026
+P009;Fone Bluetooth;preco_sob_consulta;eletronicos;26/01/2026
+P010;Brinde Caneta;R$ 0,00;casa;27/01/2026
+P011;Cupom Desconto;-R$ 50,00;moda;28/01/2026
+P012;Servidor Rack Enterprise;R$ 85.000,00;eletronicos;29/01/2026
+P013;Lote Industrial Confeccao;R$ 120.500,00;moda;30/01/2026
+P014;Tenis Esportivo;R$ 299,90;esporte;31-02-2026
+P015;Mochila Executiva;R$ 199,00;moda;ontem
+P016;Racao Premium 15kg;R$ 210,00;petshop;02/02/2026
+P017;Pneu Aro 16;R$ 420,00;automotivo;03/02/2026
+P001;Smartphone Galaxy S23 Duplicado;R$ 4.599,00;eletronicos;10/01/2026
+P003;Smart TV 55 4K Promo;R$ 2.699,00;eletronicos;15/01/2026

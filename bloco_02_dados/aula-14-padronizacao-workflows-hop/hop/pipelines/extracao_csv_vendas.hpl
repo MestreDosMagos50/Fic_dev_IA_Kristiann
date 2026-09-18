@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>extracao_csv_vendas</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>CSV Vendas Parametrizado</from><to>Gravar staging.vendas</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>CSV Vendas Parametrizado</name>
+    <type>CSVInput</type>
+    <filename>${PROJECT_HOME}/dados/bronze/vendas_${MES_REF}.csv</filename>
+    <separator>;</separator>
+    <header>Y</header>
+    <fields>
+      <field><name>id_venda</name><type>String</type></field>
+      <field><name>codigo_produto</name><type>String</type></field>
+      <field><name>quantidade</name><type>String</type></field>
+      <field><name>valor_unitario</name><type>String</type></field>
+      <field><name>valor_total</name><type>String</type></field>
+      <field><name>data_venda</name><type>String</type></field>
+      <field><name>cliente_id</name><type>String</type></field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar staging.vendas</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>staging</schema>
+    <table>vendas</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>id_venda</column_name><stream_name>id_venda</stream_name></field>
+      <field><column_name>codigo_produto</column_name><stream_name>codigo_produto</stream_name></field>
+      <field><column_name>quantidade</column_name><stream_name>quantidade</stream_name></field>
+      <field><column_name>valor_unitario</column_name><stream_name>valor_unitario</stream_name></field>
+      <field><column_name>valor_total</column_name><stream_name>valor_total</stream_name></field>
+      <field><column_name>data_venda</column_name><stream_name>data_venda</stream_name></field>
+      <field><column_name>cliente_id</column_name><stream_name>cliente_id</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>

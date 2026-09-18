@@ -1,0 +1,73 @@
+2026/09/18 15:14:14 - HopRun - Enabling project 'ecommerce'
+2026/09/18 15:14:14 - HopRun - Two-way password encoder initialized with plugin ID 'Hop' for project 'ecommerce'
+2026/09/18 15:14:14 - HopRun - Starting workflow: /home/ficdevia-16-tarde/projetos/Fic_dev_IA_Kristiann/bloco_02_dados/aula-14-padronizacao-workflows-hop/hop/workflows/carga_diaria.hwf
+2026/09/18 15:14:14 - carga_diaria - Start of workflow execution
+2026/09/18 15:14:14 - carga_diaria - Starting action [Start]
+2026/09/18 15:14:14 - carga_diaria - Finished action [Start] (result=[true])
+2026/09/18 15:14:14 - carga_diaria - Starting action [SQL: Truncate Staging e Silver Brasil]
+2026/09/18 15:14:14 - carga_diaria - Finished action [SQL: Truncate Staging e Silver Brasil] (result=[true])
+2026/09/18 15:14:14 - carga_diaria - Starting action [Fonte 1: IBGE Municipios (CSV)]
+2026/09/18 15:14:14 - Fonte 1: IBGE Municipios (CSV) - Using run configuration [local]
+2026/09/18 15:14:14 - extracao_ibge_municipios - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'
+2026/09/18 15:14:14 - extracao_ibge_municipios - Execution started for pipeline [extracao_ibge_municipios]
+2026/09/18 15:14:15 - Gravar staging.ibge_municipios.0 - Connected to database [PostgreSQL] (commit=1000)
+2026/09/18 15:14:15 - carga_diaria - Finished action [Fonte 1: IBGE Municipios (CSV)] (result=[true])
+2026/09/18 15:14:15 - carga_diaria - Starting action [Fonte 2: DataSUS Dengue (${MES_REF})]
+2026/09/18 15:14:15 - Fonte 2: DataSUS Dengue (${MES_REF}) - Using run configuration [local]
+2026/09/18 15:14:15 - extracao_datasus_dengue - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'
+2026/09/18 15:14:15 - extracao_datasus_dengue - Execution started for pipeline [extracao_datasus_dengue]
+2026/09/18 15:14:15 - CSV IBGE Municipios.0 - Header row skipped in file '/home/ficdevia-16-tarde/projetos/Fic_dev_IA_Kristiann/bloco_02_dados/aula-14-padronizacao-workflows-hop/dados/bronze/ibge_municipios.csv'
+2026/09/18 15:14:15 - CSV IBGE Municipios.0 - Finished processing (I=24, O=0, R=0, W=23, U=0, E=0)
+2026/09/18 15:14:15 - Gravar staging.ibge_municipios.0 - Finished processing (I=0, O=23, R=23, W=23, U=0, E=0)
+2026/09/18 15:14:15 - extracao_ibge_municipios - Pipeline duration : 0.076 seconds [  0.076" ]
+2026/09/18 15:14:15 - extracao_ibge_municipios - Execution finished on a local pipeline engine with run configuration 'local'
+2026/09/18 15:14:15 - Gravar staging.datasus_dengue.0 - Connected to database [PostgreSQL] (commit=1000)
+2026/09/18 15:14:15 - carga_diaria - Finished action [Fonte 2: DataSUS Dengue (${MES_REF})] (result=[true])
+2026/09/18 15:14:15 - carga_diaria - Starting action [Fonte 3: INMET Chuva (CSV)]
+2026/09/18 15:14:15 - CSV DataSUS Dengue Parametrizado.0 - Header row skipped in file '/home/ficdevia-16-tarde/projetos/Fic_dev_IA_Kristiann/bloco_02_dados/aula-14-padronizacao-workflows-hop/dados/bronze/datasus_dengue_2026-08.csv'
+2026/09/18 15:14:15 - CSV DataSUS Dengue Parametrizado.0 - Finished processing (I=25, O=0, R=0, W=24, U=0, E=0)
+2026/09/18 15:14:15 - Fonte 3: INMET Chuva (CSV) - Using run configuration [local]
+2026/09/18 15:14:15 - extracao_inmet_chuva - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'
+2026/09/18 15:14:15 - extracao_inmet_chuva - Execution started for pipeline [extracao_inmet_chuva]
+2026/09/18 15:14:15 - Gravar staging.datasus_dengue.0 - Finished processing (I=0, O=24, R=24, W=24, U=0, E=0)
+2026/09/18 15:14:15 - extracao_datasus_dengue - Pipeline duration : 0.035 seconds [  0.035" ]
+2026/09/18 15:14:15 - extracao_datasus_dengue - Execution finished on a local pipeline engine with run configuration 'local'
+2026/09/18 15:14:15 - Gravar staging.inmet_chuva.0 - Connected to database [PostgreSQL] (commit=1000)
+2026/09/18 15:14:15 - carga_diaria - Finished action [Fonte 3: INMET Chuva (CSV)] (result=[true])
+2026/09/18 15:14:15 - carga_diaria - Starting action [Fonte 4: CNES Leitos SUS (Postgres)]
+2026/09/18 15:14:15 - CSV INMET Pluviometria.0 - Header row skipped in file '/home/ficdevia-16-tarde/projetos/Fic_dev_IA_Kristiann/bloco_02_dados/aula-14-padronizacao-workflows-hop/dados/bronze/inmet_chuva.csv'
+2026/09/18 15:14:15 - CSV INMET Pluviometria.0 - Finished processing (I=23, O=0, R=0, W=22, U=0, E=0)
+2026/09/18 15:14:15 - Fonte 4: CNES Leitos SUS (Postgres) - Using run configuration [local]
+2026/09/18 15:14:15 - extracao_cnes_leitos - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'
+2026/09/18 15:14:15 - extracao_cnes_leitos - Execution started for pipeline [extracao_cnes_leitos]
+2026/09/18 15:14:15 - Gravar staging.inmet_chuva.0 - Finished processing (I=0, O=22, R=22, W=22, U=0, E=0)
+2026/09/18 15:14:15 - extracao_inmet_chuva - Pipeline duration : 0.027 seconds [  0.027" ]
+2026/09/18 15:14:15 - extracao_inmet_chuva - Execution finished on a local pipeline engine with run configuration 'local'
+2026/09/18 15:14:15 - Gravar staging.cnes_leitos.0 - Connected to database [PostgreSQL] (commit=1000)
+2026/09/18 15:14:15 - carga_diaria - Finished action [Fonte 4: CNES Leitos SUS (Postgres)] (result=[true])
+2026/09/18 15:14:15 - carga_diaria - Starting action [Fonte 5: Alertas MongoDB (Teste de Fogo)]
+2026/09/18 15:14:15 - CSV CNES Leitos.0 - Header row skipped in file '/home/ficdevia-16-tarde/projetos/Fic_dev_IA_Kristiann/bloco_02_dados/aula-14-padronizacao-workflows-hop/dados/bronze/cnes_leitos_hospitalares.csv'
+2026/09/18 15:14:15 - CSV CNES Leitos.0 - Finished processing (I=21, O=0, R=0, W=20, U=0, E=0)
+2026/09/18 15:14:15 - Fonte 5: Alertas MongoDB (Teste de Fogo) - Running on platform : Linux
+2026/09/18 15:14:15 - Gravar staging.cnes_leitos.0 - Finished processing (I=0, O=20, R=20, W=20, U=0, E=0)
+2026/09/18 15:14:15 - extracao_cnes_leitos - Pipeline duration : 0.026 seconds [  0.026" ]
+2026/09/18 15:14:15 - extracao_cnes_leitos - Execution finished on a local pipeline engine with run configuration 'local'
+2026/09/18 15:14:15 - Fonte 5: Alertas MongoDB (Teste de Fogo) - Executing command : /tmp/hop_b819af55-b9ce-4e52-8c34-18aa26fdb584shell
+2026/09/18 15:14:15 - carga_diaria - Finished action [Fonte 5: Alertas MongoDB (Teste de Fogo)] (result=[false])
+2026/09/18 15:14:15 - carga_diaria - Starting action [Log de Erro Convergente]
+2026/09/18 15:14:15 - carga_diaria - Finished action [Log de Erro Convergente] (result=[true])
+2026/09/18 15:14:15 - carga_diaria - Starting action [Abort]
+2026/09/18 15:14:15 - carga_diaria - Stop workflow execution
+2026/09/18 15:14:15 - carga_diaria - Finished action [Abort] (result=[false])
+2026/09/18 15:14:15 - carga_diaria - Workflow execution finished
+2026/09/18 15:14:15 - carga_diaria - Workflow duration : 0.804 seconds [  0.804" ]
+HopRun exit.
+
+2026/09/18 15:14:14 - General - ERROR: Execution information location 'local-audit' could not be found in the metadata (non-fatal)
+2026/09/18 15:14:15 - extracao_ibge_municipios - ERROR: Execution information location 'local-audit' could not be found in the metadata
+2026/09/18 15:14:15 - extracao_datasus_dengue - ERROR: Execution information location 'local-audit' could not be found in the metadata
+2026/09/18 15:14:15 - extracao_inmet_chuva - ERROR: Execution information location 'local-audit' could not be found in the metadata
+2026/09/18 15:14:15 - extracao_cnes_leitos - ERROR: Execution information location 'local-audit' could not be found in the metadata
+2026/09/18 15:14:15 - Fonte 5: Alertas MongoDB (Teste de Fogo) - ERROR: (stderr) MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27999
+2026/09/18 15:14:15 -  - ERROR: ERRO CRITICO NA ESTEIRA BRASILEIRA! CONVERGINDO FLUXO VERMELHO PARA ABORT...
+2026/09/18 15:14:15 - Abort - ERROR: Execucao da Carga Diaria abortada com falha.

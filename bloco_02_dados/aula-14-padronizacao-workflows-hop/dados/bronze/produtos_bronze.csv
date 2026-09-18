@@ -1,0 +1,28 @@
+codigo;nome;preco;categoria;data_cadastro
+P001;  notebook dell inspiron ;R$ 4.500,00;eletronicos;15/01/2026
+P002;mouse logitech sem fio;R$ 150,00;eletronicos;20/01/2026
+P003;teclado mecanico rgb;R$ 320,00;eletronicos;22/01/2026
+P004;cadeira ergonomica office;R$ 1.250,00;casa;25/01/2026
+P005;livro data engineering;R$ 180,50;livros;28/01/2026
+P006;cafeteira expresso bar;R$ 680,00;eletrodomesticos;02/02/2026
+P007;tenis corrida pro;R$ 499,90;esporte;05/02/2026
+P008;smart tv 55 4k;R$ 2.899,00;eletronicos;10/02/2026
+P009;mesa digitalizadora;R$ 420,00;eletronicos;12/02/2026
+P010;fone bluetooth anc;R$ 380,00;eletronicos;14/02/2026
+P011;monitor ultrawide 29;R$ 1.350,00;eletronicos;18/02/2026
+P012;livro python fluente;R$ 145,00;livros;20/02/2026
+P013;luminaria articulada;R$ 89,90;casa;22/02/2026
+P014;mochila notebook impermeavel;R$ 199,00;moda;25/02/2026
+P015;suporte articulado monitor;R$ 160,00;casa;28/02/2026
+P016;mousepad speed gigante;R$ 75,00;eletronicos;01/03/2026
+P017;webcam full hd 1080p;R$ 290,00;eletronicos;03/03/2026
+P018;hub usb-c 7 em 1;R$ 210,00;eletronicos;05/03/2026
+P019;garrafa termica inox 1l;R$ 95,00;casa;08/03/2026
+P020;kindle paperwhite 16gb;R$ 699,00;eletronicos;10/03/2026
+P001;Notebook Dell Inspiron;R$ 4.500,00;eletronicos;15/01/2026
+P003;teclado mecanico rgb;R$ 320,00;eletronicos;22/01/2026
+P021;produto sem preco valido;R$ -100,00;casa;12/03/2026
+P022;leitor codigo barras;R$ 230,00;eletronicos;data_invalida_99
+P023;item preco corrompido;R$ INVALIDO;eletronicos;15/03/2026
+P024;produto sem data;R$ 120,00;livros;
+P025;fone quebrado;PRECO_ERRADO;casa;16/03/2026

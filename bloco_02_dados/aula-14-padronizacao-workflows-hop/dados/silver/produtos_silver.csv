@@ -1,0 +1,21 @@
+codigo;nome;categoria;preco;data_cadastro
+P001;Notebook Dell Inspiron;eletronicos;4500.0;2026-01-15
+P002;Mouse Logitech Sem Fio;eletronicos;150.0;2026-01-20
+P003;Teclado Mecanico Rgb;eletronicos;320.0;2026-01-22
+P004;Cadeira Ergonomica Office;casa;1250.0;2026-01-25
+P005;Livro Data Engineering;livros;180.5;2026-01-28
+P006;Cafeteira Expresso Bar;eletrodomesticos;680.0;2026-02-02
+P007;Tenis Corrida Pro;esporte;499.9;2026-02-05
+P008;Smart Tv 55 4K;eletronicos;2899.0;2026-02-10
+P009;Mesa Digitalizadora;eletronicos;420.0;2026-02-12
+P010;Fone Bluetooth Anc;eletronicos;380.0;2026-02-14
+P011;Monitor Ultrawide 29;eletronicos;1350.0;2026-02-18
+P012;Livro Python Fluente;livros;145.0;2026-02-20
+P013;Luminaria Articulada;casa;89.9;2026-02-22
+P014;Mochila Notebook Impermeavel;moda;199.0;2026-02-25
+P015;Suporte Articulado Monitor;casa;160.0;2026-02-28
+P016;Mousepad Speed Gigante;eletronicos;75.0;2026-03-01
+P017;Webcam Full Hd 1080P;eletronicos;290.0;2026-03-03
+P018;Hub Usb-C 7 Em 1;eletronicos;210.0;2026-03-05
+P019;Garrafa Termica Inox 1L;casa;95.0;2026-03-08
+P020;Kindle Paperwhite 16Gb;eletronicos;699.0;2026-03-10

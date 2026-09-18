@@ -1,0 +1,7 @@
+[
+  { "id_feedback": "FB-001", "cliente_id": "CLI01", "comentario": "Entrega super rapida no mesmo dia", "canal": "app", "data": "2026-08-16" },
+  { "id_feedback": "FB-002", "cliente_id": "CLI02", "comentario": "Embalagem chegou bem protegida", "canal": "site", "data": "2026-08-17" },
+  { "id_feedback": "FB-003", "cliente_id": "CLI03", "comentario": "Gostei do atendimento no suporte chat", "canal": "whatsapp", "data": "2026-08-18" },
+  { "id_feedback": "FB-004", "cliente_id": "CLI04", "comentario": "Produto original com nota fiscal", "canal": "site", "data": "2026-08-19" },
+  { "id_feedback": "FB-005", "cliente_id": "CLI05", "comentario": "Recomendo a loja para amigos", "canal": "app", "data": "2026-08-20" }
+]

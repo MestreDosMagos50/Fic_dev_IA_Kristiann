@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow>
+  <name>carga_diaria</name>
+  <name_sync_with_filename>Y</name_sync_with_filename>
+  <description>Workflow Mestre Brasileiro: Truncate Staging -> 5 Fontes Brasil -> Teste de Fogo Mongo -> Silver &amp; Quarentena -> SQL ELT Indicadores</description>
+  <created_user>-</created_user>
+  <modified_user>-</modified_user>
+  <created_date>2026/09/18 15:52:34.206</created_date>
+  <modified_date>2026/09/18 15:52:34.206</modified_date>
+  <parameters>
+    <parameter>
+      <name>MES_REF</name>
+      <description>Mes de referencia YYYY-MM para notificacoes DataSUS</description>
+      <default_value>2026-08</default_value>
+    </parameter>
+  </parameters>
+  <actions>
+    <action>
+      <repeat>N</repeat>
+      <schedulerType>0</schedulerType>
+      <intervalSeconds>0</intervalSeconds>
+      <intervalMinutes>60</intervalMinutes>
+      <DayOfMonth>1</DayOfMonth>
+      <weekDay>1</weekDay>
+      <minutes>0</minutes>
+      <hour>12</hour>
+      <doNotWaitOnFirstExecution>N</doNotWaitOnFirstExecution>
+      <name>Start</name>
+      <description/>
+      <type>SPECIAL</type>
+      <attributes/>
+      <xloc>48</xloc>
+      <yloc>144</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <sql>TRUNCATE TABLE staging.ibge_municipios, staging.datasus_dengue, staging.inmet_chuva, staging.cnes_leitos, staging.alertas_vigilancia, silver.municipios, silver.notificacoes_dengue, silver.inmet_chuva, silver.cnes_leitos, silver.alertas_vigilancia, silver.rejeitados CASCADE;</sql>
+      <connection>PostgreSQL</connection>
+      <useVariableSubstitution>N</useVariableSubstitution>
+      <sqlfromfile>N</sqlfromfile>
+      <sendOneStatement>N</sendOneStatement>
+      <name>SQL: Truncate Staging e Silver Brasil</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <xloc>144</xloc>
+      <yloc>256</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename>${PROJECT_HOME}/hop/pipelines/extracao_ibge_municipios.hpl</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <create_parent_folder>N</create_parent_folder>
+      <set_logfile>N</set_logfile>
+      <set_append_logfile>N</set_append_logfile>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <wait_until_finished>N</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <run_configuration>local</run_configuration>
+      <name>Fonte 1: IBGE Municipios (CSV)</name>
+      <type>PIPELINE</type>
+      <attributes/>
+      <xloc>272</xloc>
+      <yloc>144</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename>${PROJECT_HOME}/hop/pipelines/extracao_datasus_dengue.hpl</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <create_parent_folder>N</create_parent_folder>
+      <set_logfile>N</set_logfile>
+      <set_append_logfile>N</set_append_logfile>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <wait_until_finished>N</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <run_configuration>local</run_configuration>
+      <name>Fonte 2: DataSUS Dengue (${MES_REF})</name>
+      <type>PIPELINE</type>
+      <attributes/>
+      <xloc>416</xloc>
+      <yloc>64</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename>${PROJECT_HOME}/hop/pipelines/extracao_inmet_chuva.hpl</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <create_parent_folder>N</create_parent_folder>
+      <set_logfile>N</set_logfile>
+      <set_append_logfile>N</set_append_logfile>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <wait_until_finished>N</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <run_configuration>local</run_configuration>
+      <name>Fonte 3: INMET Chuva (CSV)</name>
+      <type>PIPELINE</type>
+      <attributes/>
+      <xloc>624</xloc>
+      <yloc>48</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename>${PROJECT_HOME}/hop/pipelines/extracao_cnes_leitos.hpl</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <create_parent_folder>N</create_parent_folder>
+      <set_logfile>N</set_logfile>
+      <set_append_logfile>N</set_append_logfile>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <wait_until_finished>N</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <run_configuration>local</run_configuration>
+      <name>Fonte 4: CNES Leitos SUS (Postgres)</name>
+      <type>PIPELINE</type>
+      <attributes/>
+      <xloc>752</xloc>
+      <yloc>128</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <arguments/>
+      <arg_from_previous>N</arg_from_previous>
+      <set_logfile>N</set_logfile>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <exec_per_row>N</exec_per_row>
+      <set_append_logfile>N</set_append_logfile>
+      <insertScript>Y</insertScript>
+      <script>mongosh --eval "db.adminCommand('ping')" --quiet</script>
+      <name>Fonte 5: Alertas MongoDB (Teste de Fogo)</name>
+      <type>SHELL</type>
+      <attributes/>
+      <xloc>944</xloc>
+      <yloc>240</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename>${PROJECT_HOME}/hop/pipelines/padroniza_ibge_municipios.hpl</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <create_parent_folder>N</create_parent_folder>
+      <set_logfile>N</set_logfile>
+      <set_append_logfile>N</set_append_logfile>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <wait_until_finished>N</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <run_configuration>local</run_configuration>
+      <name>Padroniza IBGE (Silver)</name>
+      <type>PIPELINE</type>
+      <attributes/>
+      <xloc>1008</xloc>
+      <yloc>416</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename>${PROJECT_HOME}/hop/pipelines/padroniza_datasus_dengue.hpl</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <create_parent_folder>N</create_parent_folder>
+      <set_logfile>N</set_logfile>
+      <set_append_logfile>N</set_append_logfile>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <wait_until_finished>N</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <run_configuration>local</run_configuration>
+      <name>Padroniza DataSUS Dengue (Silver)</name>
+      <type>PIPELINE</type>
+      <attributes/>
+      <xloc>880</xloc>
+      <yloc>560</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename>${PROJECT_HOME}/hop/pipelines/padroniza_inmet_chuva.hpl</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <create_parent_folder>N</create_parent_folder>
+      <set_logfile>N</set_logfile>
+      <set_append_logfile>N</set_append_logfile>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <wait_until_finished>N</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <run_configuration>local</run_configuration>
+      <name>Padroniza INMET Chuva (Silver)</name>
+      <type>PIPELINE</type>
+      <attributes/>
+      <xloc>688</xloc>
+      <yloc>656</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename>${PROJECT_HOME}/hop/pipelines/padroniza_cnes_leitos.hpl</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <create_parent_folder>N</create_parent_folder>
+      <set_logfile>N</set_logfile>
+      <set_append_logfile>N</set_append_logfile>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <wait_until_finished>N</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <run_configuration>local</run_configuration>
+      <name>Padroniza CNES Leitos (Silver)</name>
+      <type>PIPELINE</type>
+      <attributes/>
+      <xloc>544</xloc>
+      <yloc>592</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <connection>PostgreSQL</connection>
+      <useVariableSubstitution>N</useVariableSubstitution>
+      <sqlfromfile>Y</sqlfromfile>
+      <sqlfilename>${PROJECT_HOME}/sql/04_elt_indicadores_municipais.sql</sqlfilename>
+      <sendOneStatement>N</sendOneStatement>
+      <name>SQL ELT: Indicadores Municipais</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <xloc>352</xloc>
+      <yloc>544</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <loglevel>Basic</loglevel>
+      <logsubject/>
+      <logmessage>CARGA BRASIL CONCLUIDA COM SUCESSO! 5 FONTES PROCESSADAS, SILVER, QUARENTENA E ELT PRONTOS. MES_REF=${MES_REF}</logmessage>
+      <name>Log: Sucesso Completo Brasil</name>
+      <description/>
+      <type>WRITE_TO_LOG</type>
+      <attributes/>
+      <xloc>128</xloc>
+      <yloc>464</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <loglevel>Error</loglevel>
+      <logsubject/>
+      <logmessage>ERRO CRITICO NA ESTEIRA BRASILEIRA! CONVERGINDO FLUXO VERMELHO PARA ABORT...</logmessage>
+      <name>Log de Erro Convergente</name>
+      <description/>
+      <type>WRITE_TO_LOG</type>
+      <attributes/>
+      <xloc>544</xloc>
+      <yloc>320</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <message>Execucao da Carga Diaria abortada com falha.</message>
+      <loglevel>Error</loglevel>
+      <name>Abort</name>
+      <description/>
+      <type>ABORT</type>
+      <attributes/>
+      <xloc>864</xloc>
+      <yloc>320</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+  </actions>
+  <hops>
+    <hop>
+      <from>Start</from>
+      <to>SQL: Truncate Staging e Silver Brasil</to>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>SQL: Truncate Staging e Silver Brasil</from>
+      <to>Fonte 1: IBGE Municipios (CSV)</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>SQL: Truncate Staging e Silver Brasil</from>
+      <to>Log de Erro Convergente</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fonte 1: IBGE Municipios (CSV)</from>
+      <to>Fonte 2: DataSUS Dengue (${MES_REF})</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fonte 1: IBGE Municipios (CSV)</from>
+      <to>Log de Erro Convergente</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fonte 2: DataSUS Dengue (${MES_REF})</from>
+      <to>Fonte 3: INMET Chuva (CSV)</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fonte 2: DataSUS Dengue (${MES_REF})</from>
+      <to>Log de Erro Convergente</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fonte 3: INMET Chuva (CSV)</from>
+      <to>Fonte 4: CNES Leitos SUS (Postgres)</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fonte 3: INMET Chuva (CSV)</from>
+      <to>Log de Erro Convergente</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fonte 4: CNES Leitos SUS (Postgres)</from>
+      <to>Fonte 5: Alertas MongoDB (Teste de Fogo)</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fonte 4: CNES Leitos SUS (Postgres)</from>
+      <to>Log de Erro Convergente</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fonte 5: Alertas MongoDB (Teste de Fogo)</from>
+      <to>Padroniza IBGE (Silver)</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fonte 5: Alertas MongoDB (Teste de Fogo)</from>
+      <to>Log de Erro Convergente</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Padroniza IBGE (Silver)</from>
+      <to>Padroniza DataSUS Dengue (Silver)</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Padroniza IBGE (Silver)</from>
+      <to>Log de Erro Convergente</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Padroniza DataSUS Dengue (Silver)</from>
+      <to>Padroniza INMET Chuva (Silver)</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Padroniza DataSUS Dengue (Silver)</from>
+      <to>Log de Erro Convergente</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Padroniza INMET Chuva (Silver)</from>
+      <to>Padroniza CNES Leitos (Silver)</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Padroniza INMET Chuva (Silver)</from>
+      <to>Log de Erro Convergente</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Padroniza CNES Leitos (Silver)</from>
+      <to>SQL ELT: Indicadores Municipais</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Padroniza CNES Leitos (Silver)</from>
+      <to>Log de Erro Convergente</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>SQL ELT: Indicadores Municipais</from>
+      <to>Log: Sucesso Completo Brasil</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>SQL ELT: Indicadores Municipais</from>
+      <to>Log de Erro Convergente</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Log de Erro Convergente</from>
+      <to>Abort</to>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+  </hops>
+  <notepads/>
+  <attributes/>
+</workflow>

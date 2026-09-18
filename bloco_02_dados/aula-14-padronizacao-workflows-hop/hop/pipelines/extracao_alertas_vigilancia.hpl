@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>extracao_alertas_vigilancia</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>Ler Staging Alertas</from><to>Gravar staging.alertas_vigilancia</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>Ler Staging Alertas</name>
+    <type>TableInput</type>
+    <connection>PostgreSQL</connection>
+    <sql>SELECT id_alerta, cod_mun_6, cidade, nivel_risco, acao, data FROM staging.alertas_vigilancia LIMIT 10</sql>
+  </transform>
+  <transform>
+    <name>Gravar staging.alertas_vigilancia</name>
+    <type>Dummy</type>
+  </transform>
+</pipeline>

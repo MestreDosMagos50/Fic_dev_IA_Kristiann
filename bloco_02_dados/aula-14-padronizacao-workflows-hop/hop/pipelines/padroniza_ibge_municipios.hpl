@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>padroniza_ibge_municipios</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>Ler staging.ibge_municipios</from><to>Limpar Textos e UF</to><enabled>Y</enabled></hop>
+    <hop><from>Limpar Textos e UF</from><to>Converter Populacao e Area</to><enabled>Y</enabled></hop>
+    <hop><from>Converter Populacao e Area</from><to>Gravar silver.municipios</to><enabled>Y</enabled></hop>
+    <hop><from>Converter Populacao e Area</from><to>Motivo Quarentena IBGE</to><enabled>Y</enabled><error_handling>Y</error_handling></hop>
+    <hop><from>Motivo Quarentena IBGE</from><to>Gravar Quarentena</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>Ler staging.ibge_municipios</name>
+    <type>TableInput</type>
+    <connection>PostgreSQL</connection>
+    <sql>SELECT cod_mun, cod_mun_6, nome_municipio, uf, regiao, populacao, area_km2 FROM staging.ibge_municipios</sql>
+  </transform>
+  <transform>
+    <name>Limpar Textos e UF</name>
+    <type>StringOperations</type>
+    <fields>
+      <field><in_stream_name>nome_municipio</in_stream_name><trim_type>both</trim_type><init_cap>Y</init_cap></field>
+      <field><in_stream_name>uf</in_stream_name><trim_type>both</trim_type><lower_upper>upper</lower_upper></field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Converter Populacao e Area</name>
+    <type>SelectValues</type>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>cod_mun_6</name><type>String</type>
+      </meta>
+      <meta>
+        <name>cod_mun</name><type>String</type>
+      </meta>
+      <meta>
+        <name>nome_municipio</name><type>String</type>
+      </meta>
+      <meta>
+        <name>uf</name><type>String</type>
+      </meta>
+      <meta>
+        <name>regiao</name><type>String</type>
+      </meta>
+      <meta>
+        <name>populacao</name><type>Integer</type><conversion_mask>#</conversion_mask>
+      </meta>
+      <meta>
+        <name>area_km2</name><type>Number</type><conversion_mask>#.##</conversion_mask><decimal_symbol>,</decimal_symbol>
+      </meta>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar silver.municipios</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>silver</schema>
+    <table>municipios</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
+      <field><column_name>cod_mun</column_name><stream_name>cod_mun</stream_name></field>
+      <field><column_name>nome_municipio</column_name><stream_name>nome_municipio</stream_name></field>
+      <field><column_name>uf</column_name><stream_name>uf</stream_name></field>
+      <field><column_name>regiao</column_name><stream_name>regiao</stream_name></field>
+      <field><column_name>populacao</column_name><stream_name>populacao</stream_name></field>
+      <field><column_name>area_km2</column_name><stream_name>area_km2</stream_name></field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Motivo Quarentena IBGE</name>
+    <type>Constant</type>
+    <fields>
+      <field>
+        <name>pipeline_origem</name><type>String</type><nullif>padroniza_ibge_municipios</nullif><length>50</length><precision>-1</precision><set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>motivo_erro</name><type>String</type><nullif>Populacao invalida ou erro de casting numerico</nullif><length>255</length><precision>-1</precision><set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar Quarentena</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>silver</schema>
+    <table>rejeitados</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>pipeline_origem</column_name><stream_name>pipeline_origem</stream_name></field>
+      <field><column_name>motivo_erro</column_name><stream_name>motivo_erro</stream_name></field>
+      <field><column_name>registro_bruto</column_name><stream_name>nome_municipio</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>

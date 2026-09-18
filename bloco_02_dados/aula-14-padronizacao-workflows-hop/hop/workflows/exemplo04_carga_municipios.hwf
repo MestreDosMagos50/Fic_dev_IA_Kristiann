@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow>
+  <name>exemplo04_carga_municipios</name>
+  <name_sync_with_filename>Y</name_sync_with_filename>
+  <description>Workflow didático: Truncate Staging -> Extracao CSV IBGE -> Padronizacao Silver</description>
+  <actions>
+    <action>
+      <name>Start</name>
+      <type>SPECIAL</type>
+      <repeat>N</repeat>
+      <nr>0</nr>
+      <xloc>80</xloc>
+      <yloc>120</yloc>
+    </action>
+    <action>
+      <name>Truncate staging.ibge_municipios</name>
+      <type>SQL</type>
+      <connection>PostgreSQL</connection>
+      <sql>TRUNCATE TABLE staging.ibge_municipios;</sql>
+      <sqlfromfile>N</sqlfromfile>
+      <nr>0</nr>
+      <xloc>240</xloc>
+      <yloc>120</yloc>
+    </action>
+    <action>
+      <name>Extracao IBGE Municipios</name>
+      <type>PIPELINE</type>
+      <run_configuration>local</run_configuration>
+      <filename>${PROJECT_HOME}/hop/pipelines/extracao_ibge_municipios.hpl</filename>
+      <loglevel>Basic</loglevel>
+      <nr>0</nr>
+      <xloc>440</xloc>
+      <yloc>120</yloc>
+    </action>
+    <action>
+      <name>Padronizacao IBGE Silver</name>
+      <type>PIPELINE</type>
+      <run_configuration>local</run_configuration>
+      <filename>${PROJECT_HOME}/hop/pipelines/padroniza_ibge_municipios.hpl</filename>
+      <loglevel>Basic</loglevel>
+      <nr>0</nr>
+      <xloc>640</xloc>
+      <yloc>120</yloc>
+    </action>
+    <action>
+      <name>Sucesso</name>
+      <type>SUCCESS</type>
+      <nr>0</nr>
+      <xloc>820</xloc>
+      <yloc>120</yloc>
+    </action>
+  </actions>
+  <hops>
+    <hop><from>Start</from><to>Truncate staging.ibge_municipios</to><enabled>Y</enabled><evaluation>Y</evaluation><unconditional>Y</unconditional></hop>
+    <hop><from>Truncate staging.ibge_municipios</from><to>Extracao IBGE Municipios</to><enabled>Y</enabled><evaluation>Y</evaluation><unconditional>N</unconditional></hop>
+    <hop><from>Extracao IBGE Municipios</from><to>Padronizacao IBGE Silver</to><enabled>Y</enabled><evaluation>Y</evaluation><unconditional>N</unconditional></hop>
+    <hop><from>Padronizacao IBGE Silver</from><to>Sucesso</to><enabled>Y</enabled><evaluation>Y</evaluation><unconditional>N</unconditional></hop>
+  </hops>
+</workflow>

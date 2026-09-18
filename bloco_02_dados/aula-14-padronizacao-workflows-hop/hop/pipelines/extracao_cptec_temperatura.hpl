@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>extracao_cptec_temperatura</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>CSV CPTEC Temperatura Satelite</from><to>Gravar staging.cptec_temperatura</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>CSV CPTEC Temperatura Satelite</name>
+    <type>CSVInput</type>
+    <filename>${PROJECT_HOME}/dados/bronze/cptec_temperatura.csv</filename>
+    <separator>;</separator>
+    <header>Y</header>
+    <fields>
+      <field><name>cod_mun_6</name><type>String</type></field>
+      <field><name>municipio</name><type>String</type></field>
+      <field><name>temperatura_satelite_c</name><type>String</type></field>
+      <field><name>umidade_satelite</name><type>String</type></field>
+      <field><name>indice_cobertura</name><type>String</type></field>
+      <field><name>data_leitura</name><type>String</type></field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar staging.cptec_temperatura</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>staging</schema>
+    <table>cptec_temperatura</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
+      <field><column_name>municipio</column_name><stream_name>municipio</stream_name></field>
+      <field><column_name>temperatura_satelite_c</column_name><stream_name>temperatura_satelite_c</stream_name></field>
+      <field><column_name>umidade_satelite</column_name><stream_name>umidade_satelite</stream_name></field>
+      <field><column_name>indice_cobertura</column_name><stream_name>indice_cobertura</stream_name></field>
+      <field><column_name>data_leitura</column_name><stream_name>data_leitura</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>

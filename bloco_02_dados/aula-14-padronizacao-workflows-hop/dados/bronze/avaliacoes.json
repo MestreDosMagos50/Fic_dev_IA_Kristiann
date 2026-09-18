@@ -1,0 +1,114 @@
+[
+  {
+    "id_avaliacao": "REV-001",
+    "codigo_produto": "P001",
+    "nota": 5,
+    "comentario": "   Excelente notebook, super rápido e silencioso!   ",
+    "data_avaliacao": "2026-08-16"
+  },
+  {
+    "id_avaliacao": "REV-002",
+    "codigo_produto": "P002",
+    "nota": 4,
+    "comentario": " Ótimo custo benefício para home office. ",
+    "data_avaliacao": "2026-08-17"
+  },
+  {
+    "id_avaliacao": "REV-003",
+    "codigo_produto": "P003",
+    "nota": 0,
+    "comentario": " Teclado chegou com tecla solta e nota zero. ",
+    "data_avaliacao": "2026-08-18"
+  },
+  {
+    "id_avaliacao": "REV-004",
+    "codigo_produto": "P004",
+    "nota": 5,
+    "comentario": " Cadeira super confortável para a lombar. ",
+    "data_avaliacao": "2026-08-19"
+  },
+  {
+    "id_avaliacao": "REV-005",
+    "codigo_produto": "P005",
+    "nota": 6,
+    "comentario": " Nota máxima ultrapassada, produto maravilhoso! ",
+    "data_avaliacao": "2026-08-20"
+  },
+  {
+    "id_avaliacao": "REV-006",
+    "codigo_produto": "P006",
+    "nota": 3,
+    "comentario": "   Cafeteira boa, mas um pouco barulhenta. ",
+    "data_avaliacao": "2026-08-21"
+  },
+  {
+    "id_avaliacao": "REV-007",
+    "codigo_produto": "P007",
+    "nota": 5,
+    "comentario": " Tênis muito leve para treinos de 10km.   ",
+    "data_avaliacao": "2026-08-22"
+  },
+  {
+    "id_avaliacao": "REV-008",
+    "codigo_produto": "P008",
+    "nota": 2,
+    "comentario": " Imagem boa, mas sistema operacional lento. ",
+    "data_avaliacao": "2026-08-23"
+  },
+  {
+    "id_avaliacao": "REV-009",
+    "codigo_produto": "P009",
+    "nota": -1,
+    "comentario": " Caneta falhou na primeira semana. ",
+    "data_avaliacao": "2026-08-24"
+  },
+  {
+    "id_avaliacao": "REV-010",
+    "codigo_produto": "P010",
+    "nota": 5,
+    "comentario": " Cancelamento de ruído impressionante! ",
+    "data_avaliacao": "2026-08-25"
+  },
+  {
+    "id_avaliacao": "REV-011",
+    "codigo_produto": "P011",
+    "nota": 4,
+    "comentario": " Ótimo monitor para programação e produtividade. ",
+    "data_avaliacao": "2026-08-26"
+  },
+  {
+    "id_avaliacao": "REV-012",
+    "codigo_produto": "P012",
+    "nota": 5,
+    "comentario": " Melhor livro de engenharia de software em Python. ",
+    "data_avaliacao": "2026-08-27"
+  },
+  {
+    "id_avaliacao": "REV-013",
+    "codigo_produto": "P013",
+    "nota": 1,
+    "comentario": " Veio com defeito no conector elétrico. ",
+    "data_avaliacao": "2026-08-28"
+  },
+  {
+    "id_avaliacao": "REV-014",
+    "codigo_produto": "P014",
+    "nota": 4,
+    "comentario": " Mochila resistente com bom acabamento. ",
+    "data_avaliacao": "2026-08-29"
+  },
+  {
+    "id_avaliacao": "REV-015",
+    "codigo_produto": "P015",
+    "nota": 10,
+    "comentario": " Nota 10 exagerada pelo cliente! ",
+    "data_avaliacao": "2026-08-30"
+  },
+  {
+    "id_avaliacao": "REV-001",
+    "codigo_produto": "P001",
+    "nota": 5,
+    "comentario": " Excelente notebook, super rápido e silencioso! ",
+    "data_avaliacao": "2026-08-16"
+  }
+]

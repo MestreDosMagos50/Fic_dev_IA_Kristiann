@@ -1,0 +1,23 @@
+cliente_id;nome;cidade;uf;segmento
+CLI01;Ana Paula Silva;São Paulo;SP;B2C
+CLI02;Bruno Henrique Costa;Belo Horizonte;MG;B2C
+CLI03;Carla Mendes Lima;Rio de Janeiro;RJ;B2B
+CLI04;Diego Santos Rocha;Curitiba;PR;B2C
+CLI05;Eduardo Oliveira;Porto Alegre;RS;VIP
+CLI06;Fernanda Lima Souza;Salvador;BA;B2C
+CLI07;Gabriel Martins;Brasília;DF;B2C
+CLI08;Helena Castro;Recife;PE;B2B
+CLI09;Igor Pereira;Fortaleza;CE;B2C
+CLI10;Juliana Ferreira;Manaus;AM;VIP
+CLI11;Lucas Almeida;Goiânia;GO;B2C
+CLI12;Mariana Duarte;Campinas;SP;B2B
+CLI13;Nicolas Barbosa;Florianópolis;SC;B2C
+CLI14;Otávio Cardoso;Vitória;ES;B2C
+CLI15;Patrícia Ribeiro;Belém;PA;VIP
+CLI16;Rafael Gomes;Natal;RN;B2C
+CLI17;Sabrina Rocha;Maceió;AL;B2C
+CLI18;Thiago Monteiro;Cuiabá;MT;B2B
+CLI19;Vanessa Pinto;Campo Grande;MS;B2C
+CLI20;William Farias;João Pessoa;PB;VIP
+CLI21;Yasmin Teixeira;Aracaju;SE;B2C
+CLI22;Zé Carlos Mendes;Teresina;PI;B2C

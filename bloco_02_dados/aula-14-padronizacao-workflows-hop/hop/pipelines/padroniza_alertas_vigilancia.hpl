@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>padroniza_alertas_vigilancia</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>Ler staging.alertas_vigilancia</from><to>Gravar silver.alertas_vigilancia</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>Ler staging.alertas_vigilancia</name>
+    <type>TableInput</type>
+    <connection>PostgreSQL</connection>
+    <sql>SELECT id_alerta, cod_mun_6, cidade, nivel_risco, acao, data FROM staging.alertas_vigilancia</sql>
+  </transform>
+  <transform>
+    <name>Gravar silver.alertas_vigilancia</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>silver</schema>
+    <table>alertas_vigilancia</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>id_alerta</column_name><stream_name>id_alerta</stream_name></field>
+      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
+      <field><column_name>cidade</column_name><stream_name>cidade</stream_name></field>
+      <field><column_name>nivel_risco</column_name><stream_name>nivel_risco</stream_name></field>
+      <field><column_name>acao</column_name><stream_name>acao</stream_name></field>
+      <field><column_name>data</column_name><stream_name>data</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>

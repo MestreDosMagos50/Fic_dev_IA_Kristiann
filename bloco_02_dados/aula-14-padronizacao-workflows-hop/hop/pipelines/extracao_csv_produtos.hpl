@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>extracao_csv_produtos</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>CSV Produtos Bronze</from><to>Gravar staging.produtos</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>CSV Produtos Bronze</name>
+    <type>CSVInput</type>
+    <filename>${PROJECT_HOME}/dados/bronze/produtos_bronze.csv</filename>
+    <separator>;</separator>
+    <header>Y</header>
+    <fields>
+      <field><name>codigo</name><type>String</type></field>
+      <field><name>nome</name><type>String</type></field>
+      <field><name>preco</name><type>String</type></field>
+      <field><name>categoria</name><type>String</type></field>
+      <field><name>data_cadastro</name><type>String</type></field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar staging.produtos</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>staging</schema>
+    <table>produtos</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>codigo</column_name><stream_name>codigo</stream_name></field>
+      <field><column_name>nome</column_name><stream_name>nome</stream_name></field>
+      <field><column_name>preco</column_name><stream_name>preco</stream_name></field>
+      <field><column_name>categoria</column_name><stream_name>categoria</stream_name></field>
+      <field><column_name>data_cadastro</column_name><stream_name>data_cadastro</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>padroniza_cnes_leitos</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>Ler staging.cnes_leitos</from><to>Converter Inteiros Leitos</to><enabled>Y</enabled></hop>
+    <hop><from>Converter Inteiros Leitos</from><to>Gravar silver.cnes_leitos</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>Ler staging.cnes_leitos</name>
+    <type>TableInput</type>
+    <connection>PostgreSQL</connection>
+    <sql>SELECT cod_mun_6, municipio, leitos_clinicos, leitos_uti, postos_saude FROM staging.cnes_leitos</sql>
+  </transform>
+  <transform>
+    <name>Converter Inteiros Leitos</name>
+    <type>SelectValues</type>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>cod_mun_6</name><type>String</type>
+      </meta>
+      <meta>
+        <name>municipio</name><type>String</type>
+      </meta>
+      <meta>
+        <name>leitos_clinicos</name><type>Integer</type><conversion_mask>#</conversion_mask>
+      </meta>
+      <meta>
+        <name>leitos_uti</name><type>Integer</type><conversion_mask>#</conversion_mask>
+      </meta>
+      <meta>
+        <name>postos_saude</name><type>Integer</type><conversion_mask>#</conversion_mask>
+      </meta>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar silver.cnes_leitos</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>silver</schema>
+    <table>cnes_leitos</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
+      <field><column_name>municipio</column_name><stream_name>municipio</stream_name></field>
+      <field><column_name>leitos_clinicos</column_name><stream_name>leitos_clinicos</stream_name></field>
+      <field><column_name>leitos_uti</column_name><stream_name>leitos_uti</stream_name></field>
+      <field><column_name>postos_saude</column_name><stream_name>postos_saude</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>

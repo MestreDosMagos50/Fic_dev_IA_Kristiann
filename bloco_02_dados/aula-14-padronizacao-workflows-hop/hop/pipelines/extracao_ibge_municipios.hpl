@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>extracao_ibge_municipios</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>CSV IBGE Municipios</from><to>Gravar staging.ibge_municipios</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>CSV IBGE Municipios</name>
+    <type>CSVInput</type>
+    <filename>${PROJECT_HOME}/dados/bronze/ibge_municipios.csv</filename>
+    <separator>;</separator>
+    <header>Y</header>
+    <fields>
+      <field><name>cod_mun</name><type>String</type></field>
+      <field><name>cod_mun_6</name><type>String</type></field>
+      <field><name>nome_municipio</name><type>String</type></field>
+      <field><name>uf</name><type>String</type></field>
+      <field><name>regiao</name><type>String</type></field>
+      <field><name>populacao</name><type>String</type></field>
+      <field><name>area_km2</name><type>String</type></field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar staging.ibge_municipios</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>staging</schema>
+    <table>ibge_municipios</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>cod_mun</column_name><stream_name>cod_mun</stream_name></field>
+      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
+      <field><column_name>nome_municipio</column_name><stream_name>nome_municipio</stream_name></field>
+      <field><column_name>uf</column_name><stream_name>uf</stream_name></field>
+      <field><column_name>regiao</column_name><stream_name>regiao</stream_name></field>
+      <field><column_name>populacao</column_name><stream_name>populacao</stream_name></field>
+      <field><column_name>area_km2</column_name><stream_name>area_km2</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>

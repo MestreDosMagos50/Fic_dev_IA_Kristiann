@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Observatório Medallion & Orquestração Hop | Aula 03 (Módulo 2)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-base: #0a0e17;
+      --bg-surface: rgba(17, 24, 39, 0.85);
+      --bg-surface-elevated: rgba(26, 36, 56, 0.95);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(99, 102, 241, 0.35);
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-faint: #64748b;
+
+      --accent-primary: #6366f1;
+      --accent-secondary: #06b6d4;
+      --accent-bronze: #d97706;
+      --accent-silver: #94a3b8;
+      --accent-gold: #eab308;
+      --accent-error: #ef4444;
+      --accent-success: #10b981;
+      --accent-warn: #f59e0b;
+
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 24px;
+      min-height: 100vh;
+    }
+
+    /* Glows e Background */
+    .ambient-glow {
+      position: fixed;
+      top: -100px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(0,0,0,0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow-2 {
+      position: fixed;
+      bottom: -100px;
+      left: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, rgba(0,0,0,0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1480px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo-icon {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #6366f1, #06b6d4);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+    }
+
+    .header-titles h1 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-titles p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: #818cf8;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse-animation 2s infinite;
+    }
+
+    @keyframes pulse-animation {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Navigation Tabs */
+    .tabs-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: rgba(17, 24, 39, 0.6);
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .tab-btn.active {
+      background: var(--accent-primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    }
+
+    /* KPI Metrics Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--bg-surface);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-accent);
+    }
+
+    .kpi-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .kpi-card.bronze::after { background: linear-gradient(90deg, #d97706, #f59e0b); }
+    .kpi-card.silver::after { background: linear-gradient(90deg, #94a3b8, #cbd5e1); }
+    .kpi-card.quarentena::after { background: linear-gradient(90deg, #ef4444, #f87171); }
+    .kpi-card.gold::after { background: linear-gradient(90deg, #eab308, #facc15); }
+
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .kpi-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .kpi-icon {
+      font-size: 1.2rem;
+    }
+
+    .kpi-value {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-family: var(--font-mono);
+      margin-bottom: 6px;
+    }
+
+    .kpi-subtext {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Grid Layout for Panels */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .panel-card {
+      background: var(--bg-surface);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .panel-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Workflow Diagram Interactive Canvas */
+    .workflow-canvas {
+      background: rgba(10, 14, 23, 0.7);
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 24px;
+      position: relative;
+    }
+
+    .workflow-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 12px 18px;
+      border-radius: 10px;
+    }
+
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .toggle-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .toggle-btn.active-online {
+      background: rgba(16, 185, 129, 0.18);
+      color: #10b981;
+      border-color: #10b981;
+    }
+
+    .toggle-btn.active-offline {
+      background: rgba(239, 68, 68, 0.18);
+      color: #ef4444;
+      border-color: #ef4444;
+    }
+
+    .wf-nodes-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .wf-node-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      position: relative;
+    }
+
+    .wf-node {
+      flex: 1;
+      padding: 12px 14px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .wf-node.active-pass {
+      border-color: #10b981;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.2);
+    }
+
+    .wf-node.active-fail {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.3);
+    }
+
+    .wf-arrow {
+      color: var(--text-faint);
+      font-weight: bold;
+    }
+
+    .wf-log-terminal {
+      margin-top: 20px;
+      background: #05080e;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #94a3b8;
+      max-height: 180px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Table Component */
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(10, 14, 23, 0.4);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.8rem;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-muted);
+      padding: 12px 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .table-filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      padding: 8px 14px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 0.8rem;
+      min-width: 260px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+    }
+
+    .filter-select {
+      padding: 8px 14px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .badge-error {
+      padding: 4px 8px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .badge-success {
+      padding: 4px 8px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    /* Code Box */
+    .code-box {
+      background: #05080e;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow-2"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="header-brand">
+        <div class="logo-icon">⚡</div>
+        <div class="header-titles">
+          <h1>Observatório Medallion & Orquestração Hop</h1>
+          <p>Módulo 2 (Aula 03) — Padronização, Workflows, Tratamento de Erros & ELT no PostgreSQL</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <span class="badge-pill">
+          <span class="pulse"></span>
+          Apache Hop 2.19 Engine
+        </span>
+        <span class="badge-pill" style="border-color: rgba(6, 182, 212, 0.3); color: #22d3ee; background: rgba(6, 182, 212, 0.1);">
+          PostgreSQL 15 Destino
+        </span>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('visao-geral')">📊 Visão Geral Medallion</button>
+      <button class="tab-btn" onclick="switchTab('quarentena')">🛡️ Quarentena & Data Quality (15)</button>
+      <button class="tab-btn" onclick="switchTab('workflow')">🔄 Workflow Mestre & Teste de Fogo</button>
+      <button class="tab-btn" onclick="switchTab('elt')">⚡ Padrão ELT vs ETL</button>
+      <button class="tab-btn" onclick="switchTab('crontab')">⏰ Produção & Crontab (3h AM)</button>
+    </div>
+
+    <!-- TAB 1: VISÃO GERAL -->
+    <div id="visao-geral" class="tab-pane active">
+      <!-- KPI Row -->
+      <div class="kpi-grid">
+        <div class="kpi-card bronze">
+          <div class="kpi-header">
+            <span class="kpi-label">Bronze (Staging Bruto)</span>
+            <span class="kpi-icon">📦</span>
+          </div>
+          <div class="kpi-value" style="color: #f59e0b;">96</div>
+          <div class="kpi-subtext">5 fontes integradas na staging</div>
+        </div>
+
+        <div class="kpi-card silver">
+          <div class="kpi-header">
+            <span class="kpi-label">Silver (Higienizado)</span>
+            <span class="kpi-icon">✨</span>
+          </div>
+          <div class="kpi-value" style="color: #cbd5e1;">71</div>
+          <div class="kpi-subtext">Deduplicado e validado</div>
+        </div>
+
+        <div class="kpi-card quarentena">
+          <div class="kpi-header">
+            <span class="kpi-label">Quarentena (silver.rejeitados)</span>
+            <span class="kpi-icon">🛡️</span>
+          </div>
+          <div class="kpi-value" style="color: #f87171;">15</div>
+          <div class="kpi-subtext">Taxa de anomalia: 21.74%</div>
+        </div>
+
+        <div class="kpi-card gold">
+          <div class="kpi-header">
+            <span class="kpi-label">Faturamento Silver</span>
+            <span class="kpi-icon">💰</span>
+          </div>
+          <div class="kpi-value" style="color: #facc15;">R$ 15,438.30</div>
+          <div class="kpi-subtext">Ticket Médio: R$ 857.68</div>
+        </div>
+      </div>
+
+      <!-- 5 Fontes de Dados Badge & Grid -->
+      <div class="panel-card" style="margin-bottom: 24px;">
+        <div class="panel-title">
+          <span>📡 As 5 Fontes de Ingestão da Staging (Conforme Especificação da Aula 02)</span>
+          <span class="badge-pill" style="color: #22d3ee; border-color: rgba(6,182,212,0.3); background: rgba(6,182,212,0.1);">5 Fontes Heterogêneas Integradas</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 14px;">
+          <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid #6366f1;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: bold; text-transform: uppercase;">Fonte 1 • CSV</div>
+            <div style="font-weight: 700; font-size: 0.9rem; margin: 4px 0;">Produtos Master</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">27 registros brutos</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid #06b6d4;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: bold; text-transform: uppercase;">Fonte 2 • CSV Parametrizado</div>
+            <div style="font-weight: 700; font-size: 0.9rem; margin: 4px 0;">Vendas (${MES_REF})</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">26 transações brutas</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid #eab308;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: bold; text-transform: uppercase;">Fonte 3 • JSON</div>
+            <div style="font-weight: 700; font-size: 0.9rem; margin: 4px 0;">Avaliações de Clientes</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">16 reviews brutos</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid #10b981;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: bold; text-transform: uppercase;">Fonte 4 • PostgreSQL (RDBMS)</div>
+            <div style="font-weight: 700; font-size: 0.9rem; margin: 4px 0;">Cadastro de Clientes</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">22 clientes da base relacional</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid #ef4444;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: bold; text-transform: uppercase;">Fonte 5 • MongoDB (NoSQL)</div>
+            <div style="font-weight: 700; font-size: 0.9rem; margin: 4px 0;">Feedbacks (Teste de Fogo)</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">5 docs na coleção ecommerce</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="dashboard-grid">
+        <div class="panel-card">
+          <div class="panel-title">
+            <span>Fluxo do Funil Medallion (Preservação de Dados)</span>
+            <span class="badge-pill">Regra: "Transformações nunca destroem o bronze"</span>
+          </div>
+          <div style="height: 300px;">
+            <canvas id="chartFunil"></canvas>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-title">
+            <span>Motivos de Rejeição (Quarentena)</span>
+          </div>
+          <div style="height: 300px;">
+            <canvas id="chartMotivos"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: QUARENTENA -->
+    <div id="quarentena" class="tab-pane">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>🛡️ Auditoria de Quarentena (silver.rejeitados)</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Nenhum dado é descartado silenciosamente: tudo possui diagnóstico formal</span>
+        </div>
+
+        <div class="table-filter-bar">
+          <input type="text" id="filtroQuarentenaInput" class="search-input" placeholder="Buscar por código, erro ou motivo..." oninput="filtrarQuarentena()">
+          <select id="filtroPipelineSelect" class="filter-select" onchange="filtrarQuarentena()">
+            <option value="TODOS">Todos os Pipelines</option>
+            <option value="padroniza_produtos">padroniza_produtos</option>
+            <option value="padroniza_vendas">padroniza_vendas</option>
+            <option value="padroniza_avaliacoes">padroniza_avaliacoes</option>
+          </select>
+        </div>
+
+        <div class="table-container">
+          <table id="tabelaQuarentena">
+            <thead>
+              <tr>
+                <th>Pipeline Origem</th>
+                <th>Diagnóstico / Motivo do Erro</th>
+                <th>Identificador</th>
+                <th>Ação Recomendada</th>
+                <th>Registro Bruto Auditar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Render via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: WORKFLOW & TESTE DE FOGO -->
+    <div id="workflow" class="tab-pane">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>🔄 Orquestração do Workflow Mestre (carga_diaria.hwf)</span>
+          <span class="badge-pill">Parâmetro: MES_REF=2026-08</span>
+        </div>
+
+        <div class="workflow-canvas">
+          <div class="workflow-controls">
+            <div class="toggle-switch">
+              <span>Simulador do Teste de Fogo (MongoDB):</span>
+              <button id="btnMongoOnline" class="toggle-btn active-online" onclick="setMongoStatus(true)">🟢 MongoDB Online</button>
+              <button id="btnMongoOffline" class="toggle-btn" onclick="setMongoStatus(false)">🔴 MongoDB Offline (Derrubado)</button>
+            </div>
+            <button class="tab-btn active" style="padding: 6px 14px;" onclick="executarSimulacaoVisual()">▶️ Testar Fluxo em Tempo Real</button>
+          </div>
+
+          <div class="wf-nodes-container">
+            <div class="wf-node-row">
+              <div id="node-start" class="wf-node active-pass">1. Start</div>
+              <div class="wf-arrow">→</div>
+              <div id="node-truncate" class="wf-node active-pass">2. SQL: Truncate Staging</div>
+              <div class="wf-arrow">→</div>
+              <div id="node-ext-csv" class="wf-node active-pass">3. Ingestão Fontes Bronze</div>
+              <div class="wf-arrow">→</div>
+              <div id="node-mongo" class="wf-node active-pass">4. Extração Mongo (Teste de Fogo)</div>
+            </div>
+
+            <div class="wf-node-row" style="margin-top: 10px;">
+              <div id="node-pad-prod" class="wf-node active-pass">5. Padroniza Produtos (Silver)</div>
+              <div class="wf-arrow">→</div>
+              <div id="node-pad-vendas" class="wf-node active-pass">6. Padroniza Vendas (Silver)</div>
+              <div class="wf-arrow">→</div>
+              <div id="node-pad-aval" class="wf-node active-pass">7. Padroniza Avaliações (Silver)</div>
+              <div class="wf-arrow">→</div>
+              <div id="node-sucesso" class="wf-node active-pass">8. Log: Sucesso Completo 🎉</div>
+            </div>
+
+            <div id="row-caminho-vermelho" class="wf-node-row" style="margin-top: 16px; display: none;">
+              <div style="flex: 1; text-align: center; color: #f87171; font-weight: bold;">CAMINHO VERMELHO (FALHA):</div>
+              <div id="node-erro" class="wf-node active-fail">⚠️ Log de Erro Convergente</div>
+              <div class="wf-arrow">→</div>
+              <div id="node-abort" class="wf-node active-fail">🛑 Action Abort (Parada Segura)</div>
+            </div>
+          </div>
+
+          <div class="wf-log-terminal" id="terminalLog">
+[2026/09/18 14:08:58] - HopRun - Starting workflow: carga_diaria.hwf
+[2026/09/18 14:08:58] - carga_diaria - Starting action [Start] (result=[true])
+[2026/09/18 14:08:58] - carga_diaria - Starting action [SQL: Truncate da Staging] (result=[true])
+[2026/09/18 14:08:58] - carga_diaria - Starting action [Extracao 5: MongoDB Feedback (Teste de Fogo)] (result=[true])
+[2026/09/18 14:08:58] - carga_diaria - CARGA DIARIA CONCLUIDA COM SUCESSO! MES_REF=2026-08
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: ELT VS ETL -->
+    <div id="elt" class="tab-pane">
+      <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="panel-card">
+          <div class="panel-title">
+            <span>⚙️ Padrão Tradicional ETL (Hop Engine)</span>
+            <span class="badge-pill" style="border-color: #f59e0b; color: #f59e0b;">Memória Externa</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+            O Apache Hop extrai todos os registros brutos da staging, executa as transformações, deduplicações e conversões na memória da JVM e desova os dados higienizados no PostgreSQL.
+          </p>
+          <div class="code-box" style="color: #94a3b8;">
+// Exemplo Hop Pipeline:
+[Table Input] 
+  -> [String Operations: trim] 
+  -> [Select Values: cast & mask] 
+  -> [Sort Rows] 
+  -> [Unique Rows] 
+  -> [Table Output]
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-title">
+            <span>⚡ Padrão Moderno ELT (SQL no Destino)</span>
+            <span class="badge-pill" style="border-color: #10b981; color: #10b981;">Storage Nativo</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+            Os dados brutos pousam diretamente na staging. A transformação e o recorte da fatia demandada pelo negócio ocorrem via query SQL de alta performance diretamente no PostgreSQL com idempotência via <code>ON CONFLICT</code>.
+          </p>
+          <div class="code-box">
+-- sql/03_elt_silver_avaliacoes.sql
+INSERT INTO silver.avaliacoes_elt (id_avaliacao, codigo_produto, nota, comentario, data_avaliacao)
+SELECT TRIM(id_avaliacao), TRIM(codigo_produto), nota::INTEGER, TRIM(comentario), TO_DATE(data_avaliacao, 'YYYY-MM-DD')
+FROM staging.avaliacoes
+WHERE nota ~ '^[0-9]+$' AND (nota::INTEGER BETWEEN 1 AND 5)
+ON CONFLICT (id_avaliacao) DO UPDATE SET nota = EXCLUDED.nota;
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: CRONTAB & CLI -->
+    <div id="crontab" class="tab-pane">
+      <div class="panel-card">
+        <div class="panel-title">
+          <span>⏰ Configuração do Agendamento Noturno (Passo 4 do Mini-lab)</span>
+          <span class="badge-pill">Produção Headless</span>
+        </div>
+
+        <div class="code-box" style="font-size: 0.95rem; color: #38bdf8; margin-bottom: 20px;">
+0 3 * * * /home/ficdevia-16-tarde/Downloads/apache-hop-client-2.19.0/hop/hop-run.sh -j ecommerce -f hop/workflows/carga_diaria.hwf -r local -p MES_REF=$(date +\%Y-\%m) >> dados/execucao_cron.log 2>&1
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>Campo</th><th>Valor</th><th>Significado na Prática</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>1. Minuto</strong></td><td><code>0</code></td><td>Inicia exatamente no minuto zero da hora estipulada.</td></tr>
+              <tr><td><strong>2. Hora</strong></td><td><code>3</code></td><td>Dispara às 3h da madrugada (período ocioso de menor tráfego).</td></tr>
+              <tr><td><strong>3. Dia do Mês</strong></td><td><code>*</code></td><td>Executa em todos os dias do mês (1 a 31).</td></tr>
+              <tr><td><strong>4. Mês</strong></td><td><code>*</code></td><td>Executa em todos os meses do ano (Janeiro a Dezembro).</td></tr>
+              <tr><td><strong>5. Dia da Semana</strong></td><td><code>*</code></td><td>Executa em todos os dias da semana (Segunda a Domingo).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DADOS = {"metricas": {"timestamp_execucao": "2026-09-18T14:34:04.665614", "mes_referencia": "2026-08", "camadas": {"bronze": {"fontes_count": 5, "detalhe_fontes": {"1_csv_produtos": 27, "2_csv_vendas_mes": 26, "3_json_avaliacoes": 16, "4_postgresql_clientes": 22, "5_mongodb_feedbacks": 5}, "total_registros_brutos": 96}, "silver": {"produtos": 20, "vendas": 18, "avaliacoes": 11, "clientes": 22, "total_registros_limpos": 71}, "quarentena": {"total_rejeitados": 15, "taxa_rejeicao_pct": 21.74, "por_pipeline": {"padroniza_vendas": 6, "padroniza_produtos": 5, "padroniza_avaliacoes": 4}}, "elt": {"avaliacoes_elt_count": 11, "recorte_fatia": "WHERE nota BETWEEN 1 AND 5", "motor_execucao": "PostgreSQL nativo (SQL no storage)"}}, "resumo_execucao": "100% dos dados brutos processados com sucesso. Nenhuma linha perdida (arquitetura medallion estrita)."}, "rejeitados": [{"pipeline_origem": "padroniza_produtos", "motivo_erro": "Preço inválido (R$ -100,00)", "registro_bruto": {"codigo": "P021", "nome": "produto sem preco valido", "preco": "R$ -100,00", "categoria": "casa", "data_cadastro": "12/03/2026"}, "data_rejeicao": "2026-09-18T14:34:02.701471"}, {"pipeline_origem": "padroniza_produtos", "motivo_erro": "Data de cadastro com formato inválido (data_invalida_99)", "registro_bruto": {"codigo": "P022", "nome": "leitor codigo barras", "preco": "R$ 230,00", "categoria": "eletronicos", "data_cadastro": "data_invalida_99"}, "data_rejeicao": "2026-09-18T14:34:02.701554"}, {"pipeline_origem": "padroniza_produtos", "motivo_erro": "Preço inválido (R$ INVALIDO)", "registro_bruto": {"codigo": "P023", "nome": "item preco corrompido", "preco": "R$ INVALIDO", "categoria": "eletronicos", "data_cadastro": "15/03/2026"}, "data_rejeicao": "2026-09-18T14:34:02.701620"}, {"pipeline_origem": "padroniza_produtos", "motivo_erro": "Data de cadastro com formato inválido (nan)", "registro_bruto": {"codigo": "P024", "nome": "produto sem data", "preco": "R$ 120,00", "categoria": "livros", "data_cadastro": NaN}, "data_rejeicao": "2026-09-18T14:34:02.701691"}, {"pipeline_origem": "padroniza_produtos", "motivo_erro": "Preço inválido (PRECO_ERRADO)", "registro_bruto": {"codigo": "P025", "nome": "fone quebrado", "preco": "PRECO_ERRADO", "categoria": "casa", "data_cadastro": "16/03/2026"}, "data_rejeicao": "2026-09-18T14:34:02.701752"}, {"pipeline_origem": "padroniza_vendas", "motivo_erro": "Quantidade menor ou igual a zero (0)", "registro_bruto": {"id_venda": "V1006", "codigo_produto": "P002", "quantidade": "0", "valor_unitario": "R$ 150,00", "valor_total": "R$ 0,00", "data_venda": "16/08/2026", "cliente_id": "CLI06"}, "data_rejeicao": "2026-09-18T14:34:02.703314"}, {"pipeline_origem": "padroniza_vendas", "motivo_erro": "Quantidade menor ou igual a zero (-2)", "registro_bruto": {"id_venda": "V1008", "codigo_produto": "P007", "quantidade": "-2", "valor_unitario": "R$ 499,90", "valor_total": "R$ -999,80", "data_venda": "18/08/2026", "cliente_id": "CLI08"}, "data_rejeicao": "2026-09-18T14:34:02.703445"}, {"pipeline_origem": "padroniza_vendas", "motivo_erro": "Quantidade menor ou igual a zero (0)", "registro_bruto": {"id_venda": "V1015", "codigo_produto": "P015", "quantidade": "0", "valor_unitario": "R$ 160,00", "valor_total": "R$ 0,00", "data_venda": "2026-08-25", "cliente_id": "CLI15"}, "data_rejeicao": "2026-09-18T14:34:02.703894"}, {"pipeline_origem": "padroniza_vendas", "motivo_erro": "Quantidade menor ou igual a zero (-1)", "registro_bruto": {"id_venda": "V1021", "codigo_produto": "P001", "quantidade": "-1", "valor_unitario": "R$ 4.500,00", "valor_total": "R$ -4.500,00", "data_venda": "2026-08-30", "cliente_id": "CLI21"}, "data_rejeicao": "2026-09-18T14:34:02.704299"}, {"pipeline_origem": "padroniza_vendas", "motivo_erro": "Data de venda em formato desconhecido (DATA_INVALIDA)", "registro_bruto": {"id_venda": "V1023", "codigo_produto": "P004", "quantidade": "1", "valor_unitario": "R$ 1.250,00", "valor_total": "R$ 1.250,00", "data_venda": "DATA_INVALIDA", "cliente_id": "CLI23"}, "data_rejeicao": "2026-09-18T14:34:02.704669"}, {"pipeline_origem": "padroniza_vendas", "motivo_erro": "Valores monetários corrompidos (VALOR_CORROMPIDO / VALOR_CORROMPIDO)", "registro_bruto": {"id_venda": "V1024", "codigo_produto": "P005", "quantidade": "2", "valor_unitario": "VALOR_CORROMPIDO", "valor_total": "VALOR_CORROMPIDO", "data_venda": "2026-08-16", "cliente_id": "CLI24"}, "data_rejeicao": "2026-09-18T14:34:02.704757"}, {"pipeline_origem": "padroniza_avaliacoes", "motivo_erro": "Nota fora do intervalo regulamentar 1-5 (0)", "registro_bruto": {"id_avaliacao": "REV-003", "codigo_produto": "P003", "nota": "0", "comentario": " Teclado chegou com tecla solta e nota zero. ", "data_avaliacao": "2026-08-18"}, "data_rejeicao": "2026-09-18T14:34:02.705884"}, {"pipeline_origem": "padroniza_avaliacoes", "motivo_erro": "Nota fora do intervalo regulamentar 1-5 (6)", "registro_bruto": {"id_avaliacao": "REV-005", "codigo_produto": "P005", "nota": "6", "comentario": " Nota máxima ultrapassada, produto maravilhoso! ", "data_avaliacao": "2026-08-20"}, "data_rejeicao": "2026-09-18T14:34:02.706032"}, {"pipeline_origem": "padroniza_avaliacoes", "motivo_erro": "Nota fora do intervalo regulamentar 1-5 (-1)", "registro_bruto": {"id_avaliacao": "REV-009", "codigo_produto": "P009", "nota": "-1", "comentario": " Caneta falhou na primeira semana. ", "data_avaliacao": "2026-08-24"}, "data_rejeicao": "2026-09-18T14:34:02.706301"}, {"pipeline_origem": "padroniza_avaliacoes", "motivo_erro": "Nota fora do intervalo regulamentar 1-5 (10)", "registro_bruto": {"id_avaliacao": "REV-015", "codigo_produto": "P015", "nota": "10", "comentario": " Nota 10 exagerada pelo cliente! ", "data_avaliacao": "2026-08-30"}, "data_rejeicao": "2026-09-18T14:34:02.706689"}], "produtos": [{"codigo": "P001", "nome": "Notebook Dell Inspiron", "categoria": "eletronicos", "preco": 4500.0, "data_cadastro": "2026-01-15"}, {"codigo": "P002", "nome": "Mouse Logitech Sem Fio", "categoria": "eletronicos", "preco": 150.0, "data_cadastro": "2026-01-20"}, {"codigo": "P003", "nome": "Teclado Mecanico Rgb", "categoria": "eletronicos", "preco": 320.0, "data_cadastro": "2026-01-22"}, {"codigo": "P004", "nome": "Cadeira Ergonomica Office", "categoria": "casa", "preco": 1250.0, "data_cadastro": "2026-01-25"}, {"codigo": "P005", "nome": "Livro Data Engineering", "categoria": "livros", "preco": 180.5, "data_cadastro": "2026-01-28"}, {"codigo": "P006", "nome": "Cafeteira Expresso Bar", "categoria": "eletrodomesticos", "preco": 680.0, "data_cadastro": "2026-02-02"}, {"codigo": "P007", "nome": "Tenis Corrida Pro", "categoria": "esporte", "preco": 499.9, "data_cadastro": "2026-02-05"}, {"codigo": "P008", "nome": "Smart Tv 55 4K", "categoria": "eletronicos", "preco": 2899.0, "data_cadastro": "2026-02-10"}, {"codigo": "P009", "nome": "Mesa Digitalizadora", "categoria": "eletronicos", "preco": 420.0, "data_cadastro": "2026-02-12"}, {"codigo": "P010", "nome": "Fone Bluetooth Anc", "categoria": "eletronicos", "preco": 380.0, "data_cadastro": "2026-02-14"}, {"codigo": "P011", "nome": "Monitor Ultrawide 29", "categoria": "eletronicos", "preco": 1350.0, "data_cadastro": "2026-02-18"}, {"codigo": "P012", "nome": "Livro Python Fluente", "categoria": "livros", "preco": 145.0, "data_cadastro": "2026-02-20"}, {"codigo": "P013", "nome": "Luminaria Articulada", "categoria": "casa", "preco": 89.9, "data_cadastro": "2026-02-22"}, {"codigo": "P014", "nome": "Mochila Notebook Impermeavel", "categoria": "moda", "preco": 199.0, "data_cadastro": "2026-02-25"}, {"codigo": "P015", "nome": "Suporte Articulado Monitor", "categoria": "casa", "preco": 160.0, "data_cadastro": "2026-02-28"}, {"codigo": "P016", "nome": "Mousepad Speed Gigante", "categoria": "eletronicos", "preco": 75.0, "data_cadastro": "2026-03-01"}, {"codigo": "P017", "nome": "Webcam Full Hd 1080P", "categoria": "eletronicos", "preco": 290.0, "data_cadastro": "2026-03-03"}, {"codigo": "P018", "nome": "Hub Usb-C 7 Em 1", "categoria": "eletronicos", "preco": 210.0, "data_cadastro": "2026-03-05"}, {"codigo": "P019", "nome": "Garrafa Termica Inox 1L", "categoria": "casa", "preco": 95.0, "data_cadastro": "2026-03-08"}, {"codigo": "P020", "nome": "Kindle Paperwhite 16Gb", "categoria": "eletronicos", "preco": 699.0, "data_cadastro": "2026-03-10"}], "vendas": [{"id_venda": "V1001", "codigo_produto": "P001", "quantidade": 1, "valor_unitario": 4500.0, "valor_total": 4500.0, "data_venda": "2026-08-12", "cliente_id": "CLI01"}, {"id_venda": "V1002", "codigo_produto": "P002", "quantidade": 2, "valor_unitario": 150.0, "valor_total": 300.0, "data_venda": "2026-08-13", "cliente_id": "CLI02"}, {"id_venda": "V1003", "codigo_produto": "P003", "quantidade": 1, "valor_unitario": 320.0, "valor_total": 320.0, "data_venda": "2026-08-14", "cliente_id": "CLI03"}, {"id_venda": "V1004", "codigo_produto": "P004", "quantidade": 1, "valor_unitario": 1250.0, "valor_total": 1250.0, "data_venda": "2026-08-15", "cliente_id": "CLI04"}, {"id_venda": "V1005", "codigo_produto": "P005", "quantidade": 3, "valor_unitario": 180.5, "valor_total": 541.5, "data_venda": "2026-08-15", "cliente_id": "CLI05"}, {"id_venda": "V1007", "codigo_produto": "P006", "quantidade": 1, "valor_unitario": 680.0, "valor_total": 680.0, "data_venda": "2026-08-17", "cliente_id": "CLI07"}, {"id_venda": "V1009", "codigo_produto": "P008", "quantidade": 1, "valor_unitario": 2899.0, "valor_total": 2899.0, "data_venda": "2026-08-19", "cliente_id": "CLI09"}, {"id_venda": "V1010", "codigo_produto": "P010", "quantidade": 2, "valor_unitario": 380.0, "valor_total": 760.0, "data_venda": "2026-08-20", "cliente_id": "CLI10"}, {"id_venda": "V1011", "codigo_produto": "P011", "quantidade": 1, "valor_unitario": 1350.0, "valor_total": 1350.0, "data_venda": "2026-08-21", "cliente_id": "CLI11"}, {"id_venda": "V1012", "codigo_produto": "P012", "quantidade": 4, "valor_unitario": 145.0, "valor_total": 580.0, "data_venda": "2026-08-22", "cliente_id": "CLI12"}, {"id_venda": "V1013", "codigo_produto": "P013", "quantidade": 2, "valor_unitario": 89.9, "valor_total": 179.8, "data_venda": "2026-08-23", "cliente_id": "CLI13"}, {"id_venda": "V1014", "codigo_produto": "P014", "quantidade": 1, "valor_unitario": 199.0, "valor_total": 199.0, "data_venda": "2026-08-24", "cliente_id": "CLI14"}, {"id_venda": "V1016", "codigo_produto": "P016", "quantidade": 3, "valor_unitario": 75.0, "valor_total": 225.0, "data_venda": "2026-08-25", "cliente_id": "CLI16"}, {"id_venda": "V1017", "codigo_produto": "P017", "quantidade": 1, "valor_unitario": 290.0, "valor_total": 290.0, "data_venda": "2026-08-26", "cliente_id": "CLI17"}, {"id_venda": "V1018", "codigo_produto": "P018", "quantidade": 2, "valor_unitario": 210.0, "valor_total": 420.0, "data_venda": "2026-08-27", "cliente_id": "CLI18"}, {"id_venda": "V1019", "codigo_produto": "P019", "quantidade": 1, "valor_unitario": 95.0, "valor_total": 95.0, "data_venda": "2026-08-28", "cliente_id": "CLI19"}, {"id_venda": "V1020", "codigo_produto": "P020", "quantidade": 1, "valor_unitario": 699.0, "valor_total": 699.0, "data_venda": "2026-08-29", "cliente_id": "CLI20"}, {"id_venda": "V1022", "codigo_produto": "P002", "quantidade": 1, "valor_unitario": 150.0, "valor_total": 150.0, "data_venda": "2026-08-31", "cliente_id": "CLI22"}], "avaliacoes": [{"id_avaliacao": "REV-001", "codigo_produto": "P001", "nota": 5, "comentario": "Excelente notebook, super rápido e silencioso!", "data_avaliacao": "2026-08-16"}, {"id_avaliacao": "REV-002", "codigo_produto": "P002", "nota": 4, "comentario": "Ótimo custo benefício para home office.", "data_avaliacao": "2026-08-17"}, {"id_avaliacao": "REV-004", "codigo_produto": "P004", "nota": 5, "comentario": "Cadeira super confortável para a lombar.", "data_avaliacao": "2026-08-19"}, {"id_avaliacao": "REV-006", "codigo_produto": "P006", "nota": 3, "comentario": "Cafeteira boa, mas um pouco barulhenta.", "data_avaliacao": "2026-08-21"}, {"id_avaliacao": "REV-007", "codigo_produto": "P007", "nota": 5, "comentario": "Tênis muito leve para treinos de 10km.", "data_avaliacao": "2026-08-22"}, {"id_avaliacao": "REV-008", "codigo_produto": "P008", "nota": 2, "comentario": "Imagem boa, mas sistema operacional lento.", "data_avaliacao": "2026-08-23"}, {"id_avaliacao": "REV-010", "codigo_produto": "P010", "nota": 5, "comentario": "Cancelamento de ruído impressionante!", "data_avaliacao": "2026-08-25"}, {"id_avaliacao": "REV-011", "codigo_produto": "P011", "nota": 4, "comentario": "Ótimo monitor para programação e produtividade.", "data_avaliacao": "2026-08-26"}, {"id_avaliacao": "REV-012", "codigo_produto": "P012", "nota": 5, "comentario": "Melhor livro de engenharia de software em Python.", "data_avaliacao": "2026-08-27"}, {"id_avaliacao": "REV-013", "codigo_produto": "P013", "nota": 1, "comentario": "Veio com defeito no conector elétrico.", "data_avaliacao": "2026-08-28"}, {"id_avaliacao": "REV-014", "codigo_produto": "P014", "nota": 4, "comentario": "Mochila resistente com bom acabamento.", "data_avaliacao": "2026-08-29"}], "motivos_rejeicao": {"Preço inválido": 3, "Data de cadastro com formato inválido": 2, "Quantidade menor ou igual a zero": 4, "Data de venda em formato desconhecido": 1, "Valores monetários corrompidos": 1, "Nota fora do intervalo regulamentar 1-5": 4}, "categorias_prod": {"eletronicos": 11, "casa": 4, "livros": 2, "eletrodomesticos": 1, "esporte": 1, "moda": 1}, "distribuicao_notas": {"1": 1, "2": 1, "3": 1, "4": 3, "5": 5}, "faturamento_total": 15438.3, "ticket_medio": 857.68, "media_avaliacoes": 3.91, "log_falha": "2026/09/18 14:10:18 - HopRun - Enabling project 'ecommerce'\n2026/09/18 14:10:18 - HopRun - Two-way password encoder initialized with plugin ID 'Hop' for project 'ecommerce'\n2026/09/18 14:10:18 - HopRun - Starting workflow: /home/ficdevia-16-tarde/projetos/Fic_dev_IA_Kristiann/bloco_02_dados/aula-14-padronizacao-workflows-hop/hop/workflows/carga_diaria.hwf\n2026/09/18 14:10:18 - carga_diaria - Start of workflow execution\n2026/09/18 14:10:18 - carga_diaria - Starting action [Start]\n2026/09/18 14:10:18 - carga_diaria - Finished action [Start] (result=[true])\n2026/09/18 14:10:18 - carga_diaria - Starting action [SQL: Truncate da Staging]\n2026/09/18 14:10:18 - carga_diaria - Finished action [SQL: Truncate da Staging] (result=[true])\n2026/09/18 14:10:18 - carga_diaria - Starting action [Extracao 1: CSV Produtos]\n2026/09/18 14:10:18 - Extracao 1: CSV Produtos - Using run configuration [local]\n2026/09/18 14:10:18 - extracao_csv_produtos - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'\n2026/09/18 14:10:18 - extracao_csv_produtos - Execution started for pipeline [extracao_csv_produtos]\n2026/09/18 14:10:19 - Gravar staging.produtos.0 - Connected to database [PostgreSQL] (commit=1000)\n2026/09/18 14:10:19 - carga_diaria - Finished action [Extracao 1: CSV Produtos] (result=[true])\n2026/09/18 14:10:19 - carga_diaria - Starting action [Extracao 2: CSV Vendas]\n2026/09/18 14:10:19 - Extracao 2: CSV Vendas - Using run configuration [local]\n2026/09/18 14:10:19 - extracao_csv_vendas - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'\n2026/09/18 14:10:19 - extracao_csv_vendas - Execution started for pipeline [extracao_csv_vendas]\n2026/09/18 14:10:19 - CSV Produtos Bronze.0 - Header row skipped in file '/home/ficdevia-16-tarde/projetos/Fic_dev_IA_Kristiann/bloco_02_dados/aula-14-padronizacao-workflows-hop/dados/bronze/produtos_bronze.csv'\n2026/09/18 14:10:19 - CSV Produtos Bronze.0 - Finished processing (I=28, O=0, R=0, W=27, U=0, E=0)\n2026/09/18 14:10:19 - Gravar staging.produtos.0 - Finished processing (I=0, O=27, R=27, W=27, U=0, E=0)\n2026/09/18 14:10:19 - Gravar staging.vendas.0 - Connected to database [PostgreSQL] (commit=1000)\n2026/09/18 14:10:19 - extracao_csv_produtos - Pipeline duration : 0.067 seconds [  0.067\" ]\n2026/09/18 14:10:19 - extracao_csv_produtos - Execution finished on a local pipeline engine with run configuration 'local'\n2026/09/18 14:10:19 - carga_diaria - Finished action [Extracao 2: CSV Vendas] (result=[true])\n2026/09/18 14:10:19 - carga_diaria - Starting action [Extracao 3: JSON Avaliacoes]\n2026/09/18 14:10:19 - CSV Vendas Parametrizado.0 - Header row skipped in file '/home/ficdevia-16-tarde/projetos/Fic_dev_IA_Kristiann/bloco_02_dados/aula-14-padronizacao-workflows-hop/dados/bronze/vendas_2026-08.csv'\n2026/09/18 14:10:19 - CSV Vendas Parametrizado.0 - Finished processing (I=27, O=0, R=0, W=26, U=0, E=0)\n2026/09/18 14:10:19 - Extracao 3: JSON Avaliacoes - Using run configuration [local]\n2026/09/18 14:10:19 - extracao_json_avaliacoes - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'\n2026/09/18 14:10:19 - Gravar staging.vendas.0 - Finished processing (I=0, O=26, R=26, W=26, U=0, E=0)\n2026/09/18 14:10:19 - extracao_json_avaliacoes - Execution started for pipeline [extracao_json_avaliacoes]\n2026/09/18 14:10:19 - extracao_csv_vendas - Pipeline duration : 0.031 seconds [  0.031\" ]\n2026/09/18 14:10:19 - extracao_csv_vendas - Execution finished on a local pipeline engine with run configuration 'local'\n2026/09/18 14:10:19 - carga_diaria - Finished action [Extracao 3: JSON Avaliacoes] (result=[true])\n2026/09/18 14:10:19 - carga_diaria - Starting action [Extracao 4: PostgreSQL Clientes]\n2026/09/18 14:10:19 - Extracao 4: PostgreSQL Clientes - Using run configuration [local]\n2026/09/18 14:10:19 - extracao_postgres_clientes - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'\n2026/09/18 14:10:19 - extracao_postgres_clientes - Execution started for pipeline [extracao_postgres_clientes]\n2026/09/18 14:10:19 - Carrega JSON Staging.0 - Finished reading query, closing connection.\n2026/09/18 14:10:19 - extracao_json_avaliacoes - Pipeline duration : 0.034 seconds [  0.034\" ]\n2026/09/18 14:10:19 - extracao_json_avaliacoes - Execution finished on a local pipeline engine with run configuration 'local'\n2026/09/18 14:10:19 - carga_diaria - Finished action [Extracao 4: PostgreSQL Clientes] (result=[true])\n2026/09/18 14:10:19 - carga_diaria - Starting action [Extracao 5: MongoDB Feedback (Teste de Fogo)]\n2026/09/18 14:10:19 - Table Input Clientes.0 - Finished reading query, closing connection.\n2026/09/18 14:10:19 - Extracao 5: MongoDB Feedback (Teste de Fogo) - Running on platform : Linux\n2026/09/18 14:10:19 - Gravar staging.clientes.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)\n2026/09/18 14:10:19 - Table Input Clientes.0 - Finished processing (I=1, O=0, R=0, W=1, U=0, E=0)\n2026/09/18 14:10:19 - extracao_postgres_clientes - Pipeline duration : 0.024 seconds [  0.024\" ]\n2026/09/18 14:10:19 - extracao_postgres_clientes - Execution finished on a local pipeline engine with run configuration 'local'\n2026/09/18 14:10:19 - Extracao 5: MongoDB Feedback (Teste de Fogo) - Executing command : /tmp/hop_4dbfb780-311a-4850-aeba-b20d0f0b7346shell\n2026/09/18 14:10:19 - carga_diaria - Finished action [Extracao 5: MongoDB Feedback (Teste de Fogo)] (result=[false])\n2026/09/18 14:10:19 - carga_diaria - Starting action [Log de Erro Convergente]\n2026/09/18 14:10:19 - carga_diaria - Finished action [Log de Erro Convergente] (result=[true])\n2026/09/18 14:10:19 - carga_diaria - Starting action [Abort]\n2026/09/18 14:10:19 - carga_diaria - Stop workflow execution\n2026/09/18 14:10:19 - carga_diaria - Finished action [Abort] (result=[false])\n2026/09/18 14:10:19 - carga_diaria - Workflow execution finished\n2026/09/18 14:10:19 - carga_diaria - Workflow duration : 0.772 seconds [  0.772\" ]\nHopRun exit.\n\n2026/09/18 14:10:18 - General - ERROR: Execution information location 'local-audit' could not be found in the metadata (non-fatal)\n2026/09/18 14:10:19 - extracao_csv_produtos - ERROR: Execution information location 'local-audit' could not be found in the metadata\n2026/09/18 14:10:19 - extracao_csv_vendas - ERROR: Execution information location 'local-audit' could not be found in the metadata\n2026/09/18 14:10:19 - extracao_json_avaliacoes - ERROR: Execution information location 'local-audit' could not be found in the metadata\n2026/09/18 14:10:19 - extracao_postgres_clientes - ERROR: Execution information location 'local-audit' could not be found in the metadata\n2026/09/18 14:10:19 - Extracao 5: MongoDB Feedback (Teste de Fogo) - ERROR: (stderr) MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27999\n2026/09/18 14:10:19 -  - ERROR: ERRO CRITICO EM ETAPA DA CARGA DIARIA! CONVERGINDO FLUXO VERMELHO PARA ABORT...\n2026/09/18 14:10:19 - Abort - ERROR: Execucao da Carga Diaria abortada com falha.\n", "log_sucesso": "2026/09/18 14:10:21 - HopRun - Enabling project 'ecommerce'\n2026/09/18 14:10:21 - HopRun - Two-way password encoder initialized with plugin ID 'Hop' for project 'ecommerce'\n2026/09/18 14:10:21 - HopRun - Starting workflow: /home/ficdevia-16-tarde/projetos/Fic_dev_IA_Kristiann/bloco_02_dados/aula-14-padronizacao-workflows-hop/hop/workflows/carga_diaria.hwf\n2026/09/18 14:10:21 - carga_diaria - Start of workflow execution\n2026/09/18 14:10:21 - carga_diaria - Starting action [Start]\n2026/09/18 14:10:21 - carga_diaria - Finished action [Start] (result=[true])\n2026/09/18 14:10:21 - carga_diaria - Starting action [SQL: Truncate da Staging]\n2026/09/18 14:10:21 - carga_diaria - Finished action [SQL: Truncate da Staging] (result=[true])\n2026/09/18 14:10:21 - carga_diaria - Starting action [Extracao 1: CSV Produtos]\n2026/09/18 14:10:21 - Extracao 1: CSV Produtos - Using run configuration [local]\n2026/09/18 14:10:21 - extracao_csv_produtos - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'\n2026/09/18 14:10:21 - extracao_csv_produtos - Execution started for pipeline [extracao_csv_produtos]\n2026/09/18 14:10:21 - Gravar staging.produtos.0 - Connected to database [PostgreSQL] (commit=1000)\n2026/09/18 14:10:21 - carga_diaria - Finished action [Extracao 1: CSV Produtos] (result=[true])\n2026/09/18 14:10:21 - carga_diaria - Starting action [Extracao 2: CSV Vendas]\n2026/09/18 14:10:21 - Extracao 2: CSV Vendas - Using run configuration [local]\n2026/09/18 14:10:21 - extracao_csv_vendas - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'\n2026/09/18 14:10:21 - extracao_csv_vendas - Execution started for pipeline [extracao_csv_vendas]\n2026/09/18 14:10:21 - CSV Produtos Bronze.0 - Header row skipped in file '/home/ficdevia-16-tarde/projetos/Fic_dev_IA_Kristiann/bloco_02_dados/aula-14-padronizacao-workflows-hop/dados/bronze/produtos_bronze.csv'\n2026/09/18 14:10:21 - CSV Produtos Bronze.0 - Finished processing (I=28, O=0, R=0, W=27, U=0, E=0)\n2026/09/18 14:10:21 - Gravar staging.produtos.0 - Finished processing (I=0, O=27, R=27, W=27, U=0, E=0)\n2026/09/18 14:10:21 - Gravar staging.vendas.0 - Connected to database [PostgreSQL] (commit=1000)\n2026/09/18 14:10:21 - extracao_csv_produtos - Pipeline duration : 0.07 seconds [  0.070\" ]\n2026/09/18 14:10:21 - extracao_csv_produtos - Execution finished on a local pipeline engine with run configuration 'local'\n2026/09/18 14:10:21 - carga_diaria - Finished action [Extracao 2: CSV Vendas] (result=[true])\n2026/09/18 14:10:21 - carga_diaria - Starting action [Extracao 3: JSON Avaliacoes]\n2026/09/18 14:10:21 - CSV Vendas Parametrizado.0 - Header row skipped in file '/home/ficdevia-16-tarde/projetos/Fic_dev_IA_Kristiann/bloco_02_dados/aula-14-padronizacao-workflows-hop/dados/bronze/vendas_2026-08.csv'\n2026/09/18 14:10:21 - CSV Vendas Parametrizado.0 - Finished processing (I=27, O=0, R=0, W=26, U=0, E=0)\n2026/09/18 14:10:21 - Gravar staging.vendas.0 - Finished processing (I=0, O=26, R=26, W=26, U=0, E=0)\n2026/09/18 14:10:21 - Extracao 3: JSON Avaliacoes - Using run configuration [local]\n2026/09/18 14:10:21 - extracao_csv_vendas - Pipeline duration : 0.03 seconds [  0.030\" ]\n2026/09/18 14:10:21 - extracao_csv_vendas - Execution finished on a local pipeline engine with run configuration 'local'\n2026/09/18 14:10:21 - extracao_json_avaliacoes - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'\n2026/09/18 14:10:21 - extracao_json_avaliacoes - Execution started for pipeline [extracao_json_avaliacoes]\n2026/09/18 14:10:21 - carga_diaria - Finished action [Extracao 3: JSON Avaliacoes] (result=[true])\n2026/09/18 14:10:21 - carga_diaria - Starting action [Extracao 4: PostgreSQL Clientes]\n2026/09/18 14:10:21 - Extracao 4: PostgreSQL Clientes - Using run configuration [local]\n2026/09/18 14:10:21 - extracao_postgres_clientes - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'\n2026/09/18 14:10:21 - extracao_postgres_clientes - Execution started for pipeline [extracao_postgres_clientes]\n2026/09/18 14:10:21 - Carrega JSON Staging.0 - Finished reading query, closing connection.\n2026/09/18 14:10:21 - extracao_json_avaliacoes - Pipeline duration : 0.036 seconds [  0.036\" ]\n2026/09/18 14:10:21 - extracao_json_avaliacoes - Execution finished on a local pipeline engine with run configuration 'local'\n2026/09/18 14:10:21 - carga_diaria - Finished action [Extracao 4: PostgreSQL Clientes] (result=[true])\n2026/09/18 14:10:21 - carga_diaria - Starting action [Extracao 5: MongoDB Feedback (Teste de Fogo)]\n2026/09/18 14:10:21 - Table Input Clientes.0 - Finished reading query, closing connection.\n2026/09/18 14:10:21 - Extracao 5: MongoDB Feedback (Teste de Fogo) - Running on platform : Linux\n2026/09/18 14:10:21 - Table Input Clientes.0 - Finished processing (I=1, O=0, R=0, W=1, U=0, E=0)\n2026/09/18 14:10:21 - Gravar staging.clientes.0 - Finished processing (I=0, O=0, R=1, W=1, U=0, E=0)\n2026/09/18 14:10:21 - extracao_postgres_clientes - Pipeline duration : 0.023 seconds [  0.023\" ]\n2026/09/18 14:10:21 - extracao_postgres_clientes - Execution finished on a local pipeline engine with run configuration 'local'\n2026/09/18 14:10:21 - Extracao 5: MongoDB Feedback (Teste de Fogo) - Executing command : /tmp/hop_deb8f7cc-aa8e-4d88-b4e1-3d1802864d0ashell\n2026/09/18 14:10:22 - Extracao 5: MongoDB Feedback (Teste de Fogo) - (stdout) { ok: 1 }\n2026/09/18 14:10:22 - carga_diaria - Finished action [Extracao 5: MongoDB Feedback (Teste de Fogo)] (result=[true])\n2026/09/18 14:10:22 - carga_diaria - Starting action [Padroniza Produtos (Silver)]\n2026/09/18 14:10:22 - Padroniza Produtos (Silver) - Using run configuration [local]\n2026/09/18 14:10:22 - exemplo03_padroniza_produtos - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'\n2026/09/18 14:10:22 - exemplo03_padroniza_produtos - Execution started for pipeline [exemplo03_padroniza_produtos]\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - Connected to database [PostgreSQL] (commit=1000)\n2026/09/18 14:10:22 - Gravar quarentena.0 - Connected to database [PostgreSQL] (commit=1000)\n2026/09/18 14:10:22 - carga_diaria - Finished action [Padroniza Produtos (Silver)] (result=[true])\n2026/09/18 14:10:22 - carga_diaria - Starting action [Padroniza Vendas (Silver)]\n2026/09/18 14:10:22 - Ler staging.produtos.0 - Finished reading query, closing connection.\n2026/09/18 14:10:22 - Ler staging.produtos.0 - Finished processing (I=27, O=0, R=0, W=27, U=0, E=0)\n2026/09/18 14:10:22 - Limpar textos.0 - Finished processing (I=0, O=0, R=27, W=27, U=0, E=0)\n2026/09/18 14:10:22 - Limpar preco.0 - Finished processing (I=0, O=0, R=27, W=27, U=0, E=0)\n2026/09/18 14:10:22 - Padroniza Vendas (Silver) - Using run configuration [local]\n2026/09/18 14:10:22 - padroniza_vendas - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'\n2026/09/18 14:10:22 - padroniza_vendas - Execution started for pipeline [padroniza_vendas]\n2026/09/18 14:10:22 - Converter tipos.0 - Finished processing (I=0, O=0, R=27, W=24, U=0, E=3)\n2026/09/18 14:10:22 - Marcar motivo erro.0 - Finished processing (I=0, O=0, R=3, W=3, U=0, E=0)\n2026/09/18 14:10:22 - Ordenar por codigo.0 - Finished processing (I=0, O=0, R=24, W=24, U=0, E=0)\n2026/09/18 14:10:22 - Deduplicar.0 - Finished processing (I=0, O=0, R=24, W=22, U=0, E=0)\n2026/09/18 14:10:22 - Gravar quarentena.0 - Finished processing (I=0, O=0, R=3, W=0, U=0, E=1)\n2026/09/18 14:10:22 - exemplo03_padroniza_produtos - Pipeline detected one or more transforms with errors.\n2026/09/18 14:10:22 - exemplo03_padroniza_produtos - Pipeline is killing the other transforms!\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - Finished processing (I=0, O=0, R=22, W=0, U=0, E=1)\n2026/09/18 14:10:22 - exemplo03_padroniza_produtos - Pipeline duration : 0.058 seconds [  0.058\" ]\n2026/09/18 14:10:22 - exemplo03_padroniza_produtos - Execution finished on a local pipeline engine with run configuration 'local'\n2026/09/18 14:10:22 - exemplo03_padroniza_produtos - Pipeline detected one or more transforms with errors.\n2026/09/18 14:10:22 - exemplo03_padroniza_produtos - Pipeline is killing the other transforms!\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - Connected to database [PostgreSQL] (commit=1000)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - Connected to database [PostgreSQL] (commit=1000)\n2026/09/18 14:10:22 - carga_diaria - Finished action [Padroniza Vendas (Silver)] (result=[true])\n2026/09/18 14:10:22 - carga_diaria - Starting action [Padroniza Avaliacoes (Silver)]\n2026/09/18 14:10:22 - Ler staging.vendas.0 - Finished reading query, closing connection.\n2026/09/18 14:10:22 - Ler staging.vendas.0 - Finished processing (I=26, O=0, R=0, W=26, U=0, E=0)\n2026/09/18 14:10:22 - Limpar strings e moeda.0 - Finished processing (I=0, O=0, R=26, W=26, U=0, E=0)\n2026/09/18 14:10:22 - Padroniza Avaliacoes (Silver) - Using run configuration [local]\n2026/09/18 14:10:22 - padroniza_avaliacoes - Executing this pipeline using the Local Pipeline Engine with run configuration 'local'\n2026/09/18 14:10:22 - padroniza_avaliacoes - Execution started for pipeline [padroniza_avaliacoes]\n2026/09/18 14:10:22 - Filtrar quantidade positiva.0 - Finished processing (I=0, O=0, R=26, W=26, U=0, E=0)\n2026/09/18 14:10:22 - Marcar erro quantidade.0 - Finished processing (I=0, O=0, R=4, W=4, U=0, E=0)\n2026/09/18 14:10:22 - Converter tipos vendas.0 - Finished processing (I=0, O=0, R=22, W=9, U=0, E=13)\n2026/09/18 14:10:22 - Ordenar por id_venda.0 - Finished processing (I=0, O=0, R=9, W=9, U=0, E=0)\n2026/09/18 14:10:22 - Marcar erro conversao vendas.0 - Finished processing (I=0, O=0, R=13, W=13, U=0, E=0)\n2026/09/18 14:10:22 - Deduplicar vendas.0 - Finished processing (I=0, O=0, R=9, W=9, U=0, E=0)\n2026/09/18 14:10:22 - Gravar quarentena avaliacoes.0 - Connected to database [PostgreSQL] (commit=1000)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - Finished processing (I=0, O=0, R=17, W=0, U=0, E=1)\n2026/09/18 14:10:22 - padroniza_vendas - Pipeline detected one or more transforms with errors.\n2026/09/18 14:10:22 - padroniza_vendas - Pipeline is killing the other transforms!\n2026/09/18 14:10:22 - Gravar silver.avaliacoes.0 - Connected to database [PostgreSQL] (commit=1000)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - Finished processing (I=0, O=0, R=9, W=0, U=0, E=1)\n2026/09/18 14:10:22 - padroniza_vendas - Pipeline duration : 0.068 seconds [  0.068\" ]\n2026/09/18 14:10:22 - padroniza_vendas - Execution finished on a local pipeline engine with run configuration 'local'\n2026/09/18 14:10:22 - padroniza_vendas - Pipeline detected one or more transforms with errors.\n2026/09/18 14:10:22 - padroniza_vendas - Pipeline is killing the other transforms!\n2026/09/18 14:10:22 - carga_diaria - Finished action [Padroniza Avaliacoes (Silver)] (result=[true])\n2026/09/18 14:10:22 - carga_diaria - Starting action [Desafio ELT Avaliacoes (SQL)]\n2026/09/18 14:10:22 - Ler staging.avaliacoes.0 - Finished reading query, closing connection.\n2026/09/18 14:10:22 - carga_diaria - Finished action [Desafio ELT Avaliacoes (SQL)] (result=[true])\n2026/09/18 14:10:22 - carga_diaria - Starting action [Log: Sucesso Completo]\n2026/09/18 14:10:22 -  - CARGA DIARIA CONCLUIDA COM SUCESSO! STAGING, SILVER E QUARENTENA PRONTAS. MES_REF=2026-08\n2026/09/18 14:10:22 - carga_diaria - Finished action [Log: Sucesso Completo] (result=[true])\n2026/09/18 14:10:22 - carga_diaria - Workflow execution finished\n2026/09/18 14:10:22 - carga_diaria - Workflow duration : 1.006 seconds [  1.006\" ]\nHopRun exit.\n\n2026/09/18 14:10:21 - General - ERROR: Execution information location 'local-audit' could not be found in the metadata (non-fatal)\n2026/09/18 14:10:21 - extracao_csv_produtos - ERROR: Execution information location 'local-audit' could not be found in the metadata\n2026/09/18 14:10:21 - extracao_csv_vendas - ERROR: Execution information location 'local-audit' could not be found in the metadata\n2026/09/18 14:10:21 - extracao_json_avaliacoes - ERROR: Execution information location 'local-audit' could not be found in the metadata\n2026/09/18 14:10:21 - extracao_postgres_clientes - ERROR: Execution information location 'local-audit' could not be found in the metadata\n2026/09/18 14:10:22 - exemplo03_padroniza_produtos - ERROR: Execution information location 'local-audit' could not be found in the metadata\n2026/09/18 14:10:22 - Converter tipos.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos.0 - \n2026/09/18 14:10:22 - Converter tipos.0 - data_cadastro String(2147483647) : couldn't convert string [data_invalida_99] to a date using format [dd/MM/yyyy] on offset location 0\n2026/09/18 14:10:22 - Converter tipos.0 - data_invalida_99\n2026/09/18 14:10:22 - Converter tipos.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos.0 - \n2026/09/18 14:10:22 - Converter tipos.0 - Unexpected conversion error while converting value [preco String(2147483647)] to a Number\n2026/09/18 14:10:22 - Converter tipos.0 - \n2026/09/18 14:10:22 - Converter tipos.0 - preco String(2147483647) : couldn't convert String to number \n2026/09/18 14:10:22 - Converter tipos.0 - \n2026/09/18 14:10:22 - Converter tipos.0 - preco String(2147483647) : couldn't convert String to number : non-numeric character found at position 1 for value [INVALIDO]\n2026/09/18 14:10:22 - Converter tipos.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos.0 - \n2026/09/18 14:10:22 - Converter tipos.0 - Unexpected conversion error while converting value [preco String(2147483647)] to a Number\n2026/09/18 14:10:22 - Converter tipos.0 - \n2026/09/18 14:10:22 - Converter tipos.0 - preco String(2147483647) : couldn't convert String to number \n2026/09/18 14:10:22 - Converter tipos.0 - \n2026/09/18 14:10:22 - Converter tipos.0 - preco String(2147483647) : couldn't convert String to number : non-numeric character found at position 1 for value [PECO_EADO]\n2026/09/18 14:10:22 - Gravar quarentena.0 - ERROR: Unexpected batch update error committing the database connection.\n2026/09/18 14:10:22 - Gravar quarentena.0 - org.apache.hop.core.exception.HopDatabaseBatchException: \n2026/09/18 14:10:22 - Gravar quarentena.0 - Error updating batch\n2026/09/18 14:10:22 - Gravar quarentena.0 - Batch entry 0 INSERT INTO silver.rejeitados (pipeline_origem, motivo_erro, registro_bruto) VALUES ( ('padroniza_produtos'),  ('Preco ou data com formato invalido'),  ('P022')) was aborted: ERRO: coluna \"registro_bruto\" é do tipo jsonb mas expressão é do tipo character varying\n2026/09/18 14:10:22 - Gravar quarentena.0 -   Dica: Você precisará reescrever ou converter a expressão.\n2026/09/18 14:10:22 - Gravar quarentena.0 -   Posição: 97  Call getNextException to see other errors in the batch.\n2026/09/18 14:10:22 - Gravar quarentena.0 - \n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.apache.hop.core.database.Database.createHopDatabaseBatchException(Database.java:1495)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.apache.hop.core.database.Database.emptyAndCommit(Database.java:1483)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.apache.hop.pipeline.transforms.tableoutput.TableOutput.emptyAndCommitBatchBuffers(TableOutput.java:1203)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.apache.hop.pipeline.transforms.tableoutput.TableOutput.dispose(TableOutput.java:1159)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.apache.hop.pipeline.transform.RunThread.run(RunThread.java:96)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat java.base/java.lang.Thread.run(Thread.java:1583)\n2026/09/18 14:10:22 - Gravar quarentena.0 - Caused by: java.sql.BatchUpdateException: Batch entry 0 INSERT INTO silver.rejeitados (pipeline_origem, motivo_erro, registro_bruto) VALUES ( ('padroniza_produtos'),  ('Preco ou data com formato invalido'),  ('P022')) was aborted: ERRO: coluna \"registro_bruto\" é do tipo jsonb mas expressão é do tipo character varying\n2026/09/18 14:10:22 - Gravar quarentena.0 -   Dica: Você precisará reescrever ou converter a expressão.\n2026/09/18 14:10:22 - Gravar quarentena.0 -   Posição: 97  Call getNextException to see other errors in the batch.\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.postgresql.jdbc.BatchResultHandler.handleError(BatchResultHandler.java:165)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.postgresql.core.ResultHandlerDelegate.handleError(ResultHandlerDelegate.java:52)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2590)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:674)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.postgresql.jdbc.PgStatement.internalExecuteBatch(PgStatement.java:900)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.postgresql.jdbc.PgStatement.executeBatch(PgStatement.java:924)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.postgresql.jdbc.PgPreparedStatement.executeBatch(PgPreparedStatement.java:1778)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.apache.hop.core.database.Database.emptyAndCommit(Database.java:1470)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \t... 4 more\n2026/09/18 14:10:22 - Gravar quarentena.0 - Caused by: org.postgresql.util.PSQLException: ERRO: coluna \"registro_bruto\" é do tipo jsonb mas expressão é do tipo character varying\n2026/09/18 14:10:22 - Gravar quarentena.0 -   Dica: Você precisará reescrever ou converter a expressão.\n2026/09/18 14:10:22 - Gravar quarentena.0 -   Posição: 97\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2904)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2589)\n2026/09/18 14:10:22 - Gravar quarentena.0 - \t... 9 more\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - ERROR: Unexpected batch update error committing the database connection.\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - org.apache.hop.core.exception.HopDatabaseBatchException: \n2026/09/18 14:10:22 - Gravar silver.produtos.0 - Error updating batch\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - Batch entry 0 INSERT INTO silver.produtos (codigo, nome, categoria, preco, data_cadastro) VALUES ( ('P001'),  ('notebook dell inspiron'),  ('eletronicos'),  ('4500.0'::double precision),  ('2026-01-15 00:00:00-04'::date)) was aborted: ERRO: duplicar valor da chave viola a restrição de unicidade \"produtos_pkey\"\n2026/09/18 14:10:22 - Gravar silver.produtos.0 -   Detalhe: Chave (codigo)=(P001) já existe.  Call getNextException to see other errors in the batch.\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.apache.hop.core.database.Database.createHopDatabaseBatchException(Database.java:1495)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.apache.hop.core.database.Database.emptyAndCommit(Database.java:1483)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.apache.hop.pipeline.transforms.tableoutput.TableOutput.emptyAndCommitBatchBuffers(TableOutput.java:1203)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.apache.hop.pipeline.transforms.tableoutput.TableOutput.dispose(TableOutput.java:1159)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.apache.hop.pipeline.transform.RunThread.run(RunThread.java:96)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat java.base/java.lang.Thread.run(Thread.java:1583)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - Caused by: java.sql.BatchUpdateException: Batch entry 0 INSERT INTO silver.produtos (codigo, nome, categoria, preco, data_cadastro) VALUES ( ('P001'),  ('notebook dell inspiron'),  ('eletronicos'),  ('4500.0'::double precision),  ('2026-01-15 00:00:00-04'::date)) was aborted: ERRO: duplicar valor da chave viola a restrição de unicidade \"produtos_pkey\"\n2026/09/18 14:10:22 - Gravar silver.produtos.0 -   Detalhe: Chave (codigo)=(P001) já existe.  Call getNextException to see other errors in the batch.\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.postgresql.jdbc.BatchResultHandler.handleError(BatchResultHandler.java:165)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.postgresql.core.ResultHandlerDelegate.handleError(ResultHandlerDelegate.java:52)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2590)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:674)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.postgresql.jdbc.PgStatement.internalExecuteBatch(PgStatement.java:900)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.postgresql.jdbc.PgStatement.executeBatch(PgStatement.java:924)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.postgresql.jdbc.PgPreparedStatement.executeBatch(PgPreparedStatement.java:1778)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.apache.hop.core.database.Database.emptyAndCommit(Database.java:1470)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \t... 4 more\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - Caused by: org.postgresql.util.PSQLException: ERRO: duplicar valor da chave viola a restrição de unicidade \"produtos_pkey\"\n2026/09/18 14:10:22 - Gravar silver.produtos.0 -   Detalhe: Chave (codigo)=(P001) já existe.\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2904)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2589)\n2026/09/18 14:10:22 - Gravar silver.produtos.0 - \t... 9 more\n2026/09/18 14:10:22 - padroniza_vendas - ERROR: Execution information location 'local-audit' could not be found in the metadata\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - data_venda String(2147483647) : couldn't convert string [12/08/2026] to a date using format [yyyy-MM-dd] on offset location 2\n2026/09/18 14:10:22 - Converter tipos vendas.0 - 12/08/2026\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - data_venda String(2147483647) : couldn't convert string [14/08/2026] to a date using format [yyyy-MM-dd] on offset location 2\n2026/09/18 14:10:22 - Converter tipos vendas.0 - 14/08/2026\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - data_venda String(2147483647) : couldn't convert string [15/08/2026] to a date using format [yyyy-MM-dd] on offset location 2\n2026/09/18 14:10:22 - Converter tipos vendas.0 - 15/08/2026\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - data_venda String(2147483647) : couldn't convert string [20/08/2026] to a date using format [yyyy-MM-dd] on offset location 2\n2026/09/18 14:10:22 - Converter tipos vendas.0 - 20/08/2026\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - data_venda String(2147483647) : couldn't convert string [22/08/2026] to a date using format [yyyy-MM-dd] on offset location 2\n2026/09/18 14:10:22 - Converter tipos vendas.0 - 22/08/2026\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - data_venda String(2147483647) : couldn't convert string [24/08/2026] to a date using format [yyyy-MM-dd] on offset location 2\n2026/09/18 14:10:22 - Converter tipos vendas.0 - 24/08/2026\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - data_venda String(2147483647) : couldn't convert string [25/08/2026] to a date using format [yyyy-MM-dd] on offset location 2\n2026/09/18 14:10:22 - Converter tipos vendas.0 - 25/08/2026\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - data_venda String(2147483647) : couldn't convert string [27/08/2026] to a date using format [yyyy-MM-dd] on offset location 2\n2026/09/18 14:10:22 - Converter tipos vendas.0 - 27/08/2026\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - data_venda String(2147483647) : couldn't convert string [31/08/2026] to a date using format [yyyy-MM-dd] on offset location 2\n2026/09/18 14:10:22 - Converter tipos vendas.0 - 31/08/2026\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - data_venda String(2147483647) : couldn't convert string [12/08/2026] to a date using format [yyyy-MM-dd] on offset location 2\n2026/09/18 14:10:22 - Converter tipos vendas.0 - 12/08/2026\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - data_venda String(2147483647) : couldn't convert string [14/08/2026] to a date using format [yyyy-MM-dd] on offset location 2\n2026/09/18 14:10:22 - Converter tipos vendas.0 - 14/08/2026\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - data_venda String(2147483647) : couldn't convert string [DATA_INVALIDA] to a date using format [yyyy-MM-dd] on offset location 0\n2026/09/18 14:10:22 - Converter tipos vendas.0 - DATA_INVALIDA\n2026/09/18 14:10:22 - Converter tipos vendas.0 - ERROR: \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - Unexpected conversion error while converting value [valor_unitario String(2147483647)] to a Number\n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - valor_unitario String(2147483647) : couldn't convert String to number \n2026/09/18 14:10:22 - Converter tipos vendas.0 - \n2026/09/18 14:10:22 - Converter tipos vendas.0 - valor_unitario String(2147483647) : couldn't convert String to number : non-numeric character found at position 1 for value [VALO_COOMPIDO]\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - ERROR: Unexpected batch update error committing the database connection.\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - org.apache.hop.core.exception.HopDatabaseBatchException: \n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - Error updating batch\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - Batch entry 0 INSERT INTO silver.rejeitados (pipeline_origem, motivo_erro, registro_bruto) VALUES ( ('padroniza_vendas'),  ('Falha na conversao de tipos, valores monetarios ou datas mistas'),  ('V1001')) was aborted: ERRO: coluna \"registro_bruto\" é do tipo jsonb mas expressão é do tipo character varying\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 -   Dica: Você precisará reescrever ou converter a expressão.\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 -   Posição: 97  Call getNextException to see other errors in the batch.\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.apache.hop.core.database.Database.createHopDatabaseBatchException(Database.java:1495)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.apache.hop.core.database.Database.emptyAndCommit(Database.java:1483)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.apache.hop.pipeline.transforms.tableoutput.TableOutput.emptyAndCommitBatchBuffers(TableOutput.java:1203)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.apache.hop.pipeline.transforms.tableoutput.TableOutput.dispose(TableOutput.java:1159)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.apache.hop.pipeline.transform.RunThread.run(RunThread.java:96)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat java.base/java.lang.Thread.run(Thread.java:1583)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - Caused by: java.sql.BatchUpdateException: Batch entry 0 INSERT INTO silver.rejeitados (pipeline_origem, motivo_erro, registro_bruto) VALUES ( ('padroniza_vendas'),  ('Falha na conversao de tipos, valores monetarios ou datas mistas'),  ('V1001')) was aborted: ERRO: coluna \"registro_bruto\" é do tipo jsonb mas expressão é do tipo character varying\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 -   Dica: Você precisará reescrever ou converter a expressão.\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 -   Posição: 97  Call getNextException to see other errors in the batch.\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.postgresql.jdbc.BatchResultHandler.handleError(BatchResultHandler.java:165)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.postgresql.core.ResultHandlerDelegate.handleError(ResultHandlerDelegate.java:52)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2590)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:674)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.postgresql.jdbc.PgStatement.internalExecuteBatch(PgStatement.java:900)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.postgresql.jdbc.PgStatement.executeBatch(PgStatement.java:924)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.postgresql.jdbc.PgPreparedStatement.executeBatch(PgPreparedStatement.java:1778)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.apache.hop.core.database.Database.emptyAndCommit(Database.java:1470)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \t... 4 more\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - Caused by: org.postgresql.util.PSQLException: ERRO: coluna \"registro_bruto\" é do tipo jsonb mas expressão é do tipo character varying\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 -   Dica: Você precisará reescrever ou converter a expressão.\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 -   Posição: 97\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2904)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2589)\n2026/09/18 14:10:22 - Gravar quarentena vendas.0 - \t... 9 more\n2026/09/18 14:10:22 - padroniza_avaliacoes - ERROR: Execution information location 'local-audit' could not be found in the metadata\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - ERROR: Unexpected batch update error committing the database connection.\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - org.apache.hop.core.exception.HopDatabaseBatchException: \n2026/09/18 14:10:22 - Gravar silver.vendas.0 - Error updating batch\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - Batch entry 0 INSERT INTO silver.vendas (id_venda, codigo_produto, quantidade, valor_unitario, valor_total, data_venda, cliente_id) VALUES ( ('V1002'),  ('P002'),  ('2'::int8),  ('150.0'::double precision),  ('300.0'::double precision),  ('2026-08-13 00:00:00-04'::date),  ('CLI02')) was aborted: ERRO: duplicar valor da chave viola a restrição de unicidade \"vendas_pkey\"\n2026/09/18 14:10:22 - Gravar silver.vendas.0 -   Detalhe: Chave (id_venda)=(V1002) já existe.  Call getNextException to see other errors in the batch.\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.apache.hop.core.database.Database.createHopDatabaseBatchException(Database.java:1495)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.apache.hop.core.database.Database.emptyAndCommit(Database.java:1483)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.apache.hop.pipeline.transforms.tableoutput.TableOutput.emptyAndCommitBatchBuffers(TableOutput.java:1203)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.apache.hop.pipeline.transforms.tableoutput.TableOutput.dispose(TableOutput.java:1159)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.apache.hop.pipeline.transform.RunThread.run(RunThread.java:96)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat java.base/java.lang.Thread.run(Thread.java:1583)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - Caused by: java.sql.BatchUpdateException: Batch entry 0 INSERT INTO silver.vendas (id_venda, codigo_produto, quantidade, valor_unitario, valor_total, data_venda, cliente_id) VALUES ( ('V1002'),  ('P002'),  ('2'::int8),  ('150.0'::double precision),  ('300.0'::double precision),  ('2026-08-13 00:00:00-04'::date),  ('CLI02')) was aborted: ERRO: duplicar valor da chave viola a restrição de unicidade \"vendas_pkey\"\n2026/09/18 14:10:22 - Gravar silver.vendas.0 -   Detalhe: Chave (id_venda)=(V1002) já existe.  Call getNextException to see other errors in the batch.\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.postgresql.jdbc.BatchResultHandler.handleError(BatchResultHandler.java:165)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.postgresql.core.ResultHandlerDelegate.handleError(ResultHandlerDelegate.java:52)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2590)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:674)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.postgresql.jdbc.PgStatement.internalExecuteBatch(PgStatement.java:900)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.postgresql.jdbc.PgStatement.executeBatch(PgStatement.java:924)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.postgresql.jdbc.PgPreparedStatement.executeBatch(PgPreparedStatement.java:1778)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.apache.hop.core.database.Database.emptyAndCommit(Database.java:1470)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \t... 4 more\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - Caused by: org.postgresql.util.PSQLException: ERRO: duplicar valor da chave viola a restrição de unicidade \"vendas_pkey\"\n2026/09/18 14:10:22 - Gravar silver.vendas.0 -   Detalhe: Chave (id_venda)=(V1002) já existe.\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2904)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \tat org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2589)\n2026/09/18 14:10:22 - Gravar silver.vendas.0 - \t... 9 more\n"};
+
+    // Gerenciamento de Abas
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    // Renderiza Tabela de Quarentena
+    function renderQuarentena(filtroTexto = '', filtroPipeline = 'TODOS') {
+      const tbody = document.querySelector('#tabelaQuarentena tbody');
+      tbody.innerHTML = '';
+
+      const filtrados = DADOS.rejeitados.filter(item => {
+        const matchPip = (filtroPipeline === 'TODOS' || item.pipeline_origem === filtroPipeline);
+        const matchTxt = JSON.stringify(item).toLowerCase().includes(filtroTexto.toLowerCase());
+        return matchPip && matchTxt;
+      });
+
+      filtrados.forEach(r => {
+        const tr = document.createElement('tr');
+        const cod = r.registro_bruto.codigo || r.registro_bruto.id_venda || r.registro_bruto.id_avaliacao || 'N/A';
+        tr.innerHTML = `
+          <td><span class="badge-pill" style="font-size:0.7rem;">${r.pipeline_origem}</span></td>
+          <td><span class="badge-error">${r.motivo_erro}</span></td>
+          <td style="font-family: var(--font-mono); font-weight: bold;">${cod}</td>
+          <td style="color: var(--text-muted);">Auditar com time de origem</td>
+          <td><code style="font-size:0.7rem; color:#94a3b8;">${JSON.stringify(r.registro_bruto)}</code></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filtrarQuarentena() {
+      const txt = document.getElementById('filtroQuarentenaInput').value;
+      const pip = document.getElementById('filtroPipelineSelect').value;
+      renderQuarentena(txt, pip);
+    }
+
+    // Simulação do Teste de Fogo
+    let mongoOnline = true;
+    function setMongoStatus(status) {
+      mongoOnline = status;
+      const btnOn = document.getElementById('btnMongoOnline');
+      const btnOff = document.getElementById('btnMongoOffline');
+      const rowVermelho = document.getElementById('row-caminho-vermelho');
+      const nodeMongo = document.getElementById('node-mongo');
+      const nodeSucesso = document.getElementById('node-sucesso');
+      const terminal = document.getElementById('terminalLog');
+
+      if (status) {
+        btnOn.className = 'toggle-btn active-online';
+        btnOff.className = 'toggle-btn';
+        rowVermelho.style.display = 'none';
+        nodeMongo.className = 'wf-node active-pass';
+        nodeSucesso.style.display = 'block';
+        terminal.innerText = DADOS.log_sucesso || '[2026/09/18 14:08:58] - Workflow finalizado com SUCESSO (Caminho Verde).';
+      } else {
+        btnOn.className = 'toggle-btn';
+        btnOff.className = 'toggle-btn active-offline';
+        rowVermelho.style.display = 'flex';
+        nodeMongo.className = 'wf-node active-fail';
+        nodeSucesso.style.display = 'none';
+        terminal.innerText = DADOS.log_falha || '[2026/09/18 14:08:52] - FALHA NA EXTRAÇÃO MONGODB! ACIONANDO ABORT (Caminho Vermelho).';
+      }
+    }
+
+    function executarSimulacaoVisual() {
+      setMongoStatus(!mongoOnline);
+    }
+
+    // Inicialização dos Gráficos Chart.js
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuarentena();
+
+      // Gráfico 1: Funil Medallion
+      const ctxFunil = document.getElementById('chartFunil').getContext('2d');
+      new Chart(ctxFunil, {
+        type: 'bar',
+        data: {
+          labels: ['Bronze (Staging Bruto)', 'Silver (Limpo e Deduplicado)', 'Quarentena (silver.rejeitados)', 'Gold/ELT (Fatia de Valor)'],
+          datasets: [{
+            label: 'Total de Registros',
+            data: [
+              DADOS.metricas.camadas?.bronze?.total_registros_brutos || 69,
+              DADOS.metricas.camadas?.silver?.total_registros_limpos || 49,
+              DADOS.metricas.camadas?.quarentena?.total_rejeitados || 15,
+              11
+            ],
+            backgroundColor: ['#d97706', '#94a3b8', '#ef4444', '#eab308'],
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+            x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+          }
+        }
+      });
+
+      // Gráfico 2: Motivos de Quarentena
+      const ctxMotivos = document.getElementById('chartMotivos').getContext('2d');
+      new Chart(ctxMotivos, {
+        type: 'doughnut',
+        data: {
+          labels: Object.keys(DADOS.motivos_rejeicao),
+          datasets: [{
+            data: Object.values(DADOS.motivos_rejeicao),
+            backgroundColor: ['#ef4444', '#f97316', '#eab308', '#6366f1', '#ec4899'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 12 } }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

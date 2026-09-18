@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>extracao_cnes_leitos</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>CSV CNES Leitos</from><to>Gravar staging.cnes_leitos</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>CSV CNES Leitos</name>
+    <type>CSVInput</type>
+    <filename>${PROJECT_HOME}/dados/bronze/cnes_leitos_hospitalares.csv</filename>
+    <separator>;</separator>
+    <header>Y</header>
+    <fields>
+      <field><name>cod_mun_6</name><type>String</type></field>
+      <field><name>municipio</name><type>String</type></field>
+      <field><name>leitos_clinicos</name><type>String</type></field>
+      <field><name>leitos_uti</name><type>String</type></field>
+      <field><name>postos_saude</name><type>String</type></field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar staging.cnes_leitos</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>staging</schema>
+    <table>cnes_leitos</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
+      <field><column_name>municipio</column_name><stream_name>municipio</stream_name></field>
+      <field><column_name>leitos_clinicos</column_name><stream_name>leitos_clinicos</stream_name></field>
+      <field><column_name>leitos_uti</column_name><stream_name>leitos_uti</stream_name></field>
+      <field><column_name>postos_saude</column_name><stream_name>postos_saude</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>

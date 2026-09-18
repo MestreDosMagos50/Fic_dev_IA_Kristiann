@@ -1,0 +1,25 @@
+id_notificacao;cod_mun_6;data_notificacao;casos_notificados;casos_confirmados;classificacao
+NOT-001;355030;12/08/2026;1420;1150;Dengue Classica
+NOT-002;330455;2026-08-13;980;820;Dengue com Sinais de Alarme
+NOT-003;310620;14/08/2026;2450;2100;Dengue Grave
+NOT-004;530010;2026-08-15;3100;2890;Dengue Grave
+NOT-005;292740;16/08/2026;450;380;Dengue Classica
+NOT-006;230440;17/08/2026;520;440;Dengue Classica
+NOT-007;410690;2026-08-18;310;260;Dengue Classica
+NOT-008;130260;19/08/2026;180;150;Dengue Classica
+NOT-009;261160;20/08/2026;610;530;Dengue com Sinais de Alarme
+NOT-010;520870;2026-08-21;1890;1650;Dengue Grave
+NOT-011;150140;22/08/2026;290;210;Dengue Classica
+NOT-012;431490;2026-08-23;120;95;Dengue Classica
+NOT-013;350950;24/08/2026;850;720;Dengue com Sinais de Alarme
+NOT-014;354980;2026-08-25;430;380;Dengue Classica
+NOT-015;354340;26/08/2026;790;680;Dengue com Sinais de Alarme
+NOT-016;317020;2026-08-27;560;490;Dengue Classica
+NOT-017;420540;28/08/2026;95;75;Dengue Classica
+NOT-018;320530;2026-08-29;210;170;Dengue Classica
+NOT-019;500270;30/08/2026;980;860;Dengue com Sinais de Alarme
+NOT-020;510340;31/08/2026;1150;1020;Dengue Grave
+NOT-021;355030;2026-08-15;-25;-20;Erro Quantidade Negativa
+NOT-022;330455;DATA_CORROMPIDA_99;50;40;Data Invalida
+NOT-023;310620;2026-08-20;0;0;Sem Notificacao
+NOT-001;355030;12/08/2026;1420;1150;Dengue Classica

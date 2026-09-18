@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>extracao_json_avaliacoes</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>Carrega JSON Staging</from><to>Gravar staging.avaliacoes</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>Carrega JSON Staging</name>
+    <type>TableInput</type>
+    <connection>PostgreSQL</connection>
+    <sql>SELECT id_avaliacao, codigo_produto, nota, comentario, data_avaliacao FROM staging.avaliacoes LIMIT 0</sql>
+  </transform>
+  <transform>
+    <name>Gravar staging.avaliacoes</name>
+    <type>Dummy</type>
+  </transform>
+</pipeline>

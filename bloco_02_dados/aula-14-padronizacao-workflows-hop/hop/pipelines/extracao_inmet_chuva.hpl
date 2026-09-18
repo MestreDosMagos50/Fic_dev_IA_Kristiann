@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>extracao_inmet_chuva</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>CSV INMET Pluviometria</from><to>Gravar staging.inmet_chuva</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>CSV INMET Pluviometria</name>
+    <type>CSVInput</type>
+    <filename>${PROJECT_HOME}/dados/bronze/inmet_chuva.csv</filename>
+    <separator>;</separator>
+    <header>Y</header>
+    <fields>
+      <field><name>cod_mun_6</name><type>String</type></field>
+      <field><name>chuva_acumulada_mm</name><type>String</type></field>
+      <field><name>dias_com_chuva</name><type>String</type></field>
+      <field><name>estacao_monitorada</name><type>String</type></field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar staging.inmet_chuva</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>staging</schema>
+    <table>inmet_chuva</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
+      <field><column_name>chuva_acumulada_mm</column_name><stream_name>chuva_acumulada_mm</stream_name></field>
+      <field><column_name>dias_com_chuva</column_name><stream_name>dias_com_chuva</stream_name></field>
+      <field><column_name>estacao_monitorada</column_name><stream_name>estacao_monitorada</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>

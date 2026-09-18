@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>padroniza_inmet_chuva</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>Ler staging.inmet_chuva</from><to>Converter Tipos Pluviometria</to><enabled>Y</enabled></hop>
+    <hop><from>Converter Tipos Pluviometria</from><to>Gravar silver.inmet_chuva</to><enabled>Y</enabled></hop>
+    <hop><from>Converter Tipos Pluviometria</from><to>Motivo Quarentena Chuva</to><enabled>Y</enabled><error_handling>Y</error_handling></hop>
+    <hop><from>Motivo Quarentena Chuva</from><to>Gravar Quarentena Chuva</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>Ler staging.inmet_chuva</name>
+    <type>TableInput</type>
+    <connection>PostgreSQL</connection>
+    <sql>SELECT cod_mun_6, chuva_acumulada_mm, dias_com_chuva, estacao_monitorada FROM staging.inmet_chuva</sql>
+  </transform>
+  <transform>
+    <name>Converter Tipos Pluviometria</name>
+    <type>SelectValues</type>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>cod_mun_6</name><type>String</type>
+      </meta>
+      <meta>
+        <name>chuva_acumulada_mm</name><type>Number</type><conversion_mask>#.##</conversion_mask><decimal_symbol>,</decimal_symbol>
+      </meta>
+      <meta>
+        <name>dias_com_chuva</name><type>Integer</type><conversion_mask>#</conversion_mask>
+      </meta>
+      <meta>
+        <name>estacao_monitorada</name><type>String</type>
+      </meta>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar silver.inmet_chuva</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>silver</schema>
+    <table>inmet_chuva</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
+      <field><column_name>chuva_acumulada_mm</column_name><stream_name>chuva_acumulada_mm</stream_name></field>
+      <field><column_name>dias_com_chuva</column_name><stream_name>dias_com_chuva</stream_name></field>
+      <field><column_name>estacao_monitorada</column_name><stream_name>estacao_monitorada</stream_name></field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Motivo Quarentena Chuva</name>
+    <type>Constant</type>
+    <fields>
+      <field>
+        <name>pipeline_origem</name><type>String</type><nullif>padroniza_inmet_chuva</nullif><length>50</length><precision>-1</precision><set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>motivo_erro</name><type>String</type><nullif>Precipitacao invalida ou dias com chuva negativo</nullif><length>255</length><precision>-1</precision><set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar Quarentena Chuva</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>silver</schema>
+    <table>rejeitados</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>pipeline_origem</column_name><stream_name>pipeline_origem</stream_name></field>
+      <field><column_name>motivo_erro</column_name><stream_name>motivo_erro</stream_name></field>
+      <field><column_name>registro_bruto</column_name><stream_name>cod_mun_6</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>extracao_mongodb_feedback</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>Mongo Feedback</from><to>Gravar staging.feedback</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>Mongo Feedback</name>
+    <type>Dummy</type>
+  </transform>
+  <transform>
+    <name>Gravar staging.feedback</name>
+    <type>Dummy</type>
+  </transform>
+</pipeline>

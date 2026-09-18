@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info>
+    <name>extracao_datasus_dengue</name>
+    <pipeline_type>Normal</pipeline_type>
+    <parameters>
+      <parameter>
+        <name>MES_REF</name>
+        <default_value>2026-08</default_value>
+        <description>Mes de referencia YYYY-MM para notificacoes</description>
+      </parameter>
+    </parameters>
+  </info>
+  <order>
+    <hop><from>CSV DataSUS Dengue Parametrizado</from><to>Gravar staging.datasus_dengue</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>CSV DataSUS Dengue Parametrizado</name>
+    <type>CSVInput</type>
+    <filename>${PROJECT_HOME}/dados/bronze/datasus_dengue_${MES_REF}.csv</filename>
+    <separator>;</separator>
+    <header>Y</header>
+    <fields>
+      <field><name>id_notificacao</name><type>String</type></field>
+      <field><name>cod_mun_6</name><type>String</type></field>
+      <field><name>data_notificacao</name><type>String</type></field>
+      <field><name>casos_notificados</name><type>String</type></field>
+      <field><name>casos_confirmados</name><type>String</type></field>
+      <field><name>classificacao</name><type>String</type></field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar staging.datasus_dengue</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>staging</schema>
+    <table>datasus_dengue</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>id_notificacao</column_name><stream_name>id_notificacao</stream_name></field>
+      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
+      <field><column_name>data_notificacao</column_name><stream_name>data_notificacao</stream_name></field>
+      <field><column_name>casos_notificados</column_name><stream_name>casos_notificados</stream_name></field>
+      <field><column_name>casos_confirmados</column_name><stream_name>casos_confirmados</stream_name></field>
+      <field><column_name>classificacao</column_name><stream_name>classificacao</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>

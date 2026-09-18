@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info><name>extracao_inmet_temperatura</name><pipeline_type>Normal</pipeline_type></info>
+  <order>
+    <hop><from>CSV INMET Temperatura</from><to>Gravar staging.inmet_temperatura</to><enabled>Y</enabled></hop>
+  </order>
+  <transform>
+    <name>CSV INMET Temperatura</name>
+    <type>CSVInput</type>
+    <filename>${PROJECT_HOME}/dados/bronze/inmet_temperatura.csv</filename>
+    <separator>;</separator>
+    <header>Y</header>
+    <fields>
+      <field><name>cod_mun_6</name><type>String</type></field>
+      <field><name>municipio</name><type>String</type></field>
+      <field><name>temperatura_c</name><type>String</type></field>
+      <field><name>umidade_relativa</name><type>String</type></field>
+      <field><name>status_sensor</name><type>String</type></field>
+      <field><name>data_leitura</name><type>String</type></field>
+    </fields>
+  </transform>
+  <transform>
+    <name>Gravar staging.inmet_temperatura</name>
+    <type>TableOutput</type>
+    <connection>PostgreSQL</connection>
+    <schema>staging</schema>
+    <table>inmet_temperatura</table>
+    <specify_fields>Y</specify_fields>
+    <fields>
+      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
+      <field><column_name>municipio</column_name><stream_name>municipio</stream_name></field>
+      <field><column_name>temperatura_c</column_name><stream_name>temperatura_c</stream_name></field>
+      <field><column_name>umidade_relativa</column_name><stream_name>umidade_relativa</stream_name></field>
+      <field><column_name>status_sensor</column_name><stream_name>status_sensor</stream_name></field>
+      <field><column_name>data_leitura</column_name><stream_name>data_leitura</stream_name></field>
+    </fields>
+  </transform>
+</pipeline>
