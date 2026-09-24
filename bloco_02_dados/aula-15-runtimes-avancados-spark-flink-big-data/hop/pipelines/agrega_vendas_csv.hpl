@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info>
+    <name>agrega_vendas_csv</name>
+    <name_sync_with_filename>Y</name_sync_with_filename>
+    <description>Passo 2 - Agregacao de Receita por Categoria lendo CSV</description>
+    <pipeline_type>Normal</pipeline_type>
+  </info>
+  <order>
+    <hop>
+      <from>CSV File Input</from>
+      <to>Sort rows (por categoria)</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Sort rows (por categoria)</from>
+      <to>Group by (Receita por Categoria)</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Group by (Receita por Categoria)</from>
+      <to>Text file output (Resultado CSV)</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <transform>
+    <name>CSV File Input</name>
+    <type>CSVInput</type>
+    <filename>${PROJECT_HOME}/dados/entrada/vendas_grandes.csv</filename>
+    <separator>,</separator>
+    <enclosure>&quot;</enclosure>
+    <header>Y</header>
+    <buffer_size>50000</buffer_size>
+    <fields>
+      <field><name>categoria</name><type>String</type></field>
+      <field><name>receita</name><type>Number</type><format>#.#</format></field>
+    </fields>
+    <GUI>
+      <xloc>140</xloc>
+      <yloc>120</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Sort rows (por categoria)</name>
+    <type>SortRows</type>
+    <directory>${java.io.tmpdir}</directory>
+    <prefix>sort_csv</prefix>
+    <sort_size>100000</sort_size>
+    <fields>
+      <field><name>categoria</name><ascending>Y</ascending><case_sensitive>N</case_sensitive></field>
+    </fields>
+    <GUI>
+      <xloc>320</xloc>
+      <yloc>120</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Group by (Receita por Categoria)</name>
+    <type>GroupBy</type>
+    <all_rows>N</all_rows>
+    <ignore_aggregate>N</ignore_aggregate>
+    <field_ignore/>
+    <directory>${java.io.tmpdir}</directory>
+    <prefix>grp_csv</prefix>
+    <add_linenr>N</add_linenr>
+    <linenr_fieldname/>
+    <give_back_row>N</give_back_row>
+    <group>
+      <field><name>categoria</name></field>
+    </group>
+    <fields>
+      <field>
+        <aggregate>receita_total</aggregate>
+        <subject>receita</subject>
+        <type>SUM</type>
+        <valuefield/>
+      </field>
+      <field>
+        <aggregate>total_pedidos</aggregate>
+        <subject>receita</subject>
+        <type>COUNT_ALL</type>
+        <valuefield/>
+      </field>
+    </fields>
+    <GUI>
+      <xloc>500</xloc>
+      <yloc>120</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Text file output (Resultado CSV)</name>
+    <type>TextFileOutput</type>
+    <filename>${PROJECT_HOME}/dados/saida/agregado_vendas_csv</filename>
+    <extension>csv</extension>
+    <separator>;</separator>
+    <header>Y</header>
+    <fields>
+      <field><name>categoria</name><type>String</type></field>
+      <field><name>receita_total</name><type>Number</type><format>#.##</format></field>
+      <field><name>total_pedidos</name><type>Integer</type></field>
+    </fields>
+    <GUI>
+      <xloc>700</xloc>
+      <yloc>120</yloc>
+    </GUI>
+  </transform>
+</pipeline>

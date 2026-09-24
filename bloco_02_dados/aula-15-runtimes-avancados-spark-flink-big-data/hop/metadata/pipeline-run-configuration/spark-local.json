@@ -1,0 +1,18 @@
+{
+  "engineRunConfiguration": {
+    "Beam": {
+      "runner": "Spark",
+      "sparkMaster": "local[*]",
+      "tempLocation": "${PROJECT_HOME}/dados/saida/spark_temp",
+      "userAgent": "Apache Hop Beam Spark Runner",
+      "gather_metrics": true,
+      "batchSize": "10000"
+    }
+  },
+  "name": "spark-local",
+  "configurationVariables": [],
+  "description": "Execução via Apache Beam Spark Runner com master local[*] aproveitando todos os cores da CPU",
+  "executionInfoLocationName": "local-audit",
+  "dataProfile": "first-last",
+  "defaultSelection": false
+}

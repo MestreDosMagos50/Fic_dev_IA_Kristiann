@@ -1,95 +1,334 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pipeline>
-  <info><name>padroniza_ibge_municipios</name><pipeline_type>Normal</pipeline_type></info>
-  <order>
-    <hop><from>Ler staging.ibge_municipios</from><to>Limpar Textos e UF</to><enabled>Y</enabled></hop>
-    <hop><from>Limpar Textos e UF</from><to>Converter Populacao e Area</to><enabled>Y</enabled></hop>
-    <hop><from>Converter Populacao e Area</from><to>Gravar silver.municipios</to><enabled>Y</enabled></hop>
-    <hop><from>Converter Populacao e Area</from><to>Motivo Quarentena IBGE</to><enabled>Y</enabled><error_handling>Y</error_handling></hop>
-    <hop><from>Motivo Quarentena IBGE</from><to>Gravar Quarentena</to><enabled>Y</enabled></hop>
-  </order>
+  <info>
+    <capture_transform_performance>N</capture_transform_performance>
+    <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
+    <transform_performance_capturing_size_limit>100</transform_performance_capturing_size_limit>
+    <pipeline_type>Normal</pipeline_type>
+    <pipeline_status>0</pipeline_status>
+    <parameters/>
+    <name>padroniza_ibge_municipios</name>
+    <name_sync_with_filename>N</name_sync_with_filename>
+    <created_user>-</created_user>
+    <modified_user>-</modified_user>
+    <created_date>2026/09/18 15:47:03.682</created_date>
+    <modified_date>2026/09/18 15:47:03.682</modified_date>
+  </info>
   <transform>
-    <name>Ler staging.ibge_municipios</name>
     <type>TableInput</type>
-    <connection>PostgreSQL</connection>
+    <name>Ler staging.ibge_municipios</name>
     <sql>SELECT cod_mun, cod_mun_6, nome_municipio, uf, regiao, populacao, area_km2 FROM staging.ibge_municipios</sql>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <connection>PostgreSQL</connection>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>96</xloc>
+      <yloc>144</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
   <transform>
-    <name>Limpar Textos e UF</name>
     <type>StringOperations</type>
+    <name>Limpar Textos e UF</name>
     <fields>
-      <field><in_stream_name>nome_municipio</in_stream_name><trim_type>both</trim_type><init_cap>Y</init_cap></field>
-      <field><in_stream_name>uf</in_stream_name><trim_type>both</trim_type><lower_upper>upper</lower_upper></field>
+      <field>
+        <in_stream_name>nome_municipio</in_stream_name>
+        <trim_type>both</trim_type>
+        <lower_upper>none</lower_upper>
+        <init_cap>no</init_cap>
+        <mask_xml>none</mask_xml>
+        <digits>none</digits>
+        <remove_special_characters>none</remove_special_characters>
+        <padding_type>none</padding_type>
+      </field>
+      <field>
+        <in_stream_name>uf</in_stream_name>
+        <trim_type>both</trim_type>
+        <lower_upper>upper</lower_upper>
+        <init_cap>no</init_cap>
+        <mask_xml>none</mask_xml>
+        <digits>none</digits>
+        <remove_special_characters>none</remove_special_characters>
+        <padding_type>none</padding_type>
+      </field>
     </fields>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>96</xloc>
+      <yloc>272</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
   <transform>
-    <name>Converter Populacao e Area</name>
     <type>SelectValues</type>
+    <name>Converter Populacao e Area</name>
     <fields>
       <select_unspecified>N</select_unspecified>
       <meta>
-        <name>cod_mun_6</name><type>String</type>
+        <name>cod_mun_6</name>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <storage_type/>
+        <date_format_lenient>N</date_format_lenient>
+        <lenient_string_to_number>N</lenient_string_to_number>
       </meta>
       <meta>
-        <name>cod_mun</name><type>String</type>
+        <name>cod_mun</name>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <storage_type/>
+        <date_format_lenient>N</date_format_lenient>
+        <lenient_string_to_number>N</lenient_string_to_number>
       </meta>
       <meta>
-        <name>nome_municipio</name><type>String</type>
+        <name>nome_municipio</name>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <storage_type/>
+        <date_format_lenient>N</date_format_lenient>
+        <lenient_string_to_number>N</lenient_string_to_number>
       </meta>
       <meta>
-        <name>uf</name><type>String</type>
+        <name>uf</name>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <storage_type/>
+        <date_format_lenient>N</date_format_lenient>
+        <lenient_string_to_number>N</lenient_string_to_number>
       </meta>
       <meta>
-        <name>regiao</name><type>String</type>
+        <name>regiao</name>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <storage_type/>
+        <date_format_lenient>N</date_format_lenient>
+        <lenient_string_to_number>N</lenient_string_to_number>
       </meta>
       <meta>
-        <name>populacao</name><type>Integer</type><conversion_mask>#</conversion_mask>
+        <name>populacao</name>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <storage_type/>
+        <conversion_mask>#</conversion_mask>
+        <date_format_lenient>N</date_format_lenient>
+        <lenient_string_to_number>N</lenient_string_to_number>
       </meta>
       <meta>
-        <name>area_km2</name><type>Number</type><conversion_mask>#.##</conversion_mask><decimal_symbol>,</decimal_symbol>
+        <name>area_km2</name>
+        <type>Number</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <storage_type/>
+        <conversion_mask>#.##</conversion_mask>
+        <date_format_lenient>N</date_format_lenient>
+        <lenient_string_to_number>N</lenient_string_to_number>
+        <decimal_symbol>,</decimal_symbol>
       </meta>
     </fields>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>272</xloc>
+      <yloc>272</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
   <transform>
-    <name>Gravar silver.municipios</name>
     <type>TableOutput</type>
+    <name>Gravar silver.municipios</name>
     <connection>PostgreSQL</connection>
     <schema>silver</schema>
     <table>municipios</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <only_when_have_rows>N</only_when_have_rows>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>N</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>N</tablename_in_table>
+    <return_keys>N</return_keys>
     <specify_fields>Y</specify_fields>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <add_columns>N</add_columns>
+    <drop_columns>N</drop_columns>
+    <change_column_types>N</change_column_types>
     <fields>
-      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
-      <field><column_name>cod_mun</column_name><stream_name>cod_mun</stream_name></field>
-      <field><column_name>nome_municipio</column_name><stream_name>nome_municipio</stream_name></field>
-      <field><column_name>uf</column_name><stream_name>uf</stream_name></field>
-      <field><column_name>regiao</column_name><stream_name>regiao</stream_name></field>
-      <field><column_name>populacao</column_name><stream_name>populacao</stream_name></field>
-      <field><column_name>area_km2</column_name><stream_name>area_km2</stream_name></field>
+      <field>
+        <stream_name>cod_mun_6</stream_name>
+        <column_name>cod_mun_6</column_name>
+      </field>
+      <field>
+        <stream_name>cod_mun</stream_name>
+        <column_name>cod_mun</column_name>
+      </field>
+      <field>
+        <stream_name>nome_municipio</stream_name>
+        <column_name>nome_municipio</column_name>
+      </field>
+      <field>
+        <stream_name>uf</stream_name>
+        <column_name>uf</column_name>
+      </field>
+      <field>
+        <stream_name>regiao</stream_name>
+        <column_name>regiao</column_name>
+      </field>
+      <field>
+        <stream_name>populacao</stream_name>
+        <column_name>populacao</column_name>
+      </field>
+      <field>
+        <stream_name>area_km2</stream_name>
+        <column_name>area_km2</column_name>
+      </field>
     </fields>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>544</xloc>
+      <yloc>192</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
   <transform>
-    <name>Motivo Quarentena IBGE</name>
     <type>Constant</type>
+    <name>Motivo Quarentena IBGE</name>
     <fields>
       <field>
-        <name>pipeline_origem</name><type>String</type><nullif>padroniza_ibge_municipios</nullif><length>50</length><precision>-1</precision><set_empty_string>N</set_empty_string>
+        <nullif>padroniza_ibge_municipios</nullif>
+        <name>pipeline_origem</name>
+        <type>String</type>
+        <length>50</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
       </field>
       <field>
-        <name>motivo_erro</name><type>String</type><nullif>Populacao invalida ou erro de casting numerico</nullif><length>255</length><precision>-1</precision><set_empty_string>N</set_empty_string>
+        <nullif>Populacao invalida ou erro de casting numerico</nullif>
+        <name>motivo_erro</name>
+        <type>String</type>
+        <length>255</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
       </field>
     </fields>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>544</xloc>
+      <yloc>288</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
   <transform>
-    <name>Gravar Quarentena</name>
     <type>TableOutput</type>
+    <name>Gravar Quarentena</name>
     <connection>PostgreSQL</connection>
     <schema>silver</schema>
     <table>rejeitados</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <only_when_have_rows>N</only_when_have_rows>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>N</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>N</tablename_in_table>
+    <return_keys>N</return_keys>
     <specify_fields>Y</specify_fields>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <add_columns>N</add_columns>
+    <drop_columns>N</drop_columns>
+    <change_column_types>N</change_column_types>
     <fields>
-      <field><column_name>pipeline_origem</column_name><stream_name>pipeline_origem</stream_name></field>
-      <field><column_name>motivo_erro</column_name><stream_name>motivo_erro</stream_name></field>
-      <field><column_name>registro_bruto</column_name><stream_name>nome_municipio</stream_name></field>
+      <field>
+        <stream_name>pipeline_origem</stream_name>
+        <column_name>pipeline_origem</column_name>
+      </field>
+      <field>
+        <stream_name>motivo_erro</stream_name>
+        <column_name>motivo_erro</column_name>
+      </field>
+      <field>
+        <stream_name>nome_municipio</stream_name>
+        <column_name>registro_bruto</column_name>
+      </field>
     </fields>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>768</xloc>
+      <yloc>288</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
+  <order>
+    <hop>
+      <from>Ler staging.ibge_municipios</from>
+      <to>Limpar Textos e UF</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Limpar Textos e UF</from>
+      <to>Converter Populacao e Area</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Converter Populacao e Area</from>
+      <to>Gravar silver.municipios</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Converter Populacao e Area</from>
+      <to>Motivo Quarentena IBGE</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Motivo Quarentena IBGE</from>
+      <to>Gravar Quarentena</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <notepads/>
+  <attributes/>
+  <transform_error_handling/>
 </pipeline>

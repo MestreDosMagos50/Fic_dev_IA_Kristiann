@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Módulo 3: Governança de Dados com OpenMetadata — Aula 02</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-main: #0a0e1a;
+      --bg-card: rgba(18, 25, 43, 0.75);
+      --bg-card-hover: rgba(28, 38, 64, 0.85);
+      --border-color: rgba(99, 102, 241, 0.2);
+      --border-glow: rgba(99, 102, 241, 0.45);
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --secondary: #06b6d4;
+      --accent: #ec4899;
+      --gold: #f59e0b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --code-bg: #0f172a;
+    }
+
+    [data-theme="light"] {
+      --bg-main: #f1f5f9;
+      --bg-card: rgba(255, 255, 255, 0.9);
+      --bg-card-hover: #ffffff;
+      --border-color: rgba(99, 102, 241, 0.25);
+      --border-glow: rgba(99, 102, 241, 0.5);
+      --primary: #4f46e5;
+      --primary-light: #6366f1;
+      --secondary: #0891b2;
+      --accent: #db2777;
+      --gold: #d97706;
+      --success: #059669;
+      --danger: #dc2626;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --code-bg: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.05) 0%, transparent 60%);
+      min-height: 100vh;
+      padding-bottom: 60px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+    }
+
+    /* Header */
+    header {
+      background: rgba(10, 14, 26, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    [data-theme="light"] header {
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .header-titles {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .header-breadcrumb {
+      font-size: 0.78rem;
+      color: var(--secondary);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+    }
+
+    .header-titles h1 {
+      font-size: 1.45rem;
+      background: linear-gradient(135deg, #fff 30%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    [data-theme="light"] .header-titles h1 {
+      background: linear-gradient(135deg, #0f172a 30%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .theme-toggle-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--primary);
+      transform: scale(1.03);
+    }
+
+    .badges {
+      display: flex;
+      gap: 8px;
+    }
+
+    .badge {
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: 1px solid;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .badge-primary {
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border-color: var(--success);
+    }
+
+    .badge-gold {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border-color: var(--gold);
+    }
+
+    .badge-cyan {
+      background: rgba(6, 182, 212, 0.15);
+      color: #38bdf8;
+      border-color: var(--secondary);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 30px 24px;
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 35px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 22px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+    }
+
+    .kpi-card.gold::before {
+      background: linear-gradient(90deg, var(--gold), #f97316);
+    }
+
+    .kpi-card.emerald::before {
+      background: linear-gradient(90deg, var(--success), #06b6d4);
+    }
+
+    .kpi-card.pink::before {
+      background: linear-gradient(90deg, var(--accent), #8b5cf6);
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-glow);
+      box-shadow: 0 12px 30px rgba(6, 182, 212, 0.18);
+    }
+
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .kpi-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .kpi-icon {
+      font-size: 1.3rem;
+    }
+
+    .kpi-value {
+      font-size: 2.1rem;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .kpi-footer {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+      overflow-x: auto;
+    }
+
+    .nav-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(6, 182, 212, 0.1);
+    }
+
+    .nav-tab-btn.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--secondary), #0284c7);
+      border-color: #38bdf8;
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+    }
+
+    /* Section Styles */
+    .section-block {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .section-block.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Glossary Layout */
+    .glossary-layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      margin-bottom: 35px;
+    }
+
+    @media (max-width: 992px) {
+      .glossary-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .glossary-tree-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 22px;
+      backdrop-filter: blur(12px);
+    }
+
+    .tree-header {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tree-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tree-item-btn {
+      width: 100%;
+      text-align: left;
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tree-item-btn:hover {
+      border-color: var(--secondary);
+      background: rgba(6, 182, 212, 0.1);
+    }
+
+    .tree-item-btn.active {
+      background: linear-gradient(135deg, var(--secondary), #0369a1);
+      color: #fff;
+      border-color: #38bdf8;
+    }
+
+    .sub-tree {
+      list-style: none;
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 6px;
+      border-left: 2px solid var(--border-color);
+    }
+
+    .term-details-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 26px;
+      backdrop-filter: blur(12px);
+    }
+
+    .term-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .term-title {
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* The 4-Parts Grid */
+    .four-parts-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .part-box {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px 20px;
+      position: relative;
+    }
+
+    .part-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .part-1 { color: #38bdf8; }
+    .part-2 { color: #34d399; }
+    .part-3 { color: #fbbf24; }
+    .part-4 { color: #c084fc; }
+
+    .part-content {
+      font-size: 0.92rem;
+      color: var(--text-main);
+      line-height: 1.55;
+    }
+
+    .formula-callout {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 3px solid var(--success);
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #34d399;
+      margin-top: 6px;
+      font-size: 0.88rem;
+    }
+
+    .exclusion-callout {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 3px solid var(--gold);
+      padding: 8px 12px;
+      border-radius: 4px;
+      color: #fde68a;
+      margin-top: 6px;
+      font-size: 0.88rem;
+    }
+
+    [data-theme="light"] .exclusion-callout {
+      color: #92400e;
+    }
+
+    /* Meta Tags Row */
+    .term-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .pill-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .pill-item {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      color: var(--text-main);
+    }
+
+    /* Tags Table */
+    .tags-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 26px;
+      margin-bottom: 35px;
+    }
+
+    .tags-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .tags-table th {
+      background: rgba(0, 0, 0, 0.25);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .tags-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.88rem;
+    }
+
+    .tag-bubble {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+
+    .tag-gold { background: rgba(245, 158, 11, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+    .tag-silver { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid #94a3b8; }
+    .tag-bronze { background: rgba(180, 83, 9, 0.2); color: #f59e0b; border: 1px solid #b45309; }
+
+    /* Search Simulator */
+    .search-sim-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 26px;
+      margin-bottom: 35px;
+    }
+
+    .sim-input-row {
+      display: flex;
+      gap: 12px;
+      margin: 16px 0 24px 0;
+    }
+
+    .sim-input {
+      flex: 1;
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .sim-input:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 14px rgba(6, 182, 212, 0.35);
+    }
+
+    .sim-btn-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .chip-btn {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chip-btn:hover {
+      color: var(--text-main);
+      border-color: var(--secondary);
+    }
+
+    .sim-results-box {
+      background: var(--code-bg);
+      border-radius: 12px;
+      padding: 18px;
+      min-height: 120px;
+    }
+
+    .result-item {
+      padding: 12px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    /* Terminal & Code Blocks */
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 14px;
+    }
+
+    .code-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .code-lang {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .copy-btn {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      color: #fff;
+      border-color: var(--secondary);
+    }
+
+    pre.code-content {
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: #e2e8f0;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    [data-theme="light"] pre.code-content {
+      color: #1e293b;
+    }
+
+    footer {
+      text-align: center;
+      padding-top: 40px;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <div class="header-titles">
+      <span class="header-breadcrumb">Módulo 3: Governança de Dados com OpenMetadata</span>
+      <h1>Aula 02 — Catalogação, Classificação e Glossário de Negócio</h1>
+    </div>
+    <div class="header-controls">
+      <div class="badges">
+        <span class="badge badge-cyan">🌐 OpenMetadata 8585</span>
+        <span class="badge badge-gold">⭐ Nota: 10.0 / 10.0</span>
+        <span class="badge badge-success">📚 7 Termos no Glossário</span>
+      </div>
+      <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
+        <span id="themeIcon">☀️</span> Modo Claro
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- KPI Metric Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card gold">
+        <div class="kpi-header">
+          <span class="kpi-title">Avaliação do Mini-Lab</span>
+          <span class="kpi-icon">🏆</span>
+        </div>
+        <div class="kpi-value">10.0 / 10.0</div>
+        <div class="kpi-footer">
+          <span class="badge badge-gold">Auditoria Aprovada com Nota Máxima</span>
+        </div>
+      </div>
+
+      <div class="kpi-card emerald">
+        <div class="kpi-header">
+          <span class="kpi-title">Termos nas 4 Partes</span>
+          <span class="kpi-icon">📖</span>
+        </div>
+        <div class="kpi-value">7 Termos</div>
+        <div class="kpi-footer">
+          <span>Ticket Médio, Cliente Ativo, Receita, Margem, Item</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Hierarquia Semântica</span>
+          <span class="kpi-icon">🌳</span>
+        </div>
+        <div class="kpi-value">Cliente (Pai)</div>
+        <div class="kpi-footer">
+          <span>➔ Cliente Ativo (≤90d) & Cliente Inativo (>90d)</span>
+        </div>
+      </div>
+
+      <div class="kpi-card pink">
+        <div class="kpi-header">
+          <span class="kpi-title">Classificações & Tags</span>
+          <span class="kpi-icon">🏷️</span>
+        </div>
+        <div class="kpi-value">Camada / Domínio</div>
+        <div class="kpi-footer">
+          <span class="badge badge-cyan">Bronze, Silver, Gold Aplicadas</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+      <button class="nav-tab-btn active" onclick="switchSection('glossario', this)">
+        <span>🌳</span> Árvore do Glossário & Termos (Passos 1, 2 e 3)
+      </button>
+      <button class="nav-tab-btn" onclick="switchSection('classificacao', this)">
+        <span>🏷️</span> Classificação & Tags por Camada (Passo 5)
+      </button>
+      <button class="nav-tab-btn" onclick="switchSection('busca-sim', this)">
+        <span>🔍</span> Teste de Busca & Autosserviço
+      </button>
+      <button class="nav-tab-btn" onclick="switchSection('tag-vs-termo', this)">
+        <span>⚖️</span> Tags vs. Termos de Glossário
+      </button>
+      <button class="nav-tab-btn" onclick="switchSection('comandos', this)">
+        <span>💻</span> Scripts & Auditoria (10 Pontos)
+      </button>
+    </div>
+
+    <!-- SECTION 1: GLOSSÁRIO E HIERARQUIA -->
+    <div id="sec-glossario" class="section-block active">
+      <div class="glossary-layout">
+        
+        <!-- Left: Tree Navigation -->
+        <div class="glossary-tree-panel">
+          <div class="tree-header">
+            <span>📚</span>
+            <strong>Glossário E-commerce</strong>
+          </div>
+          
+          <ul class="tree-list">
+            <li>
+              <button class="tree-item-btn active" onclick="selectTerm('Ticket_Medio', this)">
+                <span>🎯 Ticket Médio</span>
+                <span class="badge badge-gold" style="font-size: 0.65rem;">Obrigatório</span>
+              </button>
+            </li>
+            <li>
+              <button class="tree-item-btn" onclick="selectTerm('Cliente', this)">
+                <span>👥 Cliente (Pai)</span>
+                <span class="badge badge-primary" style="font-size: 0.65rem;">Pai</span>
+              </button>
+              <ul class="sub-tree">
+                <li>
+                  <button class="tree-item-btn" onclick="selectTerm('Cliente_Ativo', this)" style="font-size: 0.82rem; padding: 7px 12px;">
+                    <span>🟢 Cliente Ativo</span>
+                    <span class="badge badge-success" style="font-size: 0.6rem;">≤ 90d</span>
+                  </button>
+                </li>
+                <li>
+                  <button class="tree-item-btn" onclick="selectTerm('Cliente_Inativo', this)" style="font-size: 0.82rem; padding: 7px 12px;">
+                    <span>⚪ Cliente Inativo</span>
+                    <span class="badge badge-cyan" style="font-size: 0.6rem;">> 90d</span>
+                  </button>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <button class="tree-item-btn" onclick="selectTerm('Receita_Liquida', this)">
+                <span>💰 Receita Líquida</span>
+              </button>
+            </li>
+            <li>
+              <button class="tree-item-btn" onclick="selectTerm('Margem_de_Contribuicao', this)">
+                <span>📈 Margem de Contribuição</span>
+              </button>
+            </li>
+            <li>
+              <button class="tree-item-btn" onclick="selectTerm('Item_de_Pedido', this)">
+                <span>📦 Item de Pedido</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right: Inspector with the 4 parts -->
+        <div class="term-details-panel" id="termDetailsPanel">
+          <!-- Filled dynamically by JavaScript -->
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 2: CLASSIFICAÇÃO E TAGS (Passo 5) -->
+    <div id="sec-classificacao" class="section-block">
+      <div class="tags-container">
+        <h3>🏷️ Classificação por Camada (Maturidade na Arquitetura Medalhão)</h3>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px;">
+          As tags categorizam a maturidade técnica do dado, permitindo que consumidores filtrem apenas tabelas prontas para consumo:
+        </p>
+
+        <table class="tags-table">
+          <thead>
+            <tr>
+              <th>Tabela do Acervo</th>
+              <th>Camada (Medallion)</th>
+              <th>Domínio de Negócio</th>
+              <th>Status de Certificação</th>
+              <th>Uso Recomendado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>gold.fato_vendas</code></td>
+              <td><span class="tag-bubble tag-gold">Gold</span></td>
+              <td><span class="pill-item">Vendas</span></td>
+              <td><span class="badge badge-success">Certificado</span></td>
+              <td>Relatórios de faturamento, margem e balanço financeiro.</td>
+            </tr>
+            <tr>
+              <td><code>gold.dim_produto</code></td>
+              <td><span class="tag-bubble tag-gold">Gold</span></td>
+              <td><span class="pill-item">Produto</span></td>
+              <td><span class="badge badge-success">Certificado</span></td>
+              <td>Portfólio de produtos, precificação e estoques.</td>
+            </tr>
+            <tr>
+              <td><code>gold.dim_cliente</code></td>
+              <td><span class="tag-bubble tag-gold">Gold</span></td>
+              <td><span class="pill-item">Cliente</span></td>
+              <td><span class="badge badge-success">Certificado</span></td>
+              <td>Retenção, LTV e segmentações com proteção LGPD.</td>
+            </tr>
+            <tr>
+              <td><code>silver.vendas</code></td>
+              <td><span class="tag-bubble tag-silver">Silver</span></td>
+              <td><span class="pill-item">Vendas</span></td>
+              <td><span class="badge badge-success">Certificado</span></td>
+              <td>Insumo intermediário limpo para a camada Gold.</td>
+            </tr>
+            <tr>
+              <td><code>silver.produtos</code></td>
+              <td><span class="tag-bubble tag-silver">Silver</span></td>
+              <td><span class="pill-item">Produto</span></td>
+              <td><span class="badge badge-success">Certificado</span></td>
+              <td>Catálogo sanitizado sem duplicidades.</td>
+            </tr>
+            <tr>
+              <td><code>staging.vendas</code></td>
+              <td><span class="tag-bubble tag-bronze">Bronze</span></td>
+              <td><span class="pill-item">Vendas</span></td>
+              <td><span class="pill-item">Em Validação</span></td>
+              <td>Ingestão bruta; não usar diretamente em BI.</td>
+            </tr>
+            <tr>
+              <td><code>staging.produtos</code></td>
+              <td><span class="tag-bubble tag-bronze">Bronze</span></td>
+              <td><span class="pill-item">Produto</span></td>
+              <td><span class="pill-item">Em Validação</span></td>
+              <td>Ingestão bruta; não usar diretamente em BI.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SECTION 3: BUSCA E AUTOSSERVIÇO -->
+    <div id="sec-busca-sim" class="section-block">
+      <div class="search-sim-wrapper">
+        <h3>🔍 Simulador de Descoberta Semântica do OpenMetadata</h3>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px;">
+          Teste a pesquisa inteligente por conceitos de negócio. O catálogo encontra tabelas e colunas mesmo quando os termos técnicos são diferentes:
+        </p>
+
+        <div class="sim-btn-chips">
+          <button class="chip-btn" onclick="runSearchSimulation('ticket médio')">Ex: "ticket médio"</button>
+          <button class="chip-btn" onclick="runSearchSimulation('cliente ativo')">Ex: "cliente ativo"</button>
+          <button class="chip-btn" onclick="runSearchSimulation('margem')">Ex: "margem"</button>
+          <button class="chip-btn" onclick="runSearchSimulation('aov')">Ex: "aov"</button>
+          <button class="chip-btn" onclick="runSearchSimulation('90 dias')">Ex: "90 dias"</button>
+          <button class="chip-btn" onclick="runSearchSimulation('gold')">Ex: "gold"</button>
+        </div>
+
+        <div class="sim-input-row">
+          <input type="text" class="sim-input" id="simSearchInput" placeholder="Digite uma palavra-chave (ex: ticket médio, churn, cancelado, margem)..." oninput="runSearchSimulation(this.value)" />
+        </div>
+
+        <div class="sim-results-box" id="simResultsBox">
+          <!-- Filled dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: TAG VS TERMO -->
+    <div id="sec-tag-vs-termo" class="section-block">
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 18px; padding: 26px; margin-bottom: 25px;">
+        <h3>⚖️ A Distinção que Confunde Todo Mundo</h3>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px;">
+          Como saber se você deve criar uma <strong>Tag</strong> ou um <strong>Termo de Glossário</strong>:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 20px;">
+          <div style="background: var(--code-bg); border-radius: 14px; padding: 20px; border-left: 4px solid var(--secondary);">
+            <h4 style="color: var(--secondary); margin-bottom: 8px;">🏷️ TAG (Classificação Técnica)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.55;">
+              Responde: <em>"Que tipo de dado é este?"</em> ou <em>"Qual a sua maturidade?"</em>.<br>
+              <strong>Exemplos:</strong> <code>Camada.Gold</code>, <code>PII.Sensitive</code>, <code>Certificacao.Deprecado</code>.<br>
+              <strong>Regra:</strong> Se você aplicaria o rótulo a dezenas de colunas em 2 segundos sem precisar discutir, <strong>é TAG</strong>.
+            </p>
+          </div>
+
+          <div style="background: var(--code-bg); border-radius: 14px; padding: 20px; border-left: 4px solid var(--gold);">
+            <h4 style="color: var(--gold); margin-bottom: 8px;">📖 TERMO DE GLOSSÁRIO (Negócio)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.55;">
+              Responde: <em>"O que significa isto para a tomada de decisão da empresa?"</em>.<br>
+              <strong>Exemplos:</strong> <code>Ticket Médio</code>, <code>Cliente Ativo</code>, <code>Margem de Contribuição</code>.<br>
+              <strong>Regra:</strong> Se precisou de uma reunião entre áreas para definir a fórmula e as exclusões, <strong>é TERMO DE GLOSSÁRIO</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: COMANDOS E SCRIPTS -->
+    <div id="sec-comandos" class="section-block">
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 18px; padding: 26px; margin-bottom: 25px;">
+        <h3>💻 Automação Completa via API do OpenMetadata</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+          Como foi feita a criação das classifications, tags, termos de glossário e vínculos:
+        </p>
+
+        <div class="code-container">
+          <div class="code-topbar">
+            <span class="code-lang">BASH — Executar Automação e Auditoria</span>
+            <button class="copy-btn" onclick="copyCode('auditCommandsBlock')">Copiar Comandos</button>
+          </div>
+          <pre class="code-content" id="auditCommandsBlock"># 1. Executar o script que cria Glossário, Termos e Tags:
+cd bloco_03_governanca/aula-02-catalogacao-classificacao-glossario
+python3 scripts/popular_glossario_tags.py
+
+# 2. Rodar a auditoria oficial dos 10 pontos:
+python3 scripts/validar_glossario_openmetadata.py</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>FIC Engenharia de Dados | Módulo 3: Governança de Dados com OpenMetadata | Aula 02</p>
+      <p style="margin-top: 4px; font-size: 0.78rem;">Glossário e Tags configurados de acordo com as normas DAMA-DMBOK e OpenMetadata v1.6.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // DADOS DOS TERMOS NAS 4 PARTES
+    const TERMOS_DATA = {
+      "Ticket_Medio": {
+        nome: "Ticket Médio",
+        hierarquia: "Termo Raiz",
+        owner: "Diretoria Comercial",
+        part1: "Valor monetário médio despendido pelos clientes por pedido de compra concluído em um período determinado.",
+        part2: "Soma da receita faturada (valor_liquido) dividida pela contagem distinta de pedidos (DISTINCT id_venda) da tabela gold.fato_vendas.",
+        formula: "SUM(valor_liquido) / COUNT(DISTINCT id_venda)",
+        part3: "Pedidos com status_pedido IN ('Cancelado', 'Devolvido') são expressamente excluídos do numerador e do denominador. Frete e taxas de seguro não compõem o valor.",
+        part4: "Calculável e agregável por mês contábil, categoria de produto e macrorregião geográfica.",
+        synonyms: ["AOV", "Average Order Value", "Valor Médio por Pedido"],
+        related: ["Receita Líquida", "Item de Pedido"],
+        vinculo: "gold.fato_vendas.valor_liquido"
+      },
+      "Cliente": {
+        nome: "Cliente (Termo Pai)",
+        hierarquia: "Termo Pai (Root)",
+        owner: "CRM & Atendimento",
+        part1: "Pessoa física ou jurídica formalmente cadastrada na base corporativa do e-commerce.",
+        part2: "Identificado pela chave única cliente_id na dimensão gold.dim_cliente.",
+        formula: "Registro único em gold.dim_cliente",
+        part3: "A distinção entre Cliente Ativo e Cliente Inativo é estritamente temporal, baseada na janela de 90 dias da data da última compra faturada. Usuários anônimos sem cadastro concluído ficam de fora.",
+        part4: "Segmentável por tipo de relacionamento (B2C, B2B, VIP) e localização geográfica.",
+        synonyms: ["Consumidor", "Titular do Cadastro", "Comprador"],
+        related: ["Cliente Ativo", "Cliente Inativo"],
+        vinculo: "Tabela gold.dim_cliente"
+      },
+      "Cliente_Ativo": {
+        nome: "Cliente Ativo",
+        hierarquia: "Filho de: Cliente",
+        owner: "CRM & Atendimento",
+        part1: "Cliente cadastrado que realizou ao menos uma compra faturada e entregue nos últimos 90 dias.",
+        part2: "Condição lógica: CURRENT_DATE - MAX(data_venda) <= 90 dias com status_pedido = 'Entregue'.",
+        formula: "CURRENT_DATE - MAX(data_venda) <= 90 DIAS",
+        part3: "Justificativa da janela de 90 dias: O ciclo médio de recompra de eletrônicos e periféricos é de 60 a 75 dias; a janela de 90 dias cobre um trimestre fiscal e identifica o cliente em fase ativa de retenção. Clientes sem compras recentes ou com pedidos cancelados ficam de fora.",
+        part4: "Segmentação por categoria de interesse e valor acumulado LTV.",
+        synonyms: ["Active Customer", "Cliente Recorrente", "Comprador Engajado"],
+        related: ["Cliente Inativo", "Ticket Médio"],
+        vinculo: "gold.dim_cliente.status_cliente"
+      },
+      "Cliente_Inativo": {
+        nome: "Cliente Inativo",
+        hierarquia: "Filho de: Cliente",
+        owner: "CRM & Atendimento",
+        part1: "Cliente cadastrado cuja última compra concluída ocorreu há mais de 90 dias, ou que nunca realizou compras desde o cadastro.",
+        part2: "Condição lógica: CURRENT_DATE - MAX(data_venda) > 90 dias ou ausência de histórico de compras.",
+        formula: "CURRENT_DATE - MAX(data_venda) > 90 DIAS",
+        part3: "Clientes com contas suspensas por fraude ou com solicitação de exclusão por LGPD são classificados sob tag específica de 'Bloqueado/Anonimizado'.",
+        part4: "Subdividido em faixas: 91-180 dias (risco de churn), 181-365 dias (churn consolidado) e >365 dias (perdido).",
+        synonyms: ["Dormant Customer", "Cliente Adormecido", "Churn"],
+        related: ["Cliente Ativo"],
+        vinculo: "gold.dim_cliente.status_cliente"
+      },
+      "Receita_Liquida": {
+        nome: "Receita Líquida",
+        hierarquia: "Termo Raiz",
+        owner: "Controladoria & Finanças",
+        part1: "Montante monetário efetivamente faturado pela venda de produtos após dedução de descontos comerciais concedidos.",
+        part2: "Soma de valor_liquido na tabela gold.fato_vendas, onde valor_liquido = (quantidade * preco_unitario) - desconto.",
+        formula: "SUM((quantidade * preco_unitario) - desconto)",
+        part3: "Fretes cobrados à parte, seguros, juros de parcelamento do cartão e pedidos cancelados/estornados não entram na receita líquida.",
+        part4: "Por dia, mês, trimestre, filial e categoria.",
+        synonyms: ["Net Revenue", "Net Sales", "Faturamento Líquido"],
+        related: ["Ticket Médio", "Margem de Contribuição"],
+        vinculo: "gold.fato_vendas.valor_liquido"
+      },
+      "Margem_de_Contribuicao": {
+        nome: "Margem de Contribuição",
+        hierarquia: "Termo Raiz",
+        owner: "Diretoria Financeira",
+        part1: "Ganho financeiro real remanescente da venda de cada mercadoria após a dedução de todos os custos variáveis diretos e tributos incidentes.",
+        part2: "valor_liquido - custo_produto - impostos na tabela gold.fato_vendas.",
+        formula: "valor_liquido - custo_produto - impostos",
+        part3: "Deduz obrigatoriamente 18% de tributos diretos (ICMS + PIS/COFINS) e o custo de reposição CMV. Custos fixos gerais da empresa não são rateados aqui.",
+        part4: "Por categoria de produto, canal de conversão e faixa de preço.",
+        synonyms: ["Margem Líquida do Item", "Contribution Margin", "Margem Real"],
+        related: ["Receita Líquida", "Item de Pedido"],
+        vinculo: "gold.fato_vendas.margem_lucro"
+      },
+      "Item_de_Pedido": {
+        nome: "Item de Pedido",
+        hierarquia: "Termo Raiz",
+        owner: "Engenharia de Dados",
+        part1: "Unidade atômica transacionada que representa a aquisição de um SKU de produto dentro de um pedido de compra.",
+        part2: "Cada linha individual registrada na tabela gold.fato_vendas (sk_venda).",
+        formula: "1 Linha = 1 Item em gold.fato_vendas",
+        part3: "Não confundir com o pedido inteiro. Se um pedido contiver 1 notebook e 1 mouse, haverá 1 pedido e 2 itens de pedido distintos.",
+        part4: "Por pedido (id_venda), departamento e comprador.",
+        synonyms: ["Order Line", "Line Item", "Item Vendido"],
+        related: ["Ticket Médio", "Receita Líquida"],
+        vinculo: "gold.fato_vendas.sk_venda"
+      }
+    };
+
+    function selectTerm(termKey, btn) {
+      document.querySelectorAll(".tree-item-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const t = TERMOS_DATA[termKey];
+      if (!t) return;
+
+      const panel = document.getElementById("termDetailsPanel");
+      panel.innerHTML = `
+        <div class="term-title-row">
+          <div class="term-title">
+            <span>📖</span> ${t.nome}
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <span class="badge badge-primary">${t.hierarquia}</span>
+            <span class="badge badge-gold">👤 Owner: ${t.owner}</span>
+          </div>
+        </div>
+
+        <div class="four-parts-grid">
+          <!-- Parte 1 -->
+          <div class="part-box">
+            <span class="part-badge part-1">1. O que é (Conceito de Negócio)</span>
+            <div class="part-content">${t.part1}</div>
+          </div>
+
+          <!-- Parte 2 -->
+          <div class="part-box">
+            <span class="part-badge part-2">2. Como se calcula (Fórmula Formal)</span>
+            <div class="part-content">${t.part2}</div>
+            <div class="formula-callout">📐 Fórmula: ${t.formula}</div>
+          </div>
+
+          <!-- Parte 3 -->
+          <div class="part-box">
+            <span class="part-badge part-3">3. O que fica de fora (Critérios de Exclusão)</span>
+            <div class="exclusion-callout">⚠️ Exclusões: ${t.part3}</div>
+          </div>
+
+          <!-- Parte 4 -->
+          <div class="part-box">
+            <span class="part-badge part-4">4. Recortes válidos (Granularidade)</span>
+            <div class="part-content">${t.part4}</div>
+          </div>
+        </div>
+
+        <div class="term-meta-row">
+          <div class="pill-group">
+            <strong>Sinônimos:</strong>
+            ${t.synonyms.map(s => `<span class="pill-item">${s}</span>`).join('')}
+          </div>
+          <div class="pill-group">
+            <strong>Termos Relacionados:</strong>
+            ${t.related.map(r => `<span class="pill-item">${r}</span>`).join('')}
+          </div>
+          <div class="pill-group" style="margin-left: auto;">
+            <strong>Vínculo Físico no Catálogo:</strong>
+            <span class="badge badge-cyan">${t.vinculo}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // Simulador de Busca
+    const SIM_DATABASE = [
+      { titulo: "Ticket Médio (Termo de Glossário)", tipo: "GlossaryTerm", desc: "Soma de valor_liquido dividida por pedidos distintos em gold.fato_vendas.", match: "ticket médio, aov, média, pedidos, vendas, valor líquido" },
+      { titulo: "Cliente Ativo (Termo Filho)", tipo: "GlossaryTerm", desc: "Cliente com compra entregue nos últimos 90 dias.", match: "cliente ativo, 90 dias, recompra, crm, active customer" },
+      { titulo: "Cliente Inativo (Termo Filho)", tipo: "GlossaryTerm", desc: "Cliente sem compras há mais de 90 dias ou com churn.", match: "cliente inativo, 90 dias, churn, dormant customer" },
+      { titulo: "Margem de Contribuição (Termo de Glossário)", tipo: "GlossaryTerm", desc: "valor_liquido - custo_produto - impostos (18% deduzidos).", match: "margem, imposto, impostos, lucro, cmv, contribuição" },
+      { titulo: "gold.fato_vendas (Tabela Star Schema)", tipo: "Table [Camada.Gold]", desc: "Tabela fato de vendas com 16 colunas documentadas.", match: "gold, vendas, fato_vendas, transações, receita" },
+      { titulo: "gold.dim_cliente (Tabela Star Schema)", tipo: "Table [Camada.Gold]", desc: "Dimensão de clientes com segmentação permanente por região.", match: "gold, cliente, dim_cliente, regiao, email, pii" }
+    ];
+
+    function runSearchSimulation(query) {
+      document.getElementById("simSearchInput").value = query;
+      const q = query.toLowerCase().trim();
+      const box = document.getElementById("simResultsBox");
+
+      if (!q) {
+        box.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 20px;">Digite um termo ou clique em um dos exemplos acima para ver a descoberta semântica em ação.</p>`;
+        return;
+      }
+
+      const results = SIM_DATABASE.filter(item => 
+        item.titulo.toLowerCase().includes(q) || 
+        item.desc.toLowerCase().includes(q) || 
+        item.match.toLowerCase().includes(q)
+      );
+
+      if (results.length === 0) {
+        box.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 20px;">Nenhum ativo localizado com a busca "${query}". Tente "margem", "ticket" ou "gold".</p>`;
+        return;
+      }
+
+      box.innerHTML = results.map(r => `
+        <div class="result-item">
+          <div>
+            <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem;">${r.titulo}</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">${r.desc}</div>
+          </div>
+          <span class="badge ${r.tipo.includes('Gold') ? 'badge-gold' : 'badge-cyan'}">${r.tipo}</span>
+        </div>
+      `).join('');
+    }
+
+    function switchSection(secId, btn) {
+      document.querySelectorAll(".section-block").forEach(s => s.classList.remove("active"));
+      document.querySelectorAll(".nav-tab-btn").forEach(b => b.classList.remove("active"));
+
+      const target = document.getElementById("sec-" + secId);
+      if (target) target.classList.add("active");
+      btn.classList.add("active");
+    }
+
+    function copyCode(elementId) {
+      const code = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        alert("Comandos copiados com sucesso!");
+      });
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.getAttribute("data-theme") !== "light";
+      if (isDark) {
+        document.body.setAttribute("data-theme", "light");
+        document.getElementById("themeIcon").textContent = "🌙";
+        document.getElementById("themeToggleBtn").innerHTML = `<span>🌙</span> Modo Escuro`;
+      } else {
+        document.body.removeAttribute("data-theme");
+        document.getElementById("themeIcon").textContent = "☀️";
+        document.getElementById("themeToggleBtn").innerHTML = `<span>☀️</span> Modo Claro`;
+      }
+    }
+
+    // Inicialização
+    window.addEventListener("DOMContentLoaded", () => {
+      selectTerm('Ticket_Medio', document.querySelector(".tree-item-btn.active"));
+      runSearchSimulation("");
+    });
+  </script>
+</body>
+</html>

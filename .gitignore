@@ -216,3 +216,17 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Docker volumes and sensitive files
+docker-volume/
+**/docker-volume/
+**/db-data/
+*.pem
+*.key
+
+# Big data lab datasets
+*.parquet
+**/vendas_grandes.csv
+**/particionado_ano_mes/
+
+

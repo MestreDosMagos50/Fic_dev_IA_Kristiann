@@ -1,0 +1,188 @@
+{
+  "$schema": "https://open-metadata.org/schema/v1/entity/data/table.json",
+  "versao_catalogo": "1.0.0",
+  "modulo": "Módulo 3: Governança de Dados com OpenMetadata",
+  "aula": "Aula 01 — Conceitos de Documentação, Metadados e Governança de Dados",
+  "service": {
+    "name": "pg_ecommerce",
+    "serviceType": "Postgres",
+    "database": "meu_banco_de_dados"
+  },
+  "tabelas": [
+    {
+      "fqn": "pg_ecommerce.meu_banco_de_dados.gold.fato_vendas",
+      "nome": "fato_vendas",
+      "schema": "gold",
+      "camada": "gold",
+      "tier": "Tier.Tier1",
+      "tier_justificativa": "Crítico de Negócio: Alimenta diretamente os relatórios de balanço financeiro, margem da diretoria e comissionamento de vendas no Superset.",
+      "granularidade": "1 linha = 1 item de produto vendido em uma transação comercial.",
+      "data_owner": {
+        "nome": "Carlos Eduardo Braga",
+        "email": "comercial@empresa.com.br",
+        "papel": "Diretor Comercial"
+      },
+      "data_steward": {
+        "nome": "Mariana Albuquerque",
+        "email": "steward-fin@empresa.com.br",
+        "papel": "Engenheira de Analytics e Governança"
+      },
+      "descricao": "Tabela fato central contendo o histórico atômico de transações de vendas do e-commerce. Cada linha representa um item adquirido. Contém métricas financeiras ricas de receita bruta, receita líquida faturada, custos CMV e margem de contribuição real após desconto de impostos.",
+      "tags": ["Financeiro", "Vendas", "Executivo", "Tier1"],
+      "regras_calculo": {
+        "valor_bruto": "quantidade * preco_unitario",
+        "valor_liquido": "valor_bruto - desconto",
+        "custo_produto": "quantidade * custo_unitario_cmv",
+        "impostos": "valor_liquido * 0.18 (ICMS + PIS + COFINS)",
+        "margem_lucro": "valor_liquido - custo_produto - impostos"
+      },
+      "linhagem": {
+        "upstream": ["silver.vendas", "gold.dim_produto", "gold.dim_cliente"],
+        "downstream": ["dashboard_receita_trimestral", "dashboard_margem_lucro", "comissao_vendedores"]
+      },
+      "colunas": [
+        {"nome": "sk_venda", "tipo": "BIGINT", "pk": true, "descricao": "Chave substituta artificial auto-incremental gerada na camada Gold."},
+        {"nome": "id_venda", "tipo": "VARCHAR(50)", "pk": false, "descricao": "Código identificador do pedido no sistema de checkout (Dimensão degenerada)."},
+        {"nome": "sk_cliente", "tipo": "INTEGER", "pk": false, "fk": "gold.dim_cliente.sk_cliente", "descricao": "Chave estrangeira apontando para o comprador na dim_cliente."},
+        {"nome": "sk_produto", "tipo": "INTEGER", "pk": false, "fk": "gold.dim_produto.sk_produto", "descricao": "Chave estrangeira apontando para o produto na dim_produto."},
+        {"nome": "data_venda", "tipo": "DATE", "pk": false, "descricao": "Data de faturamento e aprovação do pedido pelo gateway de pagamento."},
+        {"nome": "quantidade", "tipo": "INTEGER", "pk": false, "descricao": "Volume de unidades físicas comercializadas (sempre positivo >= 1)."},
+        {"nome": "preco_unitario", "tipo": "NUMERIC(12,2)", "pk": false, "descricao": "Preço de face unitário praticado na transação."},
+        {"nome": "desconto", "tipo": "NUMERIC(12,2)", "pk": false, "descricao": "Valor monetário total de desconto aplicado em Reais (R$), não porcentagem."},
+        {"nome": "valor_bruto", "tipo": "NUMERIC(12,2)", "pk": false, "descricao": "Receita bruta: quantidade multiplicado pelo preco_unitario."},
+        {"nome": "valor_liquido", "tipo": "NUMERIC(12,2)", "pk": false, "descricao": "Receita faturada efetiva: valor_bruto menos desconto concedido."},
+        {"nome": "custo_produto", "tipo": "NUMERIC(12,2)", "pk": false, "descricao": "Custo das Mercadorias Vendidas (CMV histórico multiplicado pela quantidade)."},
+        {"nome": "impostos", "tipo": "NUMERIC(12,2)", "pk": false, "descricao": "Tributos incidentes (alíquota efetiva estimada de 18% para ICMS + PIS/COFINS)."},
+        {"nome": "margem_lucro", "tipo": "NUMERIC(12,2)", "pk": false, "descricao": "Margem de Contribuição Líquida Real: valor_liquido - custo_produto - impostos. Considera impostos e CMV."},
+        {"nome": "canal_venda", "tipo": "VARCHAR(50)", "pk": false, "descricao": "Canal de conversão: E-commerce Web, App Mobile, B2B Portal ou Marketplace."},
+        {"nome": "status_pedido", "tipo": "VARCHAR(50)", "pk": false, "descricao": "Estado da entrega: Entregue, Em Transporte ou Cancelado (sem exclusão física)."},
+        {"nome": "carregado_em", "tipo": "TIMESTAMP", "pk": false, "descricao": "Timestamp de auditoria indicando o horário da carga ELT."}
+      ]
+    },
+    {
+      "fqn": "pg_ecommerce.meu_banco_de_dados.gold.dim_produto",
+      "nome": "dim_produto",
+      "schema": "gold",
+      "camada": "gold",
+      "tier": "Tier.Tier2",
+      "tier_justificativa": "Essencial Corporativo: Padroniza atributos mestres de produtos para todas as análises de vendas e estoque.",
+      "granularidade": "1 linha = 1 SKU de produto cadastrado no catálogo.",
+      "data_owner": {
+        "nome": "Roberta Silveira",
+        "email": "produtos@empresa.com.br",
+        "papel": "Head de Produto"
+      },
+      "data_steward": {
+        "nome": "Lucas Nogueira",
+        "email": "steward-cat@empresa.com.br",
+        "papel": "Data Steward Catálogo"
+      },
+      "descricao": "Dimensão conforme de produtos contendo hierarquia mercadológica padronizada (categoria e subcategoria) e faixas de precificação para análises comerciais.",
+      "tags": ["Catálogo", "Dimensão", "Tier2"],
+      "colunas": [
+        {"nome": "sk_produto", "tipo": "INTEGER", "pk": true, "descricao": "Surrogate key numérica para integridade referencial analítica."},
+        {"nome": "codigo_produto", "tipo": "VARCHAR(50)", "pk": false, "descricao": "Código natural do SKU utilizado na operação."},
+        {"nome": "nome_produto", "tipo": "VARCHAR(255)", "pk": false, "descricao": "Nome descritivo oficial da mercadoria."},
+        {"nome": "categoria", "tipo": "VARCHAR(100)", "pk": false, "descricao": "Departamento principal (Informática, Periféricos, Móveis)."},
+        {"nome": "subcategoria", "tipo": "VARCHAR(100)", "pk": false, "descricao": "Segmento específico dentro do departamento."},
+        {"nome": "preco_tabela", "tipo": "NUMERIC(12,2)", "pk": false, "descricao": "Preço sugerido oficial sem promoções conjunturais."},
+        {"nome": "faixa_preco", "tipo": "VARCHAR(50)", "pk": false, "descricao": "Classificação da mercadoria: Acessível, Médio ou Premium."},
+        {"nome": "status_ativo", "tipo": "BOOLEAN", "pk": false, "descricao": "Flag booleano indicando se o item está ativo para venda."},
+        {"nome": "atualizado_em", "tipo": "TIMESTAMP", "pk": false, "descricao": "Data e hora da última sincronização do catálogo mestre."}
+      ]
+    },
+    {
+      "fqn": "pg_ecommerce.meu_banco_de_dados.gold.dim_cliente",
+      "nome": "dim_cliente",
+      "schema": "gold",
+      "camada": "gold",
+      "tier": "Tier.Tier2",
+      "tier_justificativa": "Essencial Corporativo com Conformidade: Alimenta relatórios de retenção de clientes, CAC, LTV e segmentações com dados regulados por LGPD.",
+      "granularidade": "1 linha = 1 cliente individual cadastrado.",
+      "data_owner": {
+        "nome": "Fernanda Guimarães",
+        "email": "crm@empresa.com.br",
+        "papel": "Gerente Executiva CRM"
+      },
+      "data_steward": {
+        "nome": "Rafael Diniz",
+        "email": "steward-crm@empresa.com.br",
+        "papel": "DPO / Especialista LGPD"
+      },
+      "descricao": "Dimensão de clientes enriquecida com segmentação geográfica e comercial. Requer aplicação de políticas de privacidade para campos PII como e-mail.",
+      "tags": ["Clientes", "CRM", "PII", "LGPD", "Tier2"],
+      "colunas": [
+        {"nome": "sk_cliente", "tipo": "INTEGER", "pk": true, "descricao": "Surrogate key da dimensão de clientes."},
+        {"nome": "cliente_id", "tipo": "VARCHAR(50)", "pk": false, "descricao": "Identificador original do cliente gerado no cadastro."},
+        {"nome": "nome_cliente", "tipo": "VARCHAR(255)", "pk": false, "descricao": "Nome civil do titular cadastrado."},
+        {"nome": "email", "tipo": "VARCHAR(255)", "pk": false, "descricao": "Endereço eletrônico oficial. Dado pessoal sensível com tag PII."},
+        {"nome": "cidade", "tipo": "VARCHAR(100)", "pk": false, "descricao": "Município de domicílio do cliente."},
+        {"nome": "uf", "tipo": "VARCHAR(2)", "pk": false, "descricao": "Sigla de duas letras da Unidade da Federação."},
+        {"nome": "regiao", "tipo": "VARCHAR(50)", "pk": false, "descricao": "Macro-região brasileira mapeada deterministicamente da UF do cadastro permanente do cliente."},
+        {"nome": "segmento", "tipo": "VARCHAR(50)", "pk": false, "descricao": "Classificação mercadológica: B2C, B2B ou VIP."},
+        {"nome": "status_cliente", "tipo": "VARCHAR(20)", "pk": false, "descricao": "Situação cadastral: Ativo, Inativo ou Bloqueado."},
+        {"nome": "atualizado_em", "tipo": "TIMESTAMP", "pk": false, "descricao": "Carimbo da última alteração de cadastro."}
+      ]
+    },
+    {
+      "fqn": "pg_ecommerce.meu_banco_de_dados.silver.vendas",
+      "nome": "vendas",
+      "schema": "silver",
+      "camada": "silver",
+      "tier": "Tier.Tier3",
+      "tier_justificativa": "Base Operacional: Camada de persistência limpa e deduplicada que fundamenta os pipelines da camada Gold.",
+      "granularidade": "1 linha = 1 registro de venda aprovado nos testes de integridade.",
+      "data_owner": {
+        "nome": "Equipe de Engenharia de Dados",
+        "email": "eng-dados@empresa.com.br",
+        "papel": "Engenharia de Dados"
+      },
+      "data_steward": {
+        "nome": "Amanda Siqueira",
+        "email": "steward-data@empresa.com.br",
+        "papel": "Data Steward Pipeline"
+      },
+      "descricao": "Tabela de transações com dados limpos, tipos de dados convertidos e deduplicação aplicada sobre a camada staging.",
+      "tags": ["Silver", "Transacional", "Tier3"],
+      "colunas": [
+        {"nome": "id_venda", "tipo": "VARCHAR(50)", "pk": true, "descricao": "Identificador da transação."},
+        {"nome": "codigo_produto", "tipo": "VARCHAR(50)", "pk": false, "descricao": "Código da mercadoria vendida."},
+        {"nome": "quantidade", "tipo": "INTEGER", "pk": false, "descricao": "Quantidade comercializada."},
+        {"nome": "valor_unitario", "tipo": "NUMERIC(12,2)", "pk": false, "descricao": "Preço de face unitário."},
+        {"nome": "valor_total", "tipo": "NUMERIC(12,2)", "pk": false, "descricao": "Valor total bruto calculado na venda."},
+        {"nome": "data_venda", "tipo": "DATE", "pk": false, "descricao": "Data da venda em formato ISO."},
+        {"nome": "cliente_id", "tipo": "VARCHAR(50)", "pk": false, "descricao": "Identificador do cliente."},
+        {"nome": "processado_em", "tipo": "TIMESTAMP", "pk": false, "descricao": "Data e hora do processamento pela esteira Silver."}
+      ]
+    },
+    {
+      "fqn": "pg_ecommerce.meu_banco_de_dados.silver.produtos",
+      "nome": "produtos",
+      "schema": "silver",
+      "camada": "silver",
+      "tier": "Tier.Tier3",
+      "tier_justificativa": "Base Operacional: Catálogo de mercadorias higienizado que serve como insumo para a camada Gold.",
+      "granularidade": "1 linha = 1 produto limpo com tipos de dados validados.",
+      "data_owner": {
+        "nome": "Equipe de Engenharia de Dados",
+        "email": "eng-dados@empresa.com.br",
+        "papel": "Engenharia de Dados"
+      },
+      "data_steward": {
+        "nome": "Amanda Siqueira",
+        "email": "steward-data@empresa.com.br",
+        "papel": "Data Steward Pipeline"
+      },
+      "descricao": "Catálogo técnico com higienização de strings, validação de categorias e conversão de preços.",
+      "tags": ["Silver", "Catálogo", "Tier3"],
+      "colunas": [
+        {"nome": "codigo", "tipo": "VARCHAR(50)", "pk": true, "descricao": "Código de identificação do produto."},
+        {"nome": "nome", "tipo": "VARCHAR(255)", "pk": false, "descricao": "Nome do produto padronizado."},
+        {"nome": "preco", "tipo": "NUMERIC(12,2)", "pk": false, "descricao": "Preço base de venda."},
+        {"nome": "categoria", "tipo": "VARCHAR(100)", "pk": false, "descricao": "Categoria operacional."},
+        {"nome": "data_cadastro", "tipo": "DATE", "pk": false, "descricao": "Data do cadastro original."},
+        {"nome": "processado_em", "tipo": "TIMESTAMP", "pk": false, "descricao": "Carimbo da esteira de transformação."}
+      ]
+    }
+  ]
+}

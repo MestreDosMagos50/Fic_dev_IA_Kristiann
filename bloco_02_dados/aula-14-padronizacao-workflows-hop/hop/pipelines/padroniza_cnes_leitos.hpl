@@ -1,51 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pipeline>
-  <info><name>padroniza_cnes_leitos</name><pipeline_type>Normal</pipeline_type></info>
-  <order>
-    <hop><from>Ler staging.cnes_leitos</from><to>Converter Inteiros Leitos</to><enabled>Y</enabled></hop>
-    <hop><from>Converter Inteiros Leitos</from><to>Gravar silver.cnes_leitos</to><enabled>Y</enabled></hop>
-  </order>
+  <info>
+    <capture_transform_performance>N</capture_transform_performance>
+    <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
+    <transform_performance_capturing_size_limit>100</transform_performance_capturing_size_limit>
+    <pipeline_type>Normal</pipeline_type>
+    <pipeline_status>0</pipeline_status>
+    <parameters/>
+    <name>padroniza_cnes_leitos</name>
+    <name_sync_with_filename>N</name_sync_with_filename>
+    <created_user>-</created_user>
+    <modified_user>-</modified_user>
+    <created_date>2026/09/18 15:46:34.402</created_date>
+    <modified_date>2026/09/18 15:46:34.402</modified_date>
+  </info>
   <transform>
-    <name>Ler staging.cnes_leitos</name>
     <type>TableInput</type>
-    <connection>PostgreSQL</connection>
+    <name>Ler staging.cnes_leitos</name>
     <sql>SELECT cod_mun_6, municipio, leitos_clinicos, leitos_uti, postos_saude FROM staging.cnes_leitos</sql>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <connection>PostgreSQL</connection>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>352</xloc>
+      <yloc>208</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
   <transform>
-    <name>Converter Inteiros Leitos</name>
     <type>SelectValues</type>
+    <name>Converter Inteiros Leitos</name>
     <fields>
       <select_unspecified>N</select_unspecified>
       <meta>
-        <name>cod_mun_6</name><type>String</type>
+        <name>cod_mun_6</name>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <storage_type/>
+        <date_format_lenient>N</date_format_lenient>
+        <lenient_string_to_number>N</lenient_string_to_number>
       </meta>
       <meta>
-        <name>municipio</name><type>String</type>
+        <name>municipio</name>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <storage_type/>
+        <date_format_lenient>N</date_format_lenient>
+        <lenient_string_to_number>N</lenient_string_to_number>
       </meta>
       <meta>
-        <name>leitos_clinicos</name><type>Integer</type><conversion_mask>#</conversion_mask>
+        <name>leitos_clinicos</name>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <storage_type/>
+        <conversion_mask>#</conversion_mask>
+        <date_format_lenient>N</date_format_lenient>
+        <lenient_string_to_number>N</lenient_string_to_number>
       </meta>
       <meta>
-        <name>leitos_uti</name><type>Integer</type><conversion_mask>#</conversion_mask>
+        <name>leitos_uti</name>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <storage_type/>
+        <conversion_mask>#</conversion_mask>
+        <date_format_lenient>N</date_format_lenient>
+        <lenient_string_to_number>N</lenient_string_to_number>
       </meta>
       <meta>
-        <name>postos_saude</name><type>Integer</type><conversion_mask>#</conversion_mask>
+        <name>postos_saude</name>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <storage_type/>
+        <conversion_mask>#</conversion_mask>
+        <date_format_lenient>N</date_format_lenient>
+        <lenient_string_to_number>N</lenient_string_to_number>
       </meta>
     </fields>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>560</xloc>
+      <yloc>208</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
   <transform>
-    <name>Gravar silver.cnes_leitos</name>
     <type>TableOutput</type>
+    <name>Gravar silver.cnes_leitos</name>
     <connection>PostgreSQL</connection>
     <schema>silver</schema>
     <table>cnes_leitos</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <only_when_have_rows>N</only_when_have_rows>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>N</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>N</tablename_in_table>
+    <return_keys>N</return_keys>
     <specify_fields>Y</specify_fields>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <add_columns>N</add_columns>
+    <drop_columns>N</drop_columns>
+    <change_column_types>N</change_column_types>
     <fields>
-      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
-      <field><column_name>municipio</column_name><stream_name>municipio</stream_name></field>
-      <field><column_name>leitos_clinicos</column_name><stream_name>leitos_clinicos</stream_name></field>
-      <field><column_name>leitos_uti</column_name><stream_name>leitos_uti</stream_name></field>
-      <field><column_name>postos_saude</column_name><stream_name>postos_saude</stream_name></field>
+      <field>
+        <stream_name>cod_mun_6</stream_name>
+        <column_name>cod_mun_6</column_name>
+      </field>
+      <field>
+        <stream_name>municipio</stream_name>
+        <column_name>municipio</column_name>
+      </field>
+      <field>
+        <stream_name>leitos_clinicos</stream_name>
+        <column_name>leitos_clinicos</column_name>
+      </field>
+      <field>
+        <stream_name>leitos_uti</stream_name>
+        <column_name>leitos_uti</column_name>
+      </field>
+      <field>
+        <stream_name>postos_saude</stream_name>
+        <column_name>postos_saude</column_name>
+      </field>
     </fields>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>752</xloc>
+      <yloc>208</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
+  <order>
+    <hop>
+      <from>Ler staging.cnes_leitos</from>
+      <to>Converter Inteiros Leitos</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Converter Inteiros Leitos</from>
+      <to>Gravar silver.cnes_leitos</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <notepads/>
+  <attributes/>
+  <transform_error_handling/>
 </pipeline>

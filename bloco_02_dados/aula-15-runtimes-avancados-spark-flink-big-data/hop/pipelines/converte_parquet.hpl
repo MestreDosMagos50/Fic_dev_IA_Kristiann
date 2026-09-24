@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info>
+    <name>converte_parquet</name>
+    <name_sync_with_filename>Y</name_sync_with_filename>
+    <description>Passo 2 - Conversao de Vendas CSV para Formato Colunar Parquet com Snappy</description>
+    <pipeline_type>Normal</pipeline_type>
+  </info>
+  <order>
+    <hop>
+      <from>CSV File Input (Vendas Grandes)</from>
+      <to>Select Values (Tipagem Explicita)</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Select Values (Tipagem Explicita)</from>
+      <to>Parquet File Output (Vendas Parquet)</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <transform>
+    <name>CSV File Input (Vendas Grandes)</name>
+    <type>CSVInput</type>
+    <filename>${PROJECT_HOME}/dados/entrada/vendas_grandes.csv</filename>
+    <separator>,</separator>
+    <enclosure>&quot;</enclosure>
+    <header>Y</header>
+    <buffer_size>50000</buffer_size>
+    <lazy_conversion>N</lazy_conversion>
+    <fields>
+      <field><name>id_venda</name><type>String</type></field>
+      <field><name>data_venda</name><type>String</type></field>
+      <field><name>ano_mes</name><type>String</type></field>
+      <field><name>id_cliente</name><type>String</type></field>
+      <field><name>id_produto</name><type>String</type></field>
+      <field><name>produto</name><type>String</type></field>
+      <field><name>categoria</name><type>String</type></field>
+      <field><name>quantidade</name><type>Integer</type></field>
+      <field><name>preco_unitario</name><type>Number</type><decimal_symbol>.</decimal_symbol><grouping_symbol>,</grouping_symbol></field>
+      <field><name>receita</name><type>Number</type><decimal_symbol>.</decimal_symbol><grouping_symbol>,</grouping_symbol></field>
+      <field><name>regiao</name><type>String</type></field>
+      <field><name>canal_venda</name><type>String</type></field>
+    </fields>
+    <GUI>
+      <xloc>140</xloc>
+      <yloc>120</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Select Values (Tipagem Explicita)</name>
+    <type>SelectValues</type>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <meta><name>id_venda</name><type>String</type></meta>
+      <meta><name>data_venda</name><type>Timestamp</type><conversion_mask>yyyy-MM-dd HH:mm:ss</conversion_mask></meta>
+      <meta><name>ano_mes</name><type>String</type></meta>
+      <meta><name>id_cliente</name><type>String</type></meta>
+      <meta><name>id_produto</name><type>String</type></meta>
+      <meta><name>produto</name><type>String</type></meta>
+      <meta><name>categoria</name><type>String</type></meta>
+      <meta><name>quantidade</name><type>Integer</type></meta>
+      <meta><name>preco_unitario</name><type>Number</type><decimal_symbol>.</decimal_symbol><grouping_symbol>,</grouping_symbol></meta>
+      <meta><name>receita</name><type>Number</type><decimal_symbol>.</decimal_symbol><grouping_symbol>,</grouping_symbol></meta>
+      <meta><name>regiao</name><type>String</type></meta>
+      <meta><name>canal_venda</name><type>String</type></meta>
+    </fields>
+    <GUI>
+      <xloc>360</xloc>
+      <yloc>120</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Parquet File Output (Vendas Parquet)</name>
+    <type>ParquetFileOutput</type>
+    <filename>${PROJECT_HOME}/dados/saida/vendas_grandes.parquet</filename>
+    <compression_codec>SNAPPY</compression_codec>
+    <row_group_size>134217728</row_group_size>
+    <page_size>1048576</page_size>
+    <GUI>
+      <xloc>600</xloc>
+      <yloc>120</yloc>
+    </GUI>
+  </transform>
+</pipeline>

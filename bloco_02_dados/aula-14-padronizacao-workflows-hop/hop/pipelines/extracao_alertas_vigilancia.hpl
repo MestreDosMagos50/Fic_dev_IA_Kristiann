@@ -1,17 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pipeline>
-  <info><name>extracao_alertas_vigilancia</name><pipeline_type>Normal</pipeline_type></info>
-  <order>
-    <hop><from>Ler Staging Alertas</from><to>Gravar staging.alertas_vigilancia</to><enabled>Y</enabled></hop>
-  </order>
+  <info>
+    <capture_transform_performance>N</capture_transform_performance>
+    <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
+    <transform_performance_capturing_size_limit>100</transform_performance_capturing_size_limit>
+    <pipeline_type>Normal</pipeline_type>
+    <pipeline_status>0</pipeline_status>
+    <parameters/>
+    <name>extracao_alertas_vigilancia</name>
+    <name_sync_with_filename>N</name_sync_with_filename>
+    <created_user>-</created_user>
+    <modified_user>-</modified_user>
+    <created_date>2026/09/18 15:45:33.282</created_date>
+    <modified_date>2026/09/18 15:45:33.282</modified_date>
+  </info>
   <transform>
-    <name>Ler Staging Alertas</name>
     <type>TableInput</type>
-    <connection>PostgreSQL</connection>
+    <name>Ler Staging Alertas</name>
     <sql>SELECT id_alerta, cod_mun_6, cidade, nivel_risco, acao, data FROM staging.alertas_vigilancia LIMIT 10</sql>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <connection>PostgreSQL</connection>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>144</xloc>
+      <yloc>176</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
   <transform>
-    <name>Gravar staging.alertas_vigilancia</name>
     <type>Dummy</type>
+    <name>Gravar staging.alertas_vigilancia</name>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>368</xloc>
+      <yloc>176</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
+  <order>
+    <hop>
+      <from>Ler Staging Alertas</from>
+      <to>Gravar staging.alertas_vigilancia</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <notepads/>
+  <attributes/>
+  <transform_error_handling/>
 </pipeline>

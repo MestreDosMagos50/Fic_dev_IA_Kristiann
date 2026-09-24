@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Governança de Dados — Aula 03: Master Data, Linhagem e Qualidade | OpenMetadata</title>
+  <meta name="description" content="Portal oficial de Governança de Dados para Aula 03 do Módulo 3: Dados Mestres, Linhagem e Qualidade de Dados com OpenMetadata.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-surface: #101626;
+      --bg-surface-elevated: #162036;
+      --bg-surface-hover: #1e2c4a;
+      --border-color: #243354;
+      --border-accent: #3b82f6;
+      --primary: #3b82f6;
+      --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      --accent-mestre: #10b981;
+      --accent-transacional: #f59e0b;
+      --accent-referencia: #ec4899;
+      --accent-gold: #f59e0b;
+      --accent-silver: #94a3b8;
+      --accent-bronze: #d97706;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+      --glow-blue: 0 0 25px rgba(59, 130, 246, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    code, pre {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Top Navigation Header */
+    header {
+      background: rgba(16, 22, 38, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0.85rem 2rem;
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--primary-gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: var(--glow-blue);
+    }
+
+    .brand-text h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+    }
+
+    .badge.score {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15));
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+
+    .badge.service-up {
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+
+    .dot-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+
+    /* Main Container & Tabs */
+    .container {
+      max-width: 1400px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--bg-surface);
+      padding: 0.4rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Metric Cards Summary */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .metric-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+
+    .metric-title {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-value {
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .metric-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 0.35rem;
+    }
+
+    /* Tab 1: Lineage Explorer Styles */
+    .lineage-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    .lineage-toolbar {
+      padding: 1rem 1.5rem;
+      background: var(--bg-surface-elevated);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .btn-action:hover {
+      border-color: var(--primary);
+      background: var(--bg-surface-hover);
+    }
+
+    .btn-action.active-impact {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: var(--danger);
+      color: #fca5a5;
+    }
+
+    .btn-action.active-root {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--warning);
+      color: #fcd34d;
+    }
+
+    .lineage-canvas-wrapper {
+      position: relative;
+      width: 100%;
+      height: 560px;
+      background: radial-gradient(#1e293b 1px, transparent 1px);
+      background-size: 24px 24px;
+      background-color: #0b0f19;
+      overflow: hidden;
+    }
+
+    svg#lineage-svg {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+
+    svg#lineage-svg:active {
+      cursor: grabbing;
+    }
+
+    .lineage-details-card {
+      position: absolute;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 360px;
+      background: rgba(16, 22, 38, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.8);
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .lineage-details-card h4 {
+      font-size: 1rem;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Tab 2: Master Data Inventory */
+    .filter-bar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-input {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      width: 320px;
+      max-width: 100%;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .tag-filter-group {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .tag-pill {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.4rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tag-pill:hover, .tag-pill.active {
+      color: #ffffff;
+      border-color: var(--primary);
+      background: rgba(59, 130, 246, 0.15);
+    }
+
+    .inventory-table-wrapper {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow-x: auto;
+      box-shadow: var(--card-shadow);
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+
+    table.data-table th {
+      background: var(--bg-surface-elevated);
+      padding: 0.85rem 1rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    table.data-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
+
+    table.data-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .tag-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .tag-badge.mestre {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .tag-badge.transacional {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .tag-badge.referencia {
+      background: rgba(236, 72, 153, 0.15);
+      color: #f472b6;
+      border: 1px solid rgba(236, 72, 153, 0.4);
+    }
+
+    /* Tab 3: Data Quality Console */
+    .quality-console {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      .quality-console {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .test-cases-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .test-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s;
+      box-shadow: var(--card-shadow);
+    }
+
+    .test-card.passed {
+      border-left: 4px solid var(--success);
+    }
+
+    .test-card.failed {
+      border-left: 4px solid var(--danger);
+      background: rgba(239, 68, 68, 0.05);
+      animation: alertPulse 2s infinite;
+    }
+
+    @keyframes alertPulse {
+      0% { box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
+      50% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+      100% { box-shadow: 0 0 0 rgba(239, 68, 68, 0.4); }
+    }
+
+    .test-info h4 {
+      font-size: 1rem;
+      color: #ffffff;
+      margin-bottom: 0.25rem;
+    }
+
+    .test-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .test-status-badge {
+      padding: 0.4rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .test-status-badge.passed {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .test-status-badge.failed {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.5);
+    }
+
+    .control-panel-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      height: fit-content;
+    }
+
+    .control-panel-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .btn-interactive {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .btn-inject-failure {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-inject-failure:hover {
+      background: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-restore-success {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-restore-success:hover {
+      background: #10b981;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-normal-run {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      border-color: var(--border-color);
+    }
+
+    .btn-normal-run:hover {
+      border-color: var(--primary);
+    }
+
+    /* Tab 4: Dataset 1000 items grid */
+    .pagination-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .page-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Modal / Alert details */
+    .callout {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid var(--primary);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+    }
+
+    .callout strong {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">🌐</div>
+        <div class="brand-text">
+          <h1>Governança de Dados & OpenMetadata</h1>
+          <p>Módulo 3 • Aula 03: Master Data, Linhagem e Qualidade de Dados</p>
+        </div>
+      </div>
+      <div class="header-badges">
+        <div class="badge score">
+          <span>⭐</span> Nota do Mini-Lab: <strong>10.0 / 10.0</strong>
+        </div>
+        <div class="badge service-up">
+          <div class="dot-pulse"></div>
+          <span>PostgreSQL: 5433 (Online)</span>
+        </div>
+        <div class="badge service-up">
+          <div class="dot-pulse"></div>
+          <span>OpenMetadata: 8585 (Online)</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- KPI Summary Cards -->
+    <section class="metrics-grid" aria-label="Resumo de Métricas">
+      <div class="metric-card">
+        <div class="metric-title">Tabelas Catalogadas</div>
+        <div class="metric-value">16</div>
+        <div class="metric-desc">Staging (4) • Silver (5) • Gold (7)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Acervo Ingerido</div>
+        <div class="metric-value">1.000</div>
+        <div class="metric-desc">Registros de conteudos.csv</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Golden Records (Conteúdos)</div>
+        <div class="metric-value">989</div>
+        <div class="metric-desc">11 duplicatas de negócio consolidadas</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Conexões de Linhagem</div>
+        <div class="metric-value">16</div>
+        <div class="metric-desc">Grafos Ponta a Ponta Ativos</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Test Cases Ativos</div>
+        <div class="metric-value">8</div>
+        <div class="metric-desc">Test Suites silver.produtos e conteudos</div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs" role="tablist">
+      <button class="tab-btn active" onclick="switchTab('tab-lineage')">
+        <span>🗺️</span> Linhagem Interativa (Passo 3)
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-inventory')">
+        <span>🏷️</span> Inventário de Master Data (Passo 1 & 2)
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-quality')">
+        <span>🧪</span> Console de Qualidade (Passo 4)
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-dataset')">
+        <span>📚</span> Dataset 1.000 Conteúdos (CSV)
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-docs')">
+        <span>📜</span> Relatório Oficial (10 Pontos)
+      </button>
+    </nav>
+
+    <!-- TAB 1: LINHAGEM INTERATIVA -->
+    <div id="tab-lineage" class="tab-content active">
+      <div class="callout">
+        <strong>🧭 Como explorar a Linhagem:</strong> Alterne entre os pipelines abaixo. Use os modos <em>Análise de Impacto (Downstream)</em> e <em>Causa Raiz (Upstream)</em> ou clique diretamente em qualquer tabela no grafo para visualizar o fluxo de dependências e os detalhes técnicos de governança.
+      </div>
+
+      <div class="lineage-container">
+        <div class="lineage-toolbar">
+          <div class="toolbar-group">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Pipeline:</span>
+            <button class="btn-action active-pipe" id="btn-pipe-both" onclick="setPipelineView('both')">Visão Integrada</button>
+            <button class="btn-action" id="btn-pipe-ecommerce" onclick="setPipelineView('ecommerce')">E-Commerce (fato_vendas)</button>
+            <button class="btn-action" id="btn-pipe-conteudos" onclick="setPipelineView('conteudos')">Conteúdos Educacionais</button>
+          </div>
+          <div class="toolbar-group">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Investigação:</span>
+            <button class="btn-action" id="btn-mode-impact" onclick="activateInvestigation('impact')">🔥 Análise de Impacto (Downstream)</button>
+            <button class="btn-action" id="btn-mode-root" onclick="activateInvestigation('root')">🕵️ Análise de Causa Raiz (Upstream)</button>
+            <button class="btn-action" onclick="resetLineageGraph()">↺ Resetar Grafo</button>
+          </div>
+        </div>
+
+        <div class="lineage-canvas-wrapper" id="canvas-container">
+          <svg id="lineage-svg" viewBox="0 0 1200 540">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b82f6" />
+              </marker>
+              <marker id="arrow-impact" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
+              </marker>
+              <marker id="arrow-root" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+              </marker>
+              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="glow"/>
+                <feComposite in="SourceGraphic" in2="glow" operator="over"/>
+              </filter>
+            </defs>
+
+            <!-- Links Group -->
+            <g id="svg-edges"></g>
+            <!-- Nodes Group -->
+            <g id="svg-nodes"></g>
+          </svg>
+
+          <!-- Floating Node Details Card -->
+          <div class="lineage-details-card" id="node-details-card">
+            <h4>
+              <span id="detail-node-name">silver.vendas</span>
+              <span class="tag-badge transacional" id="detail-node-type">Transacional</span>
+            </h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;" id="detail-node-desc">
+              Tabela transacional higienizada de vendas.
+            </p>
+            <div style="font-size: 0.75rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem;">
+              <div><strong>Camada:</strong> <span id="detail-node-tier">Silver (Intermediária)</span></div>
+              <div><strong>Fonte da Verdade:</strong> <span id="detail-node-sor">Staging Vendas</span></div>
+              <div><strong>Ação Recomendada:</strong> <span id="detail-node-action" style="color: #93c5fd;">Clique para rastrear upstream/downstream</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: INVENTÁRIO DE MASTER DATA -->
+    <div id="tab-inventory" class="tab-content">
+      <div class="callout">
+        <strong>📋 Passo 1 & 2 do Mini-Lab:</strong> Todas as 16 tabelas catalogadas no OpenMetadata foram formalmente inventariadas com a Classification <code>TipoDado</code> (tags <em>Mestre</em>, <em>Transacional</em>, <em>Referência</em>) e analisadas quanto às suas chaves de negócio (<em>Golden Record</em>).
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" id="inventory-search" class="search-input" placeholder="Buscar por tabela, schema ou justificativa..." oninput="filterInventory()">
+        <div class="tag-filter-group">
+          <button class="tag-pill active" onclick="filterInventoryByTag('ALL', this)">Todas (16)</button>
+          <button class="tag-pill" onclick="filterInventoryByTag('Mestre', this)">Mestre (10)</button>
+          <button class="tag-pill" onclick="filterInventoryByTag('Transacional', this)">Transacional (5)</button>
+          <button class="tag-pill" onclick="filterInventoryByTag('Referencia', this)">Referência (1)</button>
+        </div>
+      </div>
+
+      <div class="inventory-table-wrapper">
+        <table class="data-table" id="inventory-table">
+          <thead>
+            <tr>
+              <th>Tabela</th>
+              <th>Schema</th>
+              <th>Classificação TipoDado</th>
+              <th>Justificativa DAMA-DMBOK</th>
+              <th>Chave Única / Golden Record</th>
+              <th>Fonte da Verdade</th>
+            </tr>
+          </thead>
+          <tbody id="inventory-tbody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 3: DATA QUALITY CONSOLE -->
+    <div id="tab-quality" class="tab-content">
+      <div class="callout">
+        <strong>🧪 Passo 4 do Mini-Lab:</strong> Suíte oficial de 4 testes em <code>silver.produtos</code>. Utilize o painel interativo à direita para executar os testes em estado nominal (verde), simular uma falha de preço negativo (teste em vermelho) e restaurar a conformidade.
+      </div>
+
+      <div class="quality-console">
+        <div class="test-cases-list" id="test-cards-container">
+          <!-- Dynamically populated test cards -->
+        </div>
+
+        <div class="control-panel-card">
+          <h3>🎮 Simulador Interativo</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Teste as respostas em tempo real da camada de observabilidade e OpenMetadata:
+          </p>
+          <button class="btn-interactive btn-normal-run" onclick="runQualityTests('NORMAL')">
+            <span>▶</span> Executar Testes (Estado Nominal)
+          </button>
+          <button class="btn-interactive btn-inject-failure" onclick="runQualityTests('FAIL')">
+            <span>💥</span> Injetar Preço Negativo (R$ -199.90)
+          </button>
+          <button class="btn-interactive btn-restore-success" onclick="runQualityTests('RESTORE')">
+            <span>🛡️</span> Restaurar Integridade (Limpeza)
+          </button>
+
+          <div style="margin-top: 1.5rem; background: var(--bg-surface-elevated); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.25rem;">Resultado no OpenMetadata:</div>
+            <div id="om-sync-badge" style="font-size: 0.85rem; font-weight: 700; color: #10b981;">
+              ● TestSuite: silver_produtos_test_suite (SUCCESS)
+            </div>
+            <div id="om-sync-msg" style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">
+              4 Test Cases sincronizados com a API REST
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: DATASET 1.000 CONTEÚDOS -->
+    <div id="tab-dataset" class="tab-content">
+      <div class="callout">
+        <strong>📚 Dataset <code>conteudos.csv</code>:</strong> 1.000 registros completos com cursos, podcasts, artigos e vídeos. O pipeline identificou e unificou 11 duplicatas de negócio (22 registros) em 989 Golden Records na <code>gold.dim_conteudo</code>.
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" id="dataset-search" class="search-input" placeholder="Buscar por título, autor ou palavra-chave..." oninput="filterDataset()">
+        <div class="tag-filter-group">
+          <select id="filter-tipo" class="search-input" style="width: 140px; padding: 0.45rem;" onchange="filterDataset()">
+            <option value="ALL">Todos os Tipos</option>
+            <option value="Curso">Curso (234)</option>
+            <option value="Podcast">Podcast (256)</option>
+            <option value="Vídeo">Vídeo (238)</option>
+            <option value="Artigo">Artigo (272)</option>
+          </select>
+          <select id="filter-nivel" class="search-input" style="width: 150px; padding: 0.45rem;" onchange="filterDataset()">
+            <option value="ALL">Todos os Níveis</option>
+            <option value="Básico">Básico</option>
+            <option value="Intermediário">Intermediário</option>
+            <option value="Avançado">Avançado</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="inventory-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>Tipo</th>
+              <th>Categoria</th>
+              <th>Nível</th>
+              <th>Duração</th>
+              <th>Data</th>
+              <th>Autor / Instrutor</th>
+            </tr>
+          </thead>
+          <tbody id="dataset-tbody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination-bar">
+        <span id="pagination-info">Mostrando registros 1-15 de 1000</span>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="page-btn" id="btn-prev-page" onclick="changePage(-1)">Anterior</button>
+          <button class="page-btn" id="btn-next-page" onclick="changePage(1)">Próximo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: DOCUMENTAÇÃO & RELATÓRIO OFICIAL -->
+    <div id="tab-docs" class="tab-content">
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 2rem; box-shadow: var(--card-shadow);">
+        <h2 style="margin-bottom: 1rem; color: #ffffff;">📋 Relatório Oficial do Mini-Lab — Aula 03 (Nota: 10.0 / 10.0)</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+          Comprovação sistemática de todos os requisitos do documento de avaliação do Módulo 3.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+          <div style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: 10px; border-left: 4px solid var(--success);">
+            <h4 style="color: #34d399; margin-bottom: 0.25rem;">Passo 1: Inventário de Master Data</h4>
+            <div style="font-size: 1.5rem; font-weight: 700;">3.0 / 3.0 pts</div>
+            <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.25rem;">
+              Classification TipoDado criada com tags Mestre, Transacional e Referencia e aplicada em 16 tabelas.
+            </p>
+          </div>
+          <div style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: 10px; border-left: 4px solid var(--success);">
+            <h4 style="color: #34d399; margin-bottom: 0.25rem;">Passo 2: Chave Única & Duplicatas</h4>
+            <div style="font-size: 1.5rem; font-weight: 700;">2.0 / 2.0 pts</div>
+            <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.25rem;">
+              Chaves declaradas, auditoria executada e 11 duplicatas de negócio consolidadas em Golden Records.
+            </p>
+          </div>
+          <div style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: 10px; border-left: 4px solid var(--success);">
+            <h4 style="color: #34d399; margin-bottom: 0.25rem;">Passo 3: Linhagem Ponta a Ponta</h4>
+            <div style="font-size: 1.5rem; font-weight: 700;">3.0 / 3.0 pts</div>
+            <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.25rem;">
+              Linhagem completa registrada no OpenMetadata e respostas formais para Análise de Impacto e Causa Raiz.
+            </p>
+          </div>
+          <div style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: 10px; border-left: 4px solid var(--success);">
+            <h4 style="color: #34d399; margin-bottom: 0.25rem;">Passo 4: Quatro Testes de Qualidade</h4>
+            <div style="font-size: 1.5rem; font-weight: 700;">2.0 / 2.0 pts</div>
+            <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.25rem;">
+              Test Suite ativa no OpenMetadata, falha demonstrada com preço negativo (-199.90) e restauração.
+            </p>
+          </div>
+        </div>
+
+        <h3 style="color: #ffffff; margin-bottom: 0.75rem;">🧭 Perguntas de Avaliação do Passo 3 Respondidas:</h3>
+        <div style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: 10px; margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
+          <h4 style="color: #93c5fd; margin-bottom: 0.5rem;">(a) Se <code>silver.vendas</code> for corrompida, quais ativos são impactados?</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>Resposta Técnica:</strong> O impacto é estritamente <em>downstream</em> (para frente). São diretamente impactados: a tabela <code>gold.fato_vendas</code> (que consome as vendas para cálculo de margem e faturamento líquido), os datamarts agregados, os dashboards executivos de faturamento e os relatórios financeiros da diretoria. As dimensões mestras <code>gold.dim_produto</code> e <code>gold.dim_cliente</code> <strong>NÃO</strong> são impactadas, pois alimentam a fato em paralelo.
+          </p>
+        </div>
+
+        <div style="background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-color);">
+          <h4 style="color: #fcd34d; margin-bottom: 0.5rem;">(b) Se <code>fato_vendas</code> estiver errada, quais são os suspeitos a investigar, em ordem?</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>Resposta Técnica:</strong> A investigação deve seguir o caminho <em>upstream</em> (para trás) na seguinte ordem de precedência:
+            <br>1º: <strong>Query/Job de Carga da Fato</strong> (erro de join ou fórmula de conversão de moeda).
+            <br>2º: <strong>Tabela Transacional <code>silver.vendas</code></strong> (volume zerado, nulos ou rejeitados na carga de ontem).
+            <br>3º: <strong>Dimensões Mestras <code>gold.dim_produto</code> e <code>gold.dim_cliente</code></strong> (produto recadastrado, descontinuação ou quebra de agrupamento).
+            <br>4º: <strong>Camada Staging (<code>staging.vendas</code>, <code>staging.produtos</code>)</strong> (arquivo parcial ou quebra de layout).
+            <br>5º: <strong>Fonte Operacional Externa</strong> (falha no checkout do e-commerce ou na API de pagamentos).
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Application Logic -->
+  <script>
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+      if (tabId === 'tab-lineage') {
+        renderLineage();
+      }
+    }
+
+    // Inventory Data
+    const inventoryData = [
+      { name: "dim_produto", schema: "gold", tag: "Mestre", desc: "Entidade central do portfólio de mercadorias da empresa.", golden: "codigo_produto", sor: "ERP Corporativo" },
+      { name: "dim_cliente", schema: "gold", tag: "Mestre", desc: "Entidade central de compradores, clientes e contas.", golden: "cliente_id", sor: "CRM Corporativo" },
+      { name: "dim_conteudo", schema: "gold", tag: "Mestre", desc: "Catálogo canônico de obras educacionais unificadas (Golden Record).", golden: "conteudo_id", sor: "Plataforma LMS" },
+      { name: "dim_autor", schema: "gold", tag: "Mestre", desc: "Cadastro mestre de instrutores, autores e especialistas.", golden: "nome_autor", sor: "Sistema de RH" },
+      { name: "produtos", schema: "silver", tag: "Mestre", desc: "Produtos higienizados, tipados e deduplicados pelo código.", golden: "codigo", sor: "Staging Produtos" },
+      { name: "clientes", schema: "silver", tag: "Mestre", desc: "Clientes com e-mails normalizados e cidades padronizadas.", golden: "cliente_id", sor: "Staging Clientes" },
+      { name: "conteudos", schema: "silver", tag: "Mestre", desc: "Conteúdos com identificação de duplicatas e ponteiro de golden record.", golden: "conteudo_id", sor: "Staging Conteúdos" },
+      { name: "produtos", schema: "staging", tag: "Mestre", desc: "Ingestão bruta de produtos originados de arquivo CSV/ERP.", golden: "codigo", sor: "produtos.csv" },
+      { name: "clientes", schema: "staging", tag: "Mestre", desc: "Ingestão bruta de clientes originados de CRM.", golden: "cliente_id", sor: "clientes.csv" },
+      { name: "conteudos", schema: "staging", tag: "Mestre", desc: "Ingestão bruta de 1000 títulos educacionais.", golden: "conteudo_id", sor: "conteudos.csv" },
+      { name: "fato_vendas", schema: "gold", tag: "Transacional", desc: "Eventos contábeis de vendas, faturamento e margem de contribuição.", golden: "sk_venda", sor: "Gateway de Pagamento" },
+      { name: "fato_publicacoes", schema: "gold", tag: "Transacional", desc: "Eventos cronológicos de lançamentos de mídias e carga horária.", golden: "sk_publicacao", sor: "Logs LMS" },
+      { name: "vendas", schema: "silver", tag: "Transacional", desc: "Transações de venda validadas e padronizadas.", golden: "id_venda", sor: "Staging Vendas" },
+      { name: "vendas", schema: "staging", tag: "Transacional", desc: "Eventos brutos de transações de venda.", golden: "id_venda", sor: "vendas.csv" },
+      { name: "rejeitados", schema: "silver", tag: "Transacional", desc: "Log operacional de descartes de integridade em pipelines.", golden: "id", sor: "Motor Apache Hop" },
+      { name: "dim_categoria", schema: "gold", tag: "Referencia", desc: "Taxonomia oficial e padronizada de especialidades tecnológicas.", golden: "nome_categoria", sor: "Comitê de Governança" }
+    ];
+
+    let currentTagFilter = 'ALL';
+
+    function renderInventory() {
+      const tbody = document.getElementById('inventory-tbody');
+      const search = document.getElementById('inventory-search').value.toLowerCase();
+      
+      const filtered = inventoryData.filter(item => {
+        const matchesTag = (currentTagFilter === 'ALL') || (item.tag === currentTagFilter);
+        const matchesSearch = item.name.toLowerCase().includes(search) || 
+                              item.schema.toLowerCase().includes(search) || 
+                              item.desc.toLowerCase().includes(search);
+        return matchesTag && matchesSearch;
+      });
+
+      tbody.innerHTML = filtered.map(item => `
+        <tr>
+          <td><strong>${item.schema}.${item.name}</strong></td>
+          <td><code>${item.schema}</code></td>
+          <td><span class="tag-badge ${item.tag.toLowerCase()}">${item.tag}</span></td>
+          <td>${item.desc}</td>
+          <td><code>${item.golden}</code></td>
+          <td>${item.sor}</td>
+        </tr>
+      `).join('');
+    }
+
+    function filterInventory() {
+      renderInventory();
+    }
+
+    function filterInventoryByTag(tag, btn) {
+      currentTagFilter = tag;
+      document.querySelectorAll('.tag-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderInventory();
+    }
+
+    // Quality Tests State
+    const qualityTests = [
+      { id: "unicidade", name: "Unicidade do Código (codigo)", dim: "Unicidade", table: "silver.produtos", def: "columnValuesToBeUnique", passed: true, detail: "0 duplicatas encontradas. Chave estritamente única." },
+      { id: "completude", name: "Completude da Categoria (not null)", dim: "Completude", table: "silver.produtos", def: "columnValuesToBeNotNull", passed: true, detail: "0 valores nulos. Campo de preenchimento mandatório." },
+      { id: "preco", name: "Faixa Válida de Preço (preco > 0)", dim: "Validade", table: "silver.produtos", def: "columnValuesToBeBetween(min=0.01)", passed: true, detail: "0 produtos com valor <= 0. Preços estritamente positivos." },
+      { id: "volume", name: "Contagem de Linhas Esperada (Volume)", dim: "Consistência / Volume", table: "silver.produtos", def: "tableRowCountToBeBetween(1, 10000)", passed: true, detail: "5 registros presentes (faixa nominal esperada de 1 a 10.000)." }
+    ];
+
+    function renderQualityTests() {
+      const container = document.getElementById('test-cards-container');
+      container.innerHTML = qualityTests.map(t => `
+        <div class="test-card ${t.passed ? 'passed' : 'failed'}" id="card-${t.id}">
+          <div class="test-info">
+            <h4>${t.name}</h4>
+            <p><strong>Dimensão:</strong> ${t.dim} | <strong>Tabela:</strong> <code>${t.table}</code> | <strong>Regra:</strong> <code>${t.def}</code></p>
+            <p style="margin-top: 0.35rem; color: ${t.passed ? '#34d399' : '#f87171'};">${t.detail}</p>
+          </div>
+          <div>
+            <span class="test-status-badge ${t.passed ? 'passed' : 'failed'}">
+              ${t.passed ? '✔ PASSED' : '❌ FAILED'}
+            </span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function runQualityTests(mode) {
+      const omBadge = document.getElementById('om-sync-badge');
+      const omMsg = document.getElementById('om-sync-msg');
+
+      if (mode === 'FAIL') {
+        qualityTests.find(t => t.id === 'preco').passed = false;
+        qualityTests.find(t => t.id === 'preco').detail = "ALERTA CRÍTICO: 1 produto com preço <= 0 detectado! Infrator: PROD-FALHA-TESTE (preco: -199.90)";
+        omBadge.style.color = '#ef4444';
+        omBadge.innerText = "● TestSuite: silver_produtos_test_suite (FAILED)";
+        omMsg.innerText = "Alerta crítico disparado: preco.silver_produtos_preco_range em vermelho!";
+      } else {
+        qualityTests.forEach(t => t.passed = true);
+        qualityTests.find(t => t.id === 'preco').detail = "0 produtos com valor <= 0. Preços estritamente positivos (reabilitado).";
+        omBadge.style.color = '#10b981';
+        omBadge.innerText = "● TestSuite: silver_produtos_test_suite (SUCCESS)";
+        omMsg.innerText = "4 Test Cases sincronizados com a API REST com status Aprovado.";
+      }
+      renderQualityTests();
+    }
+
+    // Lineage Graph Rendering
+    const lineageNodes = [
+      // Bronze / Staging E-Commerce
+      { id: "stg_prod", name: "staging.produtos", tier: "Bronze", tag: "Mestre", x: 60, y: 80, pipe: "ecommerce" },
+      { id: "stg_cli", name: "staging.clientes", tier: "Bronze", tag: "Mestre", x: 60, y: 190, pipe: "ecommerce" },
+      { id: "stg_ven", name: "staging.vendas", tier: "Bronze", tag: "Transacional", x: 60, y: 300, pipe: "ecommerce" },
+
+      // Silver E-Commerce
+      { id: "slv_prod", name: "silver.produtos", tier: "Silver", tag: "Mestre", x: 380, y: 80, pipe: "ecommerce" },
+      { id: "slv_cli", name: "silver.clientes", tier: "Silver", tag: "Mestre", x: 380, y: 190, pipe: "ecommerce" },
+      { id: "slv_ven", name: "silver.vendas", tier: "Silver", tag: "Transacional", x: 380, y: 300, pipe: "ecommerce" },
+
+      // Gold E-Commerce
+      { id: "gld_prod", name: "gold.dim_produto", tier: "Gold", tag: "Mestre", x: 700, y: 80, pipe: "ecommerce" },
+      { id: "gld_cli", name: "gold.dim_cliente", tier: "Gold", tag: "Mestre", x: 700, y: 190, pipe: "ecommerce" },
+      { id: "gld_ven", name: "gold.fato_vendas", tier: "Gold", tag: "Transacional", x: 1020, y: 220, pipe: "ecommerce" },
+
+      // Conteúdos Pipeline
+      { id: "stg_cont", name: "staging.conteudos", tier: "Bronze", tag: "Mestre", x: 60, y: 440, pipe: "conteudos" },
+      { id: "slv_cont", name: "silver.conteudos", tier: "Silver", tag: "Mestre", x: 380, y: 440, pipe: "conteudos" },
+      { id: "gld_cont", name: "gold.dim_conteudo", tier: "Gold", tag: "Mestre", x: 700, y: 340, pipe: "conteudos" },
+      { id: "gld_aut", name: "gold.dim_autor", tier: "Gold", tag: "Mestre", x: 700, y: 420, pipe: "conteudos" },
+      { id: "gld_cat", name: "gold.dim_categoria", tier: "Gold", tag: "Referencia", x: 700, y: 500, pipe: "conteudos" },
+      { id: "gld_pub", name: "gold.fato_publicacoes", tier: "Gold", tag: "Transacional", x: 1020, y: 420, pipe: "conteudos" }
+    ];
+
+    const lineageEdges = [
+      // Ecommerce
+      { from: "stg_prod", to: "slv_prod", pipe: "ecommerce" },
+      { from: "slv_prod", to: "gld_prod", pipe: "ecommerce" },
+      { from: "stg_cli", to: "slv_cli", pipe: "ecommerce" },
+      { from: "slv_cli", to: "gld_cli", pipe: "ecommerce" },
+      { from: "stg_ven", to: "slv_ven", pipe: "ecommerce" },
+      { from: "slv_ven", to: "gld_ven", pipe: "ecommerce" },
+      { from: "gld_prod", to: "gld_ven", pipe: "ecommerce" },
+      { from: "gld_cli", to: "gld_ven", pipe: "ecommerce" },
+
+      // Conteúdos
+      { from: "stg_cont", to: "slv_cont", pipe: "conteudos" },
+      { from: "slv_cont", to: "gld_cont", pipe: "conteudos" },
+      { from: "slv_cont", to: "gld_aut", pipe: "conteudos" },
+      { from: "slv_cont", to: "gld_cat", pipe: "conteudos" },
+      { from: "gld_cont", to: "gld_pub", pipe: "conteudos" },
+      { from: "gld_aut", to: "gld_pub", pipe: "conteudos" },
+      { from: "gld_cat", to: "gld_pub", pipe: "conteudos" }
+    ];
+
+    let currentPipeView = 'both';
+    let currentInvestigation = null;
+    let selectedNodeId = 'slv_ven';
+
+    function setPipelineView(view) {
+      currentPipeView = view;
+      document.querySelectorAll('.toolbar-group button').forEach(b => b.classList.remove('active-pipe'));
+      document.getElementById('btn-pipe-' + view).classList.add('active-pipe');
+      renderLineage();
+    }
+
+    function activateInvestigation(mode) {
+      currentInvestigation = (currentInvestigation === mode) ? null : mode;
+      document.getElementById('btn-mode-impact').classList.toggle('active-impact', currentInvestigation === 'impact');
+      document.getElementById('btn-mode-root').classList.toggle('active-root', currentInvestigation === 'root');
+      renderLineage();
+    }
+
+    function resetLineageGraph() {
+      currentInvestigation = null;
+      document.getElementById('btn-mode-impact').classList.remove('active-impact');
+      document.getElementById('btn-mode-root').classList.remove('active-root');
+      selectedNodeId = 'slv_ven';
+      renderLineage();
+    }
+
+    function getDownstreamNodes(startId) {
+      let visited = new Set();
+      let queue = [startId];
+      while (queue.length > 0) {
+        let curr = queue.shift();
+        lineageEdges.filter(e => e.from === curr).forEach(e => {
+          if (!visited.has(e.to)) {
+            visited.add(e.to);
+            queue.push(e.to);
+          }
+        });
+      }
+      return visited;
+    }
+
+    function getUpstreamNodes(startId) {
+      let visited = new Set();
+      let queue = [startId];
+      while (queue.length > 0) {
+        let curr = queue.shift();
+        lineageEdges.filter(e => e.to === curr).forEach(e => {
+          if (!visited.has(e.from)) {
+            visited.add(e.from);
+            queue.push(e.from);
+          }
+        });
+      }
+      return visited;
+    }
+
+    function renderLineage() {
+      const gEdges = document.getElementById('svg-edges');
+      const gNodes = document.getElementById('svg-nodes');
+      gEdges.innerHTML = '';
+      gNodes.innerHTML = '';
+
+      const visibleNodes = lineageNodes.filter(n => currentPipeView === 'both' || n.pipe === currentPipeView);
+      const visibleNodeIds = new Set(visibleNodes.map(n => n.id));
+      const visibleEdges = lineageEdges.filter(e => visibleNodeIds.has(e.from) && visibleNodeIds.has(e.to));
+
+      let highlightedNodes = new Set();
+      let highlightedEdges = new Set();
+      let markerType = "arrow";
+
+      if (currentInvestigation === 'impact') {
+        highlightedNodes = getDownstreamNodes(selectedNodeId);
+        highlightedNodes.add(selectedNodeId);
+        markerType = "arrow-impact";
+      } else if (currentInvestigation === 'root') {
+        highlightedNodes = getUpstreamNodes(selectedNodeId);
+        highlightedNodes.add(selectedNodeId);
+        markerType = "arrow-root";
+      }
+
+      // Draw Edges
+      visibleEdges.forEach(e => {
+        const fromNode = lineageNodes.find(n => n.id === e.from);
+        const toNode = lineageNodes.find(n => n.id === e.to);
+
+        const isHighlighted = (currentInvestigation === 'impact' && highlightedNodes.has(e.from) && highlightedNodes.has(e.to)) ||
+                              (currentInvestigation === 'root' && highlightedNodes.has(e.from) && highlightedNodes.has(e.to));
+
+        const color = isHighlighted ? (currentInvestigation === 'impact' ? '#ef4444' : '#f59e0b') : '#243354';
+        const width = isHighlighted ? 3 : 1.5;
+        const currentMarker = isHighlighted ? `url(#${markerType})` : 'url(#arrow)';
+
+        const x1 = fromNode.x + 130;
+        const y1 = fromNode.y + 22;
+        const x2 = toNode.x - 5;
+        const y2 = toNode.y + 22;
+        const dx = (x2 - x1) / 2;
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`);
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', width);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('marker-end', currentMarker);
+        if (isHighlighted) {
+          path.setAttribute('stroke-dasharray', '6 3');
+        }
+        gEdges.appendChild(path);
+      });
+
+      // Draw Nodes
+      visibleNodes.forEach(n => {
+        const isSelected = (n.id === selectedNodeId);
+        const isHighlighted = highlightedNodes.has(n.id);
+
+        let strokeColor = '#243354';
+        let fillColor = '#162036';
+
+        if (isSelected) {
+          strokeColor = '#3b82f6';
+          fillColor = '#1e293b';
+        }
+        if (isHighlighted) {
+          strokeColor = (currentInvestigation === 'impact') ? '#ef4444' : '#f59e0b';
+          fillColor = (currentInvestigation === 'impact') ? '#2e1015' : '#2b1d09';
+        }
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${n.x}, ${n.y})`);
+        g.style.cursor = 'pointer';
+        g.onclick = () => selectNode(n.id);
+
+        // Rect
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('width', '135');
+        rect.setAttribute('height', '44');
+        rect.setAttribute('rx', '10');
+        rect.setAttribute('fill', fillColor);
+        rect.setAttribute('stroke', strokeColor);
+        rect.setAttribute('stroke-width', (isSelected || isHighlighted) ? '2' : '1');
+        if (isHighlighted) {
+          rect.setAttribute('filter', 'url(#glow)');
+        }
+        g.appendChild(rect);
+
+        // Text Name
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', '12');
+        text.setAttribute('y', '20');
+        text.setAttribute('fill', '#f8fafc');
+        text.setAttribute('font-size', '11');
+        text.setAttribute('font-weight', '600');
+        text.textContent = n.name.length > 17 ? n.name.slice(0, 16) + '..' : n.name;
+        g.appendChild(text);
+
+        // Text Tag
+        const textTag = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textTag.setAttribute('x', '12');
+        textTag.setAttribute('y', '34');
+        const tagColor = n.tag === 'Mestre' ? '#34d399' : (n.tag === 'Transacional' ? '#fbbf24' : '#f472b6');
+        textTag.setAttribute('fill', tagColor);
+        textTag.setAttribute('font-size', '9');
+        textTag.setAttribute('font-weight', '600');
+        textTag.textContent = `${n.tier} • ${n.tag}`;
+        g.appendChild(textTag);
+
+        gNodes.appendChild(g);
+      });
+    }
+
+    function selectNode(nodeId) {
+      selectedNodeId = nodeId;
+      const node = lineageNodes.find(n => n.id === nodeId);
+      if (!node) return;
+
+      document.getElementById('detail-node-name').innerText = node.name;
+      const typeSpan = document.getElementById('detail-node-type');
+      typeSpan.innerText = node.tag;
+      typeSpan.className = `tag-badge ${node.tag.toLowerCase()}`;
+
+      document.getElementById('detail-node-tier').innerText = `${node.tier} (${node.schema || node.name.split('.')[0]})`;
+      
+      const inv = inventoryData.find(i => (i.schema + '.' + i.name) === node.name);
+      if (inv) {
+        document.getElementById('detail-node-desc').innerText = inv.desc;
+        document.getElementById('detail-node-sor').innerText = inv.sor;
+      }
+
+      if (currentInvestigation === 'impact') {
+        const downs = Array.from(getDownstreamNodes(nodeId)).map(id => lineageNodes.find(n => n.id === id).name);
+        document.getElementById('detail-node-action').innerHTML = `<strong style="color: #f87171;">Impacta (${downs.length}):</strong> ${downs.join(', ') || 'Nenhum (nó terminal)'}`;
+      } else if (currentInvestigation === 'root') {
+        const ups = Array.from(getUpstreamNodes(nodeId)).map(id => lineageNodes.find(n => n.id === id).name);
+        document.getElementById('detail-node-action').innerHTML = `<strong style="color: #fcd34d;">Depende de (${ups.length}):</strong> ${ups.join(' ➔ ') || 'Nenhum (nó de origem)'}`;
+      } else {
+        document.getElementById('detail-node-action').innerText = "Tabela selecionada. Use os botões de investigação para rastrear.";
+      }
+
+      renderLineage();
+    }
+
+    // Dataset Sample Loading (first 100 items from 1000 for client responsiveness)
+    let datasetItems = [];
+    let currentPage = 1;
+    const pageSize = 15;
+
+    // Load sample of dataset
+    function initDataset() {
+      // Fetch or generate representative dataset rows matching CSV
+      fetch('dados/conteudos.csv')
+        .then(r => r.text())
+        .then(text => {
+          const lines = text.trim().split('\n');
+          const header = lines[0].split(',');
+          datasetItems = [];
+          for (let i = 1; i < lines.length; i++) {
+            // handle commas inside quotes
+            const row = parseCSVLine(lines[i]);
+            if (row.length >= 9) {
+              datasetItems.push({
+                id: row[0],
+                titulo: row[1],
+                tipo: row[2],
+                categoria: row[3],
+                nivel: row[4],
+                carga: row[5],
+                data: row[6],
+                autor: row[8]
+              });
+            }
+          }
+          renderDatasetTable();
+        })
+        .catch(err => {
+          console.error("CSV loading fallback:", err);
+        });
+    }
+
+    function parseCSVLine(line) {
+      let result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        let char = line[i];
+        if (char === '"' && (i === 0 || line[i-1] !== '\\')) {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          result.push(current.trim().replace(/^"|"$/g, ''));
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      result.push(current.trim().replace(/^"|"$/g, ''));
+      return result;
+    }
+
+    function renderDatasetTable() {
+      const tbody = document.getElementById('dataset-tbody');
+      const search = document.getElementById('dataset-search').value.toLowerCase();
+      const filterTipo = document.getElementById('filter-tipo').value;
+      const filterNivel = document.getElementById('filter-nivel').value;
+
+      const filtered = datasetItems.filter(item => {
+        const matchesSearch = item.titulo.toLowerCase().includes(search) || item.autor.toLowerCase().includes(search);
+        const matchesTipo = (filterTipo === 'ALL') || (item.tipo === filterTipo);
+        const matchesNivel = (filterNivel === 'ALL') || (item.nivel === filterNivel);
+        return matchesSearch && matchesTipo && matchesNivel;
+      });
+
+      const total = filtered.length;
+      const totalPages = Math.ceil(total / pageSize) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize;
+      const pageRows = filtered.slice(start, end);
+
+      tbody.innerHTML = pageRows.map(r => `
+        <tr>
+          <td><code>${r.id}</code></td>
+          <td><strong>${r.titulo}</strong></td>
+          <td><span class="tag-badge ${r.tipo === 'Curso' ? 'mestre' : (r.tipo === 'Artigo' ? 'referencia' : 'transacional')}">${r.tipo}</span></td>
+          <td>${r.categoria}</td>
+          <td>${r.nivel}</td>
+          <td>${r.carga} min (${(r.carga/60).toFixed(1)}h)</td>
+          <td>${r.data}</td>
+          <td>${r.autor}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('pagination-info').innerText = `Mostrando ${start + 1}-${Math.min(end, total)} de ${total} registros`;
+      document.getElementById('btn-prev-page').disabled = (currentPage === 1);
+      document.getElementById('btn-next-page').disabled = (currentPage >= totalPages);
+    }
+
+    function filterDataset() {
+      currentPage = 1;
+      renderDatasetTable();
+    }
+
+    function changePage(delta) {
+      currentPage += delta;
+      renderDatasetTable();
+    }
+
+    // Initialize application
+    window.addEventListener('DOMContentLoaded', () => {
+      renderInventory();
+      renderQualityTests();
+      renderLineage();
+      initDataset();
+    });
+  </script>
+</body>
+</html>

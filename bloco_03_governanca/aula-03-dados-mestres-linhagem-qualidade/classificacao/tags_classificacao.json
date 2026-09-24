@@ -1,0 +1,45 @@
+{
+  "classificacoes": [
+    {
+      "name": "TipoDado",
+      "displayName": "Tipo de Dado Governança",
+      "description": "Classificação fundamental da arquitetura de governança (DAMA-DMBOK) para distinguir Entidades Centrais (Mestre), Eventos de Negócio (Transacional) e Taxonomias/Tabelas de Apoio (Referência).",
+      "mutuallyExclusive": true,
+      "tags": [
+        {
+          "name": "Mestre",
+          "displayName": "Dado Mestre (Master Data)",
+          "description": "As entidades centrais do negócio, compartilhadas entre múltiplos processos e sistemas. Apresentam baixo volume e baixa volatilidade (ex: clientes, produtos, conteúdos, autores)."
+        },
+        {
+          "name": "Transacional",
+          "displayName": "Dado Transacional",
+          "description": "Os eventos e movimentos operacionais do negócio. Apresentam alto volume, crescimento contínuo e histórico cronológico (ex: vendas, pedidos, publicações, avaliações)."
+        },
+        {
+          "name": "Referencia",
+          "displayName": "Dado de Referência (Reference Data)",
+          "description": "Listas padronizadas, códigos, domínios e taxonomias usadas para classificar e categorizar outros dados. Apresentam volume muito baixo e estrutura quase estática (ex: categorias, UFs, tipos de curso, níveis)."
+        }
+      ]
+    }
+  ],
+  "aplicacao_nas_tabelas": {
+    "pg_ecommerce.meu_banco_de_dados.gold.dim_produto": ["TipoDado.Mestre"],
+    "pg_ecommerce.meu_banco_de_dados.gold.dim_cliente": ["TipoDado.Mestre"],
+    "pg_ecommerce.meu_banco_de_dados.gold.dim_conteudo": ["TipoDado.Mestre"],
+    "pg_ecommerce.meu_banco_de_dados.gold.dim_autor": ["TipoDado.Mestre"],
+    "pg_ecommerce.meu_banco_de_dados.silver.produtos": ["TipoDado.Mestre"],
+    "pg_ecommerce.meu_banco_de_dados.silver.clientes": ["TipoDado.Mestre"],
+    "pg_ecommerce.meu_banco_de_dados.silver.conteudos": ["TipoDado.Mestre"],
+    "pg_ecommerce.meu_banco_de_dados.staging.produtos": ["TipoDado.Mestre"],
+    "pg_ecommerce.meu_banco_de_dados.staging.clientes": ["TipoDado.Mestre"],
+    "pg_ecommerce.meu_banco_de_dados.staging.conteudos": ["TipoDado.Mestre"],
+    "pg_ecommerce.meu_banco_de_dados.gold.fato_vendas": ["TipoDado.Transacional"],
+    "pg_ecommerce.meu_banco_de_dados.gold.fato_publicacoes": ["TipoDado.Transacional"],
+    "pg_ecommerce.meu_banco_de_dados.silver.vendas": ["TipoDado.Transacional"],
+    "pg_ecommerce.meu_banco_de_dados.staging.vendas": ["TipoDado.Transacional"],
+    "pg_ecommerce.meu_banco_de_dados.silver.rejeitados": ["TipoDado.Transacional"],
+    "pg_ecommerce.meu_banco_de_dados.gold.dim_categoria": ["TipoDado.Referencia"]
+  }
+}

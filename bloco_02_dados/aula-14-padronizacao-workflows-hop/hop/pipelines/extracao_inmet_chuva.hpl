@@ -1,34 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pipeline>
-  <info><name>extracao_inmet_chuva</name><pipeline_type>Normal</pipeline_type></info>
-  <order>
-    <hop><from>CSV INMET Pluviometria</from><to>Gravar staging.inmet_chuva</to><enabled>Y</enabled></hop>
-  </order>
+  <info>
+    <capture_transform_performance>N</capture_transform_performance>
+    <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
+    <transform_performance_capturing_size_limit>100</transform_performance_capturing_size_limit>
+    <pipeline_type>Normal</pipeline_type>
+    <pipeline_status>0</pipeline_status>
+    <parameters/>
+    <name>extracao_inmet_chuva</name>
+    <name_sync_with_filename>N</name_sync_with_filename>
+    <created_user>-</created_user>
+    <modified_user>-</modified_user>
+    <created_date>2026/09/18 15:46:04.066</created_date>
+    <modified_date>2026/09/18 15:46:04.066</modified_date>
+  </info>
   <transform>
-    <name>CSV INMET Pluviometria</name>
     <type>CSVInput</type>
+    <name>CSV INMET Pluviometria</name>
     <filename>${PROJECT_HOME}/dados/bronze/inmet_chuva.csv</filename>
-    <separator>;</separator>
+    <include_filename>N</include_filename>
     <header>Y</header>
+    <separator>;</separator>
+    <enclosure>"</enclosure>
+    <buffer_size>50000</buffer_size>
+    <lazy_conversion>N</lazy_conversion>
+    <add_filename_result>N</add_filename_result>
+    <parallel>N</parallel>
+    <newline_possible>N</newline_possible>
+    <ignoreFields>N</ignoreFields>
     <fields>
-      <field><name>cod_mun_6</name><type>String</type></field>
-      <field><name>chuva_acumulada_mm</name><type>String</type></field>
-      <field><name>dias_com_chuva</name><type>String</type></field>
-      <field><name>estacao_monitorada</name><type>String</type></field>
+      <field>
+        <name>cod_mun_6</name>
+        <length>-9</length>
+        <type>String</type>
+        <format/>
+        <trim_type>none</trim_type>
+        <precision>-1</precision>
+        <currency/>
+        <decimal/>
+        <group/>
+      </field>
+      <field>
+        <name>chuva_acumulada_mm</name>
+        <length>-9</length>
+        <type>String</type>
+        <format/>
+        <trim_type>none</trim_type>
+        <precision>-1</precision>
+        <currency/>
+        <decimal/>
+        <group/>
+      </field>
+      <field>
+        <name>dias_com_chuva</name>
+        <length>-9</length>
+        <type>String</type>
+        <format/>
+        <trim_type>none</trim_type>
+        <precision>-1</precision>
+        <currency/>
+        <decimal/>
+        <group/>
+      </field>
+      <field>
+        <name>estacao_monitorada</name>
+        <length>-9</length>
+        <type>String</type>
+        <format/>
+        <trim_type>none</trim_type>
+        <precision>-1</precision>
+        <currency/>
+        <decimal/>
+        <group/>
+      </field>
     </fields>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>208</xloc>
+      <yloc>224</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
   <transform>
-    <name>Gravar staging.inmet_chuva</name>
     <type>TableOutput</type>
+    <name>Gravar staging.inmet_chuva</name>
     <connection>PostgreSQL</connection>
     <schema>staging</schema>
     <table>inmet_chuva</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <only_when_have_rows>N</only_when_have_rows>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>N</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>N</tablename_in_table>
+    <return_keys>N</return_keys>
     <specify_fields>Y</specify_fields>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <add_columns>N</add_columns>
+    <drop_columns>N</drop_columns>
+    <change_column_types>N</change_column_types>
     <fields>
-      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
-      <field><column_name>chuva_acumulada_mm</column_name><stream_name>chuva_acumulada_mm</stream_name></field>
-      <field><column_name>dias_com_chuva</column_name><stream_name>dias_com_chuva</stream_name></field>
-      <field><column_name>estacao_monitorada</column_name><stream_name>estacao_monitorada</stream_name></field>
+      <field>
+        <stream_name>cod_mun_6</stream_name>
+        <column_name>cod_mun_6</column_name>
+      </field>
+      <field>
+        <stream_name>chuva_acumulada_mm</stream_name>
+        <column_name>chuva_acumulada_mm</column_name>
+      </field>
+      <field>
+        <stream_name>dias_com_chuva</stream_name>
+        <column_name>dias_com_chuva</column_name>
+      </field>
+      <field>
+        <stream_name>estacao_monitorada</stream_name>
+        <column_name>estacao_monitorada</column_name>
+      </field>
     </fields>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>448</xloc>
+      <yloc>224</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
+  <order>
+    <hop>
+      <from>CSV INMET Pluviometria</from>
+      <to>Gravar staging.inmet_chuva</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <notepads/>
+  <attributes/>
+  <transform_error_handling/>
 </pipeline>

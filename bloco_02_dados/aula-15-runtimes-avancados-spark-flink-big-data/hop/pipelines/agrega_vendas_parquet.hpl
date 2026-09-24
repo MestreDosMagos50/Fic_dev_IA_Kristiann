@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info>
+    <name>agrega_vendas_parquet</name>
+    <name_sync_with_filename>Y</name_sync_with_filename>
+    <description>Passo 2 - Agregacao de Receita por Categoria lendo Parquet (Projecao Colunar)</description>
+    <pipeline_type>Normal</pipeline_type>
+  </info>
+  <order>
+    <hop>
+      <from>Parquet File Input (Vendas Parquet)</from>
+      <to>Memory Group by (Receita por Categoria)</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Memory Group by (Receita por Categoria)</from>
+      <to>Parquet File Output (Resultado Agregado)</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <transform>
+    <name>Parquet File Input (Vendas Parquet)</name>
+    <type>ParquetFileInput</type>
+    <filename>${PROJECT_HOME}/dados/saida/vendas_grandes.parquet</filename>
+    <fields>
+      <field><name>categoria</name><type>String</type></field>
+      <field><name>receita</name><type>Number</type></field>
+    </fields>
+    <GUI>
+      <xloc>140</xloc>
+      <yloc>120</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Memory Group by (Receita por Categoria)</name>
+    <type>MemoryGroupBy</type>
+    <give_back_row>N</give_back_row>
+    <group>
+      <field><name>categoria</name></field>
+    </group>
+    <fields>
+      <field>
+        <aggregate>receita_total</aggregate>
+        <subject>receita</subject>
+        <type>SUM</type>
+      </field>
+      <field>
+        <aggregate>total_pedidos</aggregate>
+        <subject>receita</subject>
+        <type>COUNT_ALL</type>
+      </field>
+    </fields>
+    <GUI>
+      <xloc>420</xloc>
+      <yloc>120</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Parquet File Output (Resultado Agregado)</name>
+    <type>ParquetFileOutput</type>
+    <filename>${PROJECT_HOME}/dados/saida/agregado_vendas_parquet.parquet</filename>
+    <compression_codec>SNAPPY</compression_codec>
+    <GUI>
+      <xloc>700</xloc>
+      <yloc>120</yloc>
+    </GUI>
+  </transform>
+</pipeline>

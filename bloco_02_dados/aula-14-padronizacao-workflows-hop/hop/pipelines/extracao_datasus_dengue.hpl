@@ -1,48 +1,188 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pipeline>
   <info>
-    <name>extracao_datasus_dengue</name>
+    <capture_transform_performance>N</capture_transform_performance>
+    <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
+    <transform_performance_capturing_size_limit>100</transform_performance_capturing_size_limit>
     <pipeline_type>Normal</pipeline_type>
+    <pipeline_status>0</pipeline_status>
     <parameters>
       <parameter>
         <name>MES_REF</name>
-        <default_value>2026-08</default_value>
         <description>Mes de referencia YYYY-MM para notificacoes</description>
+        <default_value>2026-08</default_value>
       </parameter>
     </parameters>
+    <name>extracao_datasus_dengue</name>
+    <name_sync_with_filename>N</name_sync_with_filename>
+    <created_user>-</created_user>
+    <modified_user>-</modified_user>
+    <created_date>2026/09/18 15:45:53.930</created_date>
+    <modified_date>2026/09/18 15:45:53.930</modified_date>
   </info>
-  <order>
-    <hop><from>CSV DataSUS Dengue Parametrizado</from><to>Gravar staging.datasus_dengue</to><enabled>Y</enabled></hop>
-  </order>
   <transform>
-    <name>CSV DataSUS Dengue Parametrizado</name>
     <type>CSVInput</type>
+    <name>CSV DataSUS Dengue Parametrizado</name>
     <filename>${PROJECT_HOME}/dados/bronze/datasus_dengue_${MES_REF}.csv</filename>
-    <separator>;</separator>
+    <include_filename>N</include_filename>
     <header>Y</header>
+    <separator>;</separator>
+    <enclosure>"</enclosure>
+    <buffer_size>50000</buffer_size>
+    <lazy_conversion>N</lazy_conversion>
+    <add_filename_result>N</add_filename_result>
+    <parallel>N</parallel>
+    <newline_possible>N</newline_possible>
+    <ignoreFields>N</ignoreFields>
     <fields>
-      <field><name>id_notificacao</name><type>String</type></field>
-      <field><name>cod_mun_6</name><type>String</type></field>
-      <field><name>data_notificacao</name><type>String</type></field>
-      <field><name>casos_notificados</name><type>String</type></field>
-      <field><name>casos_confirmados</name><type>String</type></field>
-      <field><name>classificacao</name><type>String</type></field>
+      <field>
+        <name>id_notificacao</name>
+        <length>-9</length>
+        <type>String</type>
+        <format/>
+        <trim_type>none</trim_type>
+        <precision>-1</precision>
+        <currency/>
+        <decimal/>
+        <group/>
+      </field>
+      <field>
+        <name>cod_mun_6</name>
+        <length>-9</length>
+        <type>String</type>
+        <format/>
+        <trim_type>none</trim_type>
+        <precision>-1</precision>
+        <currency/>
+        <decimal/>
+        <group/>
+      </field>
+      <field>
+        <name>data_notificacao</name>
+        <length>-9</length>
+        <type>String</type>
+        <format/>
+        <trim_type>none</trim_type>
+        <precision>-1</precision>
+        <currency/>
+        <decimal/>
+        <group/>
+      </field>
+      <field>
+        <name>casos_notificados</name>
+        <length>-9</length>
+        <type>String</type>
+        <format/>
+        <trim_type>none</trim_type>
+        <precision>-1</precision>
+        <currency/>
+        <decimal/>
+        <group/>
+      </field>
+      <field>
+        <name>casos_confirmados</name>
+        <length>-9</length>
+        <type>String</type>
+        <format/>
+        <trim_type>none</trim_type>
+        <precision>-1</precision>
+        <currency/>
+        <decimal/>
+        <group/>
+      </field>
+      <field>
+        <name>classificacao</name>
+        <length>-9</length>
+        <type>String</type>
+        <format/>
+        <trim_type>none</trim_type>
+        <precision>-1</precision>
+        <currency/>
+        <decimal/>
+        <group/>
+      </field>
     </fields>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>112</xloc>
+      <yloc>160</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
   <transform>
-    <name>Gravar staging.datasus_dengue</name>
     <type>TableOutput</type>
+    <name>Gravar staging.datasus_dengue</name>
     <connection>PostgreSQL</connection>
     <schema>staging</schema>
     <table>datasus_dengue</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <only_when_have_rows>N</only_when_have_rows>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>N</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>N</tablename_in_table>
+    <return_keys>N</return_keys>
     <specify_fields>Y</specify_fields>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <add_columns>N</add_columns>
+    <drop_columns>N</drop_columns>
+    <change_column_types>N</change_column_types>
     <fields>
-      <field><column_name>id_notificacao</column_name><stream_name>id_notificacao</stream_name></field>
-      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
-      <field><column_name>data_notificacao</column_name><stream_name>data_notificacao</stream_name></field>
-      <field><column_name>casos_notificados</column_name><stream_name>casos_notificados</stream_name></field>
-      <field><column_name>casos_confirmados</column_name><stream_name>casos_confirmados</stream_name></field>
-      <field><column_name>classificacao</column_name><stream_name>classificacao</stream_name></field>
+      <field>
+        <stream_name>id_notificacao</stream_name>
+        <column_name>id_notificacao</column_name>
+      </field>
+      <field>
+        <stream_name>cod_mun_6</stream_name>
+        <column_name>cod_mun_6</column_name>
+      </field>
+      <field>
+        <stream_name>data_notificacao</stream_name>
+        <column_name>data_notificacao</column_name>
+      </field>
+      <field>
+        <stream_name>casos_notificados</stream_name>
+        <column_name>casos_notificados</column_name>
+      </field>
+      <field>
+        <stream_name>casos_confirmados</stream_name>
+        <column_name>casos_confirmados</column_name>
+      </field>
+      <field>
+        <stream_name>classificacao</stream_name>
+        <column_name>classificacao</column_name>
+      </field>
     </fields>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>608</xloc>
+      <yloc>160</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
+  <order>
+    <hop>
+      <from>CSV DataSUS Dengue Parametrizado</from>
+      <to>Gravar staging.datasus_dengue</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <notepads/>
+  <attributes/>
+  <transform_error_handling/>
 </pipeline>

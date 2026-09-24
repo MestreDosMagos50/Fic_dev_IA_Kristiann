@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-09-21 15:29:58",
+  "total_linhas": 5000000,
+  "csv": {
+    "tamanho_mb": 668.03,
+    "tempo_segundos": 3.324,
+    "linhas_por_segundo": 1504329
+  },
+  "parquet": {
+    "tamanho_mb": 147.39,
+    "tempo_segundos": 0.258,
+    "linhas_por_segundo": 19372870,
+    "taxa_compressao_pct": 77.9,
+    "speedup_fator": 12.88
+  },
+  "categorias": [
+    {
+      "categoria": "Eletrodomésticos",
+      "receita": 2528329530.11
+    },
+    {
+      "categoria": "Eletrônicos",
+      "receita": 5059210115.2
+    },
+    {
+      "categoria": "Esporte",
+      "receita": 2538646880.86
+    },
+    {
+      "categoria": "Informática",
+      "receita": 3772171734.96
+    },
+    {
+      "categoria": "Livros & Cultura",
+      "receita": 346566243.94
+    },
+    {
+      "categoria": "Móveis",
+      "receita": 1294594957.05
+    }
+  ]
+}

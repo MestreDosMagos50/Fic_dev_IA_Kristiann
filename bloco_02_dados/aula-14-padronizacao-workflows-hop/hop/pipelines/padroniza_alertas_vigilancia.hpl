@@ -1,29 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pipeline>
-  <info><name>padroniza_alertas_vigilancia</name><pipeline_type>Normal</pipeline_type></info>
-  <order>
-    <hop><from>Ler staging.alertas_vigilancia</from><to>Gravar silver.alertas_vigilancia</to><enabled>Y</enabled></hop>
-  </order>
+  <info>
+    <capture_transform_performance>N</capture_transform_performance>
+    <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
+    <transform_performance_capturing_size_limit>100</transform_performance_capturing_size_limit>
+    <pipeline_type>Normal</pipeline_type>
+    <pipeline_status>0</pipeline_status>
+    <parameters/>
+    <name>padroniza_alertas_vigilancia</name>
+    <name_sync_with_filename>N</name_sync_with_filename>
+    <created_user>-</created_user>
+    <modified_user>-</modified_user>
+    <created_date>2026/09/18 15:46:24.482</created_date>
+    <modified_date>2026/09/18 15:46:24.482</modified_date>
+  </info>
   <transform>
-    <name>Ler staging.alertas_vigilancia</name>
     <type>TableInput</type>
-    <connection>PostgreSQL</connection>
+    <name>Ler staging.alertas_vigilancia</name>
     <sql>SELECT id_alerta, cod_mun_6, cidade, nivel_risco, acao, data FROM staging.alertas_vigilancia</sql>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <connection>PostgreSQL</connection>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>192</xloc>
+      <yloc>176</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
   <transform>
-    <name>Gravar silver.alertas_vigilancia</name>
     <type>TableOutput</type>
+    <name>Gravar silver.alertas_vigilancia</name>
     <connection>PostgreSQL</connection>
     <schema>silver</schema>
     <table>alertas_vigilancia</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <only_when_have_rows>N</only_when_have_rows>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>N</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>N</tablename_in_table>
+    <return_keys>N</return_keys>
     <specify_fields>Y</specify_fields>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <add_columns>N</add_columns>
+    <drop_columns>N</drop_columns>
+    <change_column_types>N</change_column_types>
     <fields>
-      <field><column_name>id_alerta</column_name><stream_name>id_alerta</stream_name></field>
-      <field><column_name>cod_mun_6</column_name><stream_name>cod_mun_6</stream_name></field>
-      <field><column_name>cidade</column_name><stream_name>cidade</stream_name></field>
-      <field><column_name>nivel_risco</column_name><stream_name>nivel_risco</stream_name></field>
-      <field><column_name>acao</column_name><stream_name>acao</stream_name></field>
-      <field><column_name>data</column_name><stream_name>data</stream_name></field>
+      <field>
+        <stream_name>id_alerta</stream_name>
+        <column_name>id_alerta</column_name>
+      </field>
+      <field>
+        <stream_name>cod_mun_6</stream_name>
+        <column_name>cod_mun_6</column_name>
+      </field>
+      <field>
+        <stream_name>cidade</stream_name>
+        <column_name>cidade</column_name>
+      </field>
+      <field>
+        <stream_name>nivel_risco</stream_name>
+        <column_name>nivel_risco</column_name>
+      </field>
+      <field>
+        <stream_name>acao</stream_name>
+        <column_name>acao</column_name>
+      </field>
+      <field>
+        <stream_name>data</stream_name>
+        <column_name>data</column_name>
+      </field>
     </fields>
+    <distribute>N</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>432</xloc>
+      <yloc>176</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
   </transform>
+  <order>
+    <hop>
+      <from>Ler staging.alertas_vigilancia</from>
+      <to>Gravar silver.alertas_vigilancia</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <notepads/>
+  <attributes/>
+  <transform_error_handling/>
 </pipeline>

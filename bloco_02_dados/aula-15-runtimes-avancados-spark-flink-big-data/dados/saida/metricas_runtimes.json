@@ -1,0 +1,21 @@
+{
+  "runtime_nativo": {
+    "tempo_execucao": 0.254,
+    "overhead_init": 0.05,
+    "tempo_total": 0.304
+  },
+  "beam_direct": {
+    "tempo_execucao": 0.292,
+    "overhead_init": 0.8,
+    "tempo_total": 1.092
+  },
+  "spark_local": {
+    "tempo_execucao": 2.777,
+    "overhead_init": 3.142,
+    "tempo_total": 5.919
+  },
+  "analise_overhead": {
+    "razao_overhead_spark_vs_exec": 1.13,
+    "conclusao": "O Spark sofre forte penalidade de overhead de inicialização da JVM em datasets médios, mas oferece escalabilidade ilimitada em clusters reais."
+  }
+}

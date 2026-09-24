@@ -1,0 +1,98 @@
+{
+  "versao": "1.0",
+  "descricao": "Grafo formal de linhagem de dados ponta a ponta (E-Commerce e Plataforma Educacional)",
+  "pipelines": [
+    {
+      "nome": "Pipeline_Vendas_Ecommerce",
+      "tipo": "Batch ETL / Apache Hop",
+      "edges": [
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.staging.produtos",
+          "to": "pg_ecommerce.meu_banco_de_dados.silver.produtos",
+          "transformacao": "Limpeza, tipagem numérica, deduplicação por código (exemplo02.hpl)"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.silver.produtos",
+          "to": "pg_ecommerce.meu_banco_de_dados.gold.dim_produto",
+          "transformacao": "Enriquecimento com faixas de preço e flags ativas (dim_produto.hpl)"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.staging.clientes",
+          "to": "pg_ecommerce.meu_banco_de_dados.silver.clientes",
+          "transformacao": "Padronização de e-mails, validação de UF e cidade"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.silver.clientes",
+          "to": "pg_ecommerce.meu_banco_de_dados.gold.dim_cliente",
+          "transformacao": "Atribuição de região geográfica e status do cliente"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.staging.vendas",
+          "to": "pg_ecommerce.meu_banco_de_dados.silver.vendas",
+          "transformacao": "Cálculo de valor_total, tipagem de datas e validação de quantidade"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.silver.vendas",
+          "to": "pg_ecommerce.meu_banco_de_dados.gold.fato_vendas",
+          "transformacao": "Lookup dimensional de surrogate keys (sk_cliente, sk_produto) e métricas analíticas"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.gold.dim_produto",
+          "to": "pg_ecommerce.meu_banco_de_dados.gold.fato_vendas",
+          "transformacao": "Associação de chave substituta de produto e validação de catálogo"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.gold.dim_cliente",
+          "to": "pg_ecommerce.meu_banco_de_dados.gold.fato_vendas",
+          "transformacao": "Associação de chave substituta de cliente e validação cadastral"
+        }
+      ]
+    },
+    {
+      "nome": "Pipeline_Conteudos_Educacionais",
+      "tipo": "Batch ETL / Python & SQL",
+      "edges": [
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.staging.conteudos",
+          "to": "pg_ecommerce.meu_banco_de_dados.silver.conteudos",
+          "transformacao": "Normalização de strings, identificação de re-publicações e determinação de Golden Record"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.silver.conteudos",
+          "to": "pg_ecommerce.meu_banco_de_dados.gold.dim_conteudo",
+          "transformacao": "Consolidação de registros mestres únicos (Golden Record) e contagem de versões"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.silver.conteudos",
+          "to": "pg_ecommerce.meu_banco_de_dados.gold.dim_autor",
+          "transformacao": "Extração e deduplicação de autores, padronização de titulação e soma de horas"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.silver.conteudos",
+          "to": "pg_ecommerce.meu_banco_de_dados.gold.dim_categoria",
+          "transformacao": "Agrupamento de categorias e atribuição de macro-áreas de conhecimento"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.silver.conteudos",
+          "to": "pg_ecommerce.meu_banco_de_dados.gold.fato_publicacoes",
+          "transformacao": "Geração do fato transacional cronológico de publicações com chaves substitutas"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.gold.dim_conteudo",
+          "to": "pg_ecommerce.meu_banco_de_dados.gold.fato_publicacoes",
+          "transformacao": "Associação da surrogate key sk_conteudo"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.gold.dim_autor",
+          "to": "pg_ecommerce.meu_banco_de_dados.gold.fato_publicacoes",
+          "transformacao": "Associação da surrogate key sk_autor"
+        },
+        {
+          "from": "pg_ecommerce.meu_banco_de_dados.gold.dim_categoria",
+          "to": "pg_ecommerce.meu_banco_de_dados.gold.fato_publicacoes",
+          "transformacao": "Associação da surrogate key sk_categoria"
+        }
+      ]
+    }
+  ]
+}

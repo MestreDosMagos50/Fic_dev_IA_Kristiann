@@ -1,0 +1,16 @@
+{
+  "engineRunConfiguration": {
+    "Beam": {
+      "runner": "Direct",
+      "tempLocation": "${PROJECT_HOME}/dados/saida/beam_temp",
+      "userAgent": "Apache Hop Beam Direct Runner",
+      "gather_metrics": true
+    }
+  },
+  "name": "beam-direct",
+  "configurationVariables": [],
+  "description": "Execução via Apache Beam Direct Runner para validação local de compatibilidade",
+  "executionInfoLocationName": "local-audit",
+  "dataProfile": "first-last",
+  "defaultSelection": false
+}

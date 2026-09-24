@@ -1,0 +1,601 @@
+{
+  "kpis": {
+    "total_linhas": 5000000,
+    "receita_total": 15539519462.12,
+    "total_particoes": 12,
+    "particoes": [
+      "ano_mes=2026-01",
+      "ano_mes=2026-02",
+      "ano_mes=2026-03",
+      "ano_mes=2026-04",
+      "ano_mes=2026-05",
+      "ano_mes=2026-06",
+      "ano_mes=2026-07",
+      "ano_mes=2026-08",
+      "ano_mes=2026-09",
+      "ano_mes=2026-10",
+      "ano_mes=2026-11",
+      "ano_mes=2026-12"
+    ]
+  },
+  "pergunta_1_top_produtos": [
+    {
+      "produto": "Notebook Gamer Dell G15",
+      "categoria": "Informática",
+      "receita_total": 2770887066.0,
+      "total_pedidos": 332865,
+      "share_receita_pct": 17.831227489076927
+    },
+    {
+      "produto": "Smartphone Samsung Galaxy S24",
+      "categoria": "Eletrônicos",
+      "receita_total": 2560588213.93,
+      "total_pedidos": 333151,
+      "share_receita_pct": 16.47791117461407
+    },
+    {
+      "produto": "Geladeira Frost Free Brastemp",
+      "categoria": "Eletrodomésticos",
+      "receita_total": 1973443204.87,
+      "total_pedidos": 332825,
+      "share_receita_pct": 12.699512424953522
+    },
+    {
+      "produto": "Esteira Ergométrica Dobrável",
+      "categoria": "Esporte",
+      "receita_total": 1551328986.87,
+      "total_pedidos": 333607,
+      "share_receita_pct": 9.983120717803445
+    },
+    {
+      "produto": "Smart TV 55 4K Crystal Samsung",
+      "categoria": "Eletrônicos",
+      "receita_total": 1378490667.42,
+      "total_pedidos": 331888,
+      "share_receita_pct": 8.87087062621393
+    },
+    {
+      "produto": "Fone Bluetooth Sony WH-1000XM5",
+      "categoria": "Eletrônicos",
+      "receita_total": 1120131233.85,
+      "total_pedidos": 333594,
+      "share_receita_pct": 7.208274596782059
+    },
+    {
+      "produto": "Bicicleta Aro 29 Mountain Bike",
+      "categoria": "Esporte",
+      "receita_total": 987317893.99,
+      "total_pedidos": 333162,
+      "share_receita_pct": 6.353593471128508
+    },
+    {
+      "produto": "Mesa Ajustável de Escritório",
+      "categoria": "Móveis",
+      "receita_total": 772441083.14,
+      "total_pedidos": 333149,
+      "share_receita_pct": 4.970817051472831
+    },
+    {
+      "produto": "Monitor UltraWide 29 LG",
+      "categoria": "Informática",
+      "receita_total": 617128387.55,
+      "total_pedidos": 334679,
+      "share_receita_pct": 3.97134794968626
+    },
+    {
+      "produto": "Cadeira Ergonômica Presidente",
+      "categoria": "Móveis",
+      "receita_total": 522153873.91,
+      "total_pedidos": 333108,
+      "share_receita_pct": 3.36016744393436
+    }
+  ],
+  "pergunta_2_ticket_regional": [
+    {
+      "ano_mes": "2026-01",
+      "regiao": "Nordeste",
+      "receita_total": 237446670.17,
+      "total_pedidos": 76302,
+      "ticket_medio": 3111.9324548504624
+    },
+    {
+      "ano_mes": "2026-01",
+      "regiao": "Norte",
+      "receita_total": 65584776.96,
+      "total_pedidos": 21087,
+      "ticket_medio": 3110.1995049082375
+    },
+    {
+      "ano_mes": "2026-01",
+      "regiao": "Sul",
+      "receita_total": 290540206.33,
+      "total_pedidos": 93426,
+      "ticket_medio": 3109.8431521203947
+    },
+    {
+      "ano_mes": "2026-01",
+      "regiao": "Sudeste",
+      "receita_total": 592602909.57,
+      "total_pedidos": 190562,
+      "ticket_medio": 3109.764326413451
+    },
+    {
+      "ano_mes": "2026-01",
+      "regiao": "Centro-Oeste",
+      "receita_total": 131096048.56,
+      "total_pedidos": 42459,
+      "ticket_medio": 3087.5915250005887
+    },
+    {
+      "ano_mes": "2026-02",
+      "regiao": "Norte",
+      "receita_total": 60186867.91,
+      "total_pedidos": 19283,
+      "ticket_medio": 3121.2398439039566
+    },
+    {
+      "ano_mes": "2026-02",
+      "regiao": "Sul",
+      "receita_total": 262764230.9,
+      "total_pedidos": 84211,
+      "ticket_medio": 3120.307690206743
+    },
+    {
+      "ano_mes": "2026-02",
+      "regiao": "Nordeste",
+      "receita_total": 214141200.11,
+      "total_pedidos": 69004,
+      "ticket_medio": 3103.3157514057157
+    },
+    {
+      "ano_mes": "2026-02",
+      "regiao": "Sudeste",
+      "receita_total": 536275268.19,
+      "total_pedidos": 172881,
+      "ticket_medio": 3101.9907808839607
+    },
+    {
+      "ano_mes": "2026-02",
+      "regiao": "Centro-Oeste",
+      "receita_total": 118885790.27,
+      "total_pedidos": 38474,
+      "ticket_medio": 3090.0293775016894
+    },
+    {
+      "ano_mes": "2026-03",
+      "regiao": "Centro-Oeste",
+      "receita_total": 132424483.64,
+      "total_pedidos": 42438,
+      "ticket_medio": 3120.4223488383054
+    },
+    {
+      "ano_mes": "2026-03",
+      "regiao": "Sul",
+      "receita_total": 290125034.71,
+      "total_pedidos": 93393,
+      "ticket_medio": 3106.4965758675703
+    },
+    {
+      "ano_mes": "2026-03",
+      "regiao": "Norte",
+      "receita_total": 66423908.19,
+      "total_pedidos": 21407,
+      "ticket_medio": 3102.905974214042
+    },
+    {
+      "ano_mes": "2026-03",
+      "regiao": "Nordeste",
+      "receita_total": 236421955.22,
+      "total_pedidos": 76308,
+      "ticket_medio": 3098.2590976044453
+    },
+    {
+      "ano_mes": "2026-03",
+      "regiao": "Sudeste",
+      "receita_total": 593217366.97,
+      "total_pedidos": 191635,
+      "ticket_medio": 3095.5585721293087
+    },
+    {
+      "ano_mes": "2026-04",
+      "regiao": "Sudeste",
+      "receita_total": 575547174.74,
+      "total_pedidos": 185249,
+      "ticket_medio": 3106.884111331235
+    },
+    {
+      "ano_mes": "2026-04",
+      "regiao": "Sul",
+      "receita_total": 280445129.8,
+      "total_pedidos": 90400,
+      "ticket_medio": 3102.269134955752
+    },
+    {
+      "ano_mes": "2026-04",
+      "regiao": "Norte",
+      "receita_total": 63900076.6,
+      "total_pedidos": 20624,
+      "ticket_medio": 3098.3357544608225
+    },
+    {
+      "ano_mes": "2026-04",
+      "regiao": "Nordeste",
+      "receita_total": 228735995.74,
+      "total_pedidos": 74107,
+      "ticket_medio": 3086.563964807643
+    },
+    {
+      "ano_mes": "2026-04",
+      "regiao": "Centro-Oeste",
+      "receita_total": 125753661.05,
+      "total_pedidos": 40916,
+      "ticket_medio": 3073.459308094633
+    },
+    {
+      "ano_mes": "2026-05",
+      "regiao": "Nordeste",
+      "receita_total": 237425628.92,
+      "total_pedidos": 76436,
+      "ticket_medio": 3106.2016447747133
+    },
+    {
+      "ano_mes": "2026-05",
+      "regiao": "Sudeste",
+      "receita_total": 592602937.68,
+      "total_pedidos": 190809,
+      "ticket_medio": 3105.7389204911715
+    },
+    {
+      "ano_mes": "2026-05",
+      "regiao": "Sul",
+      "receita_total": 288531009.64,
+      "total_pedidos": 93318,
+      "ticket_medio": 3091.9116316251952
+    },
+    {
+      "ano_mes": "2026-05",
+      "regiao": "Centro-Oeste",
+      "receita_total": 130643076.24,
+      "total_pedidos": 42362,
+      "ticket_medio": 3083.9685623908217
+    },
+    {
+      "ano_mes": "2026-05",
+      "regiao": "Norte",
+      "receita_total": 64982231.43,
+      "total_pedidos": 21099,
+      "ticket_medio": 3079.8725735816865
+    },
+    {
+      "ano_mes": "2026-06",
+      "regiao": "Centro-Oeste",
+      "receita_total": 127148912.81,
+      "total_pedidos": 40825,
+      "ticket_medio": 3114.4865354562157
+    },
+    {
+      "ano_mes": "2026-06",
+      "regiao": "Sudeste",
+      "receita_total": 574031773.56,
+      "total_pedidos": 184780,
+      "ticket_medio": 3106.56874964823
+    },
+    {
+      "ano_mes": "2026-06",
+      "regiao": "Sul",
+      "receita_total": 279421850.88,
+      "total_pedidos": 89962,
+      "ticket_medio": 3105.998653653765
+    },
+    {
+      "ano_mes": "2026-06",
+      "regiao": "Nordeste",
+      "receita_total": 229304156.86,
+      "total_pedidos": 73936,
+      "ticket_medio": 3101.3871031703097
+    },
+    {
+      "ano_mes": "2026-06",
+      "regiao": "Norte",
+      "receita_total": 62386485.42,
+      "total_pedidos": 20361,
+      "ticket_medio": 3064.0187328716665
+    },
+    {
+      "ano_mes": "2026-07",
+      "regiao": "Norte",
+      "receita_total": 66073852.3,
+      "total_pedidos": 21069,
+      "ticket_medio": 3136.0696900659736
+    },
+    {
+      "ano_mes": "2026-07",
+      "regiao": "Nordeste",
+      "receita_total": 237525010.62,
+      "total_pedidos": 76006,
+      "ticket_medio": 3125.0823700760466
+    },
+    {
+      "ano_mes": "2026-07",
+      "regiao": "Sudeste",
+      "receita_total": 596546161.62,
+      "total_pedidos": 191745,
+      "ticket_medio": 3111.14324556051
+    },
+    {
+      "ano_mes": "2026-07",
+      "regiao": "Centro-Oeste",
+      "receita_total": 132113863.03,
+      "total_pedidos": 42486,
+      "ticket_medio": 3109.5858172103754
+    },
+    {
+      "ano_mes": "2026-07",
+      "regiao": "Sul",
+      "receita_total": 290901916.82,
+      "total_pedidos": 93945,
+      "ticket_medio": 3096.5130323061367
+    },
+    {
+      "ano_mes": "2026-08",
+      "regiao": "Sudeste",
+      "receita_total": 597092623.01,
+      "total_pedidos": 191110,
+      "ticket_medio": 3124.3400293548216
+    },
+    {
+      "ano_mes": "2026-08",
+      "regiao": "Norte",
+      "receita_total": 66333767.78,
+      "total_pedidos": 21272,
+      "ticket_medio": 3118.360651560737
+    },
+    {
+      "ano_mes": "2026-08",
+      "regiao": "Nordeste",
+      "receita_total": 238020258.46,
+      "total_pedidos": 76548,
+      "ticket_medio": 3109.424915869781
+    },
+    {
+      "ano_mes": "2026-08",
+      "regiao": "Sul",
+      "receita_total": 289391128.63,
+      "total_pedidos": 93319,
+      "ticket_medio": 3101.0954749836583
+    },
+    {
+      "ano_mes": "2026-08",
+      "regiao": "Centro-Oeste",
+      "receita_total": 131080684.94,
+      "total_pedidos": 42342,
+      "ticket_medio": 3095.7603547305275
+    },
+    {
+      "ano_mes": "2026-09",
+      "regiao": "Sudeste",
+      "receita_total": 579640367.71,
+      "total_pedidos": 185893,
+      "ticket_medio": 3118.1398315697743
+    },
+    {
+      "ano_mes": "2026-09",
+      "regiao": "Sul",
+      "receita_total": 280401213.96,
+      "total_pedidos": 90208,
+      "ticket_medio": 3108.385220379567
+    },
+    {
+      "ano_mes": "2026-09",
+      "regiao": "Centro-Oeste",
+      "receita_total": 128566031.97,
+      "total_pedidos": 41363,
+      "ticket_medio": 3108.237602930155
+    },
+    {
+      "ano_mes": "2026-09",
+      "regiao": "Nordeste",
+      "receita_total": 230079942.58,
+      "total_pedidos": 74148,
+      "ticket_medio": 3102.9824483465504
+    },
+    {
+      "ano_mes": "2026-09",
+      "regiao": "Norte",
+      "receita_total": 63294678.12,
+      "total_pedidos": 20431,
+      "ticket_medio": 3097.972596544467
+    },
+    {
+      "ano_mes": "2026-10",
+      "regiao": "Centro-Oeste",
+      "receita_total": 132841969.48,
+      "total_pedidos": 42265,
+      "ticket_medio": 3143.072742931504
+    },
+    {
+      "ano_mes": "2026-10",
+      "regiao": "Nordeste",
+      "receita_total": 238158375.07,
+      "total_pedidos": 76278,
+      "ticket_medio": 3122.241997299352
+    },
+    {
+      "ano_mes": "2026-10",
+      "regiao": "Norte",
+      "receita_total": 66572790.44,
+      "total_pedidos": 21418,
+      "ticket_medio": 3108.2636305910914
+    },
+    {
+      "ano_mes": "2026-10",
+      "regiao": "Sudeste",
+      "receita_total": 592248386.58,
+      "total_pedidos": 190692,
+      "ticket_medio": 3105.785174941791
+    },
+    {
+      "ano_mes": "2026-10",
+      "regiao": "Sul",
+      "receita_total": 290136260.85,
+      "total_pedidos": 93866,
+      "ticket_medio": 3090.9622317985218
+    },
+    {
+      "ano_mes": "2026-11",
+      "regiao": "Nordeste",
+      "receita_total": 231773929.75,
+      "total_pedidos": 74028,
+      "ticket_medio": 3130.895468606473
+    },
+    {
+      "ano_mes": "2026-11",
+      "regiao": "Sudeste",
+      "receita_total": 578007073.3,
+      "total_pedidos": 184861,
+      "ticket_medio": 3126.7118175277637
+    },
+    {
+      "ano_mes": "2026-11",
+      "regiao": "Centro-Oeste",
+      "receita_total": 127239506.72,
+      "total_pedidos": 41092,
+      "ticket_medio": 3096.4544612089944
+    },
+    {
+      "ano_mes": "2026-11",
+      "regiao": "Norte",
+      "receita_total": 63969951.1,
+      "total_pedidos": 20692,
+      "ticket_medio": 3091.530596365745
+    },
+    {
+      "ano_mes": "2026-11",
+      "regiao": "Sul",
+      "receita_total": 280180894.76,
+      "total_pedidos": 90675,
+      "ticket_medio": 3089.946454480287
+    },
+    {
+      "ano_mes": "2026-12",
+      "regiao": "Norte",
+      "receita_total": 66264929.27,
+      "total_pedidos": 21058,
+      "ticket_medio": 3146.7817109886983
+    },
+    {
+      "ano_mes": "2026-12",
+      "regiao": "Centro-Oeste",
+      "receita_total": 133102954.48,
+      "total_pedidos": 42346,
+      "ticket_medio": 3143.2237868984084
+    },
+    {
+      "ano_mes": "2026-12",
+      "regiao": "Sul",
+      "receita_total": 289842525.94,
+      "total_pedidos": 92834,
+      "ticket_medio": 3122.1591867203824
+    },
+    {
+      "ano_mes": "2026-12",
+      "regiao": "Nordeste",
+      "receita_total": 237691559.15,
+      "total_pedidos": 76366,
+      "ticket_medio": 3112.53122004557
+    },
+    {
+      "ano_mes": "2026-12",
+      "regiao": "Sudeste",
+      "receita_total": 595430034.61,
+      "total_pedidos": 191590,
+      "ticket_medio": 3107.834618769247
+    }
+  ],
+  "pergunta_3_crescimento_mom": [
+    {
+      "ano_mes": "2026-01",
+      "receita_mensal": 1317270611.59,
+      "total_transacoes": 423836,
+      "receita_mes_anterior": NaN,
+      "crescimento_mom_pct": 0.0
+    },
+    {
+      "ano_mes": "2026-02",
+      "receita_mensal": 1192253357.38,
+      "total_transacoes": 383853,
+      "receita_mes_anterior": 1317270611.59,
+      "crescimento_mom_pct": -9.49062805395004
+    },
+    {
+      "ano_mes": "2026-03",
+      "receita_mensal": 1318612748.73,
+      "total_transacoes": 425181,
+      "receita_mes_anterior": 1192253357.38,
+      "crescimento_mom_pct": 10.598367416442182
+    },
+    {
+      "ano_mes": "2026-04",
+      "receita_mensal": 1274382037.93,
+      "total_transacoes": 411296,
+      "receita_mes_anterior": 1318612748.73,
+      "crescimento_mom_pct": -3.354336657415153
+    },
+    {
+      "ano_mes": "2026-05",
+      "receita_mensal": 1314184883.91,
+      "total_transacoes": 424024,
+      "receita_mes_anterior": 1274382037.93,
+      "crescimento_mom_pct": 3.1233056332661784
+    },
+    {
+      "ano_mes": "2026-06",
+      "receita_mensal": 1272293179.53,
+      "total_transacoes": 409864,
+      "receita_mes_anterior": 1314184883.91,
+      "crescimento_mom_pct": -3.1876568428760743
+    },
+    {
+      "ano_mes": "2026-07",
+      "receita_mensal": 1323160804.39,
+      "total_transacoes": 425251,
+      "receita_mes_anterior": 1272293179.53,
+      "crescimento_mom_pct": 3.9981056000623405
+    },
+    {
+      "ano_mes": "2026-08",
+      "receita_mensal": 1321918462.82,
+      "total_transacoes": 424591,
+      "receita_mes_anterior": 1323160804.39,
+      "crescimento_mom_pct": -0.09389195673559213
+    },
+    {
+      "ano_mes": "2026-09",
+      "receita_mensal": 1281982234.34,
+      "total_transacoes": 412043,
+      "receita_mes_anterior": 1321918462.82,
+      "crescimento_mom_pct": -3.0210810729434505
+    },
+    {
+      "ano_mes": "2026-10",
+      "receita_mensal": 1319957782.42,
+      "total_transacoes": 424519,
+      "receita_mes_anterior": 1281982234.34,
+      "crescimento_mom_pct": 2.9622522888978278
+    },
+    {
+      "ano_mes": "2026-11",
+      "receita_mensal": 1281171355.63,
+      "total_transacoes": 411348,
+      "receita_mes_anterior": 1319957782.42,
+      "crescimento_mom_pct": -2.9384596467084907
+    },
+    {
+      "ano_mes": "2026-12",
+      "receita_mensal": 1322332003.45,
+      "total_transacoes": 424194,
+      "receita_mes_anterior": 1281171355.63,
+      "crescimento_mom_pct": 3.2127355672699767
+    }
+  ]
+}

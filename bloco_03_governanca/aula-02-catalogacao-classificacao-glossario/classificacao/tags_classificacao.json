@@ -1,0 +1,84 @@
+{
+  "$schema": "https://open-metadata.org/schema/v1/entity/classification/classification.json",
+  "classificacoes": [
+    {
+      "name": "Camada",
+      "displayName": "Camada",
+      "description": "Classificação da maturidade do dado na arquitetura Medalhão (Bronze, Silver, Gold).",
+      "mutuallyExclusive": true,
+      "tags": [
+        {
+          "name": "Bronze",
+          "displayName": "Bronze",
+          "description": "Camada de ingestão bruta (Staging). Dados fiéis à origem, sem transformações de tipos ou deduplicação."
+        },
+        {
+          "name": "Silver",
+          "displayName": "Silver",
+          "description": "Camada higienizada, deduplicada, validada e tipada. Serve como fundação para modelos analíticos."
+        },
+        {
+          "name": "Gold",
+          "displayName": "Gold",
+          "description": "Camada analítica modelada em Star Schema / Data Warehouse, agregada e pronta para consumo executivo e relatórios de BI."
+        }
+      ]
+    },
+    {
+      "name": "Dominio",
+      "displayName": "Domínio de Negócio",
+      "description": "Agrupamento de dados de acordo com a unidade ou área de negócio proprietária.",
+      "mutuallyExclusive": false,
+      "tags": [
+        {
+          "name": "Vendas",
+          "displayName": "Vendas & Faturamento",
+          "description": "Transações comerciais, pedidos de compra, receitas e comissionamento."
+        },
+        {
+          "name": "Produto",
+          "displayName": "Produtos & Catálogo",
+          "description": "Itens comercializáveis, SKUs, categorias e precificação."
+        },
+        {
+          "name": "Cliente",
+          "displayName": "Clientes & CRM",
+          "description": "Cadastro de compradores, segmentação, dados cadastrais e retenção."
+        }
+      ]
+    },
+    {
+      "name": "Certificacao",
+      "displayName": "Status de Certificação",
+      "description": "Indica a confiabilidade operacional e maturidade de governança para uso do dado.",
+      "mutuallyExclusive": true,
+      "tags": [
+        {
+          "name": "Certificado",
+          "displayName": "Certificado para Produção",
+          "description": "Dataset homologado pela governança, com testes de qualidade diários e documentação aprovada."
+        },
+        {
+          "name": "Em_Revisao",
+          "displayName": "Em Revisão",
+          "description": "Dataset em processo de validação técnica ou semântica; utilizar com cautela."
+        },
+        {
+          "name": "Deprecado",
+          "displayName": "Deprecado / Descontinuado",
+          "description": "Dataset obsoleto que será desativado. Substituído por versão mais recente. Não iniciar novos projetos com ele."
+        }
+      ]
+    }
+  ],
+  "aplicacao_nas_tabelas": {
+    "pg_ecommerce.meu_banco_de_dados.gold.fato_vendas": ["Camada.Gold", "Dominio.Vendas", "Certificacao.Certificado"],
+    "pg_ecommerce.meu_banco_de_dados.gold.dim_produto": ["Camada.Gold", "Dominio.Produto", "Certificacao.Certificado"],
+    "pg_ecommerce.meu_banco_de_dados.gold.dim_cliente": ["Camada.Gold", "Dominio.Cliente", "Certificacao.Certificado"],
+    "pg_ecommerce.meu_banco_de_dados.silver.vendas": ["Camada.Silver", "Dominio.Vendas", "Certificacao.Certificado"],
+    "pg_ecommerce.meu_banco_de_dados.silver.produtos": ["Camada.Silver", "Dominio.Produto", "Certificacao.Certificado"],
+    "pg_ecommerce.meu_banco_de_dados.staging.vendas": ["Camada.Bronze", "Dominio.Vendas"],
+    "pg_ecommerce.meu_banco_de_dados.staging.produtos": ["Camada.Bronze", "Dominio.Produto"],
+    "pg_ecommerce.meu_banco_de_dados.staging.clientes": ["Camada.Bronze", "Dominio.Cliente"]
+  }
+}

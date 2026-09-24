@@ -1,0 +1,135 @@
+{
+  "$schema": "https://open-metadata.org/schema/v1/entity/data/glossary.json",
+  "glossario": {
+    "name": "Glossario_Ecommerce",
+    "displayName": "Glossário E-commerce",
+    "description": "Repositório semântico corporativo que estabelece o significado único, oficial e padronizado dos conceitos de negócio para os ativos de dados do e-commerce, eliminando ambiguidades entre departamentos.",
+    "owner": "admin",
+    "reviewers": ["admin"]
+  },
+  "termos": [
+    {
+      "name": "Ticket_Medio",
+      "displayName": "Ticket Médio",
+      "owner": "admin",
+      "definicao_quatro_partes": {
+        "o_que_e": "Valor monetário médio despendido pelos clientes por pedido de compra concluído em um período fiscal determinado.",
+        "como_se_calcula": "Soma da receita faturada (valor_liquido) dividida pela contagem distinta de pedidos (DISTINCT id_venda) da tabela gold.fato_vendas.",
+        "o_que_fica_de_fora": "Pedidos com status_pedido IN ('Cancelado', 'Devolvido') são expressamente excluídos tanto do numerador quanto do denominador; frete e seguro não compõem o valor.",
+        "recortes_validos": "Calculável e agregável por mês contábil, departamento/categoria de produto e macrorregião geográfica do cliente."
+      },
+      "description": "Valor monetário médio despendido pelos clientes por pedido de compra concluído em um período determinado. Cálculo: SUM(valor_liquido) / COUNT(DISTINCT id_venda) em gold.fato_vendas. Exclusões: Pedidos cancelados ou devolvidos não entram no numerador nem no denominador; frete e seguros não compõem o valor. Recortes válidos: Calculável por mês contábil, categoria de produto e macrorregião geográfica.",
+      "synonyms": ["AOV", "Average Order Value", "Valor Médio por Pedido"],
+      "relatedTerms": ["Receita_Liquida", "Item_de_Pedido"],
+      "vinculos": [
+        {"entityType": "table", "fqn": "pg_ecommerce.meu_banco_de_dados.gold.fato_vendas", "column": "valor_liquido"}
+      ]
+    },
+    {
+      "name": "Cliente",
+      "displayName": "Cliente",
+      "owner": "admin",
+      "definicao_quatro_partes": {
+        "o_que_e": "Pessoa física ou jurídica formalmente cadastrada na base de dados corporativa do e-commerce.",
+        "como_se_calcula": "Registro individual único identificado por cliente_id e sk_cliente na dimensão gold.dim_cliente.",
+        "o_que_fica_de_fora": "Visitantes anônimos que navegam na loja virtual sem criar conta ou concluir compra.",
+        "recortes_validos": "Segmentável por tipo de relacionamento (B2C, B2B, VIP) e localização geográfica permanente (UF/Região)."
+      },
+      "description": "Pessoa física ou jurídica cadastrada na plataforma de e-commerce. Critério de separação: A distinção entre Cliente Ativo e Cliente Inativo é estritamente temporal, baseada na janela de 90 dias transcorridos desde a data da última compra faturada (MAX(data_venda)). Exclusões: Usuários anônimos sem cadastro concluído.",
+      "synonyms": ["Consumidor", "Titular do Cadastro", "Comprador"],
+      "relatedTerms": ["Cliente_Ativo", "Cliente_Inativo"],
+      "vinculos": [
+        {"entityType": "table", "fqn": "pg_ecommerce.meu_banco_de_dados.gold.dim_cliente"}
+      ],
+      "filhos": [
+        {
+          "name": "Cliente_Ativo",
+          "displayName": "Cliente Ativo",
+          "owner": "admin",
+          "parent": "Cliente",
+          "definicao_quatro_partes": {
+            "o_que_e": "Cliente cadastrado que realizou ao menos um pedido de compra faturado e entregue dentro da janela temporal de referência de 90 dias.",
+            "como_se_calcula": "Condição SQL: CURRENT_DATE - MAX(data_venda) <= 90 dias, considerando apenas vendas com status_pedido = 'Entregue'.",
+            "o_que_fica_de_fora": "Clientes com histórico antigo de compras mas sem pedidos nos últimos 90 dias; clientes cujos pedidos recentes foram integralmente cancelados.",
+            "recortes_validos": "Segmentação por categoria de interesse, valor acumulado de compras (LTV) e canal de aquisição."
+          },
+          "description": "Cliente cadastrado que realizou ao menos um pedido faturado e entregue nos últimos 90 dias. Cálculo: CURRENT_DATE - MAX(data_venda) <= 90 dias. Justificativa da janela de 90 dias: O ciclo médio de recompra de tecnologia e periféricos é de 60 a 75 dias; a janela de 90 dias cobre um trimestre fiscal completo e identifica o cliente em fase ativa de retenção. Exclusões: Clientes com pedidos cancelados ou sem compras nos últimos 90 dias.",
+          "synonyms": ["Active Customer", "Cliente Recorrente", "Comprador Engajado"],
+          "relatedTerms": ["Cliente_Inativo", "Ticket_Medio"],
+          "vinculos": [
+            {"entityType": "table", "fqn": "pg_ecommerce.meu_banco_de_dados.gold.dim_cliente", "column": "status_cliente"}
+          ]
+        },
+        {
+          "name": "Cliente_Inativo",
+          "displayName": "Cliente Inativo",
+          "owner": "admin",
+          "parent": "Cliente",
+          "definicao_quatro_partes": {
+            "o_que_e": "Cliente cadastrado cuja última transação concluída ocorreu há mais de 90 dias, ou que nunca realizou compras desde o cadastro.",
+            "como_se_calcula": "Condição SQL: CURRENT_DATE - MAX(data_venda) > 90 dias ou MAX(data_venda) IS NULL.",
+            "o_que_fica_de_fora": "Clientes bloqueados por suspeita de fraude ou titulares que solicitaram direito de exclusão conforme a LGPD (classificados sob tag de 'Bloqueado/Anonimizado').",
+            "recortes_validos": "Recortes por faixas de inatividade: 91-180 dias (risco de churn), 181-365 dias (churn consolidado) e >365 dias (perdido)."
+          },
+          "description": "Cliente cadastrado cuja última transação faturada ocorreu há mais de 90 dias, ou que nunca concluiu um pedido. Cálculo: CURRENT_DATE - MAX(data_venda) > 90 dias ou ausência de compras. Exclusões: Contas suspensas judicialmente ou bloqueadas por segurança. Recortes: 91-180 dias (adormecido) e >180 dias (churn provável).",
+          "synonyms": ["Dormant Customer", "Cliente Adormecido", "Churn de Cliente"],
+          "relatedTerms": ["Cliente_Ativo"],
+          "vinculos": [
+            {"entityType": "table", "fqn": "pg_ecommerce.meu_banco_de_dados.gold.dim_cliente", "column": "status_cliente"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Receita_Liquida",
+      "displayName": "Receita Líquida",
+      "owner": "admin",
+      "definicao_quatro_partes": {
+        "o_que_e": "Montante financeiro faturado efetivo decorrente da comercialização de itens, após o abatimento de descontos comerciais concedidos.",
+        "como_se_calcula": "Soma de valor_liquido na tabela gold.fato_vendas, onde valor_liquido = (quantidade * preco_unitario) - desconto.",
+        "o_que_fica_de_fora": "Fretes cobrados à parte, seguros de transporte, taxas de juros de parcelamento do gateway e pedidos cancelados/estornados.",
+        "recortes_validos": "Por período diário/mensal/anual, canal de venda (Web, App, B2B, Marketplace) e departamento."
+      },
+      "description": "Montante monetário efetivamente faturado pela venda de produtos após dedução de descontos comerciais e cupons. Cálculo: SUM(valor_liquido) = SUM(quantidade * preco_unitario - desconto) em gold.fato_vendas. Exclusões: Fretes cobrados, juros de parcelamento, garantias estendidas e pedidos cancelados. Recortes válidos: Diário, mensal, por canal de venda e por SKU.",
+      "synonyms": ["Net Revenue", "Net Sales", "Faturamento Líquido"],
+      "relatedTerms": ["Ticket_Medio", "Margem_de_Contribuicao"],
+      "vinculos": [
+        {"entityType": "table", "fqn": "pg_ecommerce.meu_banco_de_dados.gold.fato_vendas", "column": "valor_liquido"}
+      ]
+    },
+    {
+      "name": "Margem_de_Contribuicao",
+      "displayName": "Margem de Contribuição",
+      "owner": "admin",
+      "definicao_quatro_partes": {
+        "o_que_e": "Ganho financeiro real remanescente da venda de cada mercadoria após a dedução de todos os custos variáveis diretos e impostos incidentes.",
+        "como_se_calcula": "Fórmula: valor_liquido - custo_produto - impostos em gold.fato_vendas.",
+        "o_que_fica_de_fora": "Custos fixos de infraestrutura (aluguel de CD, salários de TI, despesas de servidores AWS) não são alocados no nível do item. Deduz obrigatoriamente 18% de tributos diretos (ICMS + PIS/COFINS) e o custo de reposição CMV.",
+        "recortes_validos": "Por linha de produto, fabricante/fornecedor, canal de venda e faixa de preço."
+      },
+      "description": "Ganho financeiro remanescente da venda de cada item para cobertura dos custos fixos da empresa. Cálculo: valor_liquido - custo_produto - impostos na gold.fato_vendas. Regra tributária: Considera obrigatoriamente a dedução de 18% de alíquota tributária (ICMS/PIS/COFINS) e o Custo das Mercadorias Vendidas (CMV). Exclusões: Custos fixos e despesas corporativas gerais.",
+      "synonyms": ["Margem Líquida do Item", "Contribution Margin", "Margem Real"],
+      "relatedTerms": ["Receita_Liquida", "Item_de_Pedido"],
+      "vinculos": [
+        {"entityType": "table", "fqn": "pg_ecommerce.meu_banco_de_dados.gold.fato_vendas", "column": "margem_lucro"}
+      ]
+    },
+    {
+      "name": "Item_de_Pedido",
+      "displayName": "Item de Pedido",
+      "owner": "admin",
+      "definicao_quatro_partes": {
+        "o_que_e": "Unidade atômica transacionada que representa a aquisição de um SKU de produto dentro de um pedido de compra.",
+        "como_se_calcula": "Cada registro individual persistido na tabela gold.fato_vendas (sk_venda).",
+        "o_que_fica_de_fora": "O pedido em si não é o item. Se um pedido contiver 1 notebook e 1 mouse, haverá 1 pedido e 2 itens de pedido distintos.",
+        "recortes_validos": "Por pedido (id_venda), por categoria de produto e por comprador."
+      },
+      "description": "Unidade atômica da venda que representa a aquisição de um produto específico em um pedido comercial. Granularidade: Uma linha em gold.fato_vendas. Exclusões: Não confundir com o pedido inteiro; um pedido pode conter múltiplos itens de pedido.",
+      "synonyms": ["Order Line", "Line Item", "Item Vendido"],
+      "relatedTerms": ["Ticket_Medio", "Receita_Liquida"],
+      "vinculos": [
+        {"entityType": "table", "fqn": "pg_ecommerce.meu_banco_de_dados.gold.fato_vendas", "column": "sk_venda"}
+      ]
+    }
+  ]
+}

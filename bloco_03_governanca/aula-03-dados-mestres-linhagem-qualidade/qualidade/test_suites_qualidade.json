@@ -1,0 +1,112 @@
+{
+  "testSuites": [
+    {
+      "name": "silver_produtos_test_suite",
+      "displayName": "Suíte de Qualidade - Tabela silver.produtos",
+      "description": "Conjunto oficial de testes automatizados de qualidade de dados para validação contínua da tabela mestre de produtos higienizados (Aula 03 - Mini-Lab).",
+      "targetTable": "pg_ecommerce.meu_banco_de_dados.silver.produtos",
+      "testCases": [
+        {
+          "name": "silver_produtos_codigo_unique",
+          "displayName": "Unicidade da Chave de Produto (codigo)",
+          "description": "Garante a dimensão de Unicidade: a coluna 'codigo' não pode conter valores duplicados no catálogo silver.",
+          "column": "codigo",
+          "testDefinition": "columnValuesToBeUnique",
+          "parameters": [],
+          "dimensao": "Unicidade",
+          "severidade": "Critical"
+        },
+        {
+          "name": "silver_produtos_categoria_not_null",
+          "displayName": "Completude da Categoria (não nulo)",
+          "description": "Garante a dimensão de Completude: a coluna 'categoria' é obrigatória para segmentação e não pode conter valores nulos.",
+          "column": "categoria",
+          "testDefinition": "columnValuesToBeNotNull",
+          "parameters": [],
+          "dimensao": "Completude",
+          "severidade": "Critical"
+        },
+        {
+          "name": "silver_produtos_preco_range",
+          "displayName": "Faixa Válida de Preço (preco > 0)",
+          "description": "Garante a dimensão de Validade: o preço de tabela do produto deve ser estritamente positivo (mínimo de R$ 0,01).",
+          "column": "preco",
+          "testDefinition": "columnValuesToBeBetween",
+          "parameters": [
+            {"name": "minValue", "value": "0.01"},
+            {"name": "maxValue", "value": "999999.99"}
+          ],
+          "dimensao": "Validade",
+          "severidade": "Critical"
+        },
+        {
+          "name": "silver_produtos_row_count",
+          "displayName": "Contagem de Linhas Esperada (Volume)",
+          "description": "Garante a dimensão de Consistência e Volume: a tabela deve possuir entre 1 e 10.000 registros, evitando cargas vazias ou explosões cartesianas.",
+          "column": null,
+          "testDefinition": "tableRowCountToBeBetween",
+          "parameters": [
+            {"name": "minValue", "value": "1"},
+            {"name": "maxValue", "value": "10000"}
+          ],
+          "dimensao": "Consistência / Volume",
+          "severidade": "Major"
+        }
+      ]
+    },
+    {
+      "name": "silver_conteudos_test_suite",
+      "displayName": "Suíte de Qualidade - Tabela silver.conteudos (Dataset Educacional)",
+      "description": "Conjunto de testes de integridade para a base de 1000 conteúdos educacionais ingeridos via CSV.",
+      "targetTable": "pg_ecommerce.meu_banco_de_dados.silver.conteudos",
+      "testCases": [
+        {
+          "name": "silver_conteudos_id_unique",
+          "displayName": "Unicidade do Identificador (conteudo_id)",
+          "description": "Garante que cada registro possua um ID técnico único no acervo.",
+          "column": "conteudo_id",
+          "testDefinition": "columnValuesToBeUnique",
+          "parameters": [],
+          "dimensao": "Unicidade",
+          "severidade": "Critical"
+        },
+        {
+          "name": "silver_conteudos_titulo_not_null",
+          "displayName": "Completude do Título da Obra",
+          "description": "O título do conteúdo não pode ser nulo.",
+          "column": "titulo",
+          "testDefinition": "columnValuesToBeNotNull",
+          "parameters": [],
+          "dimensao": "Completude",
+          "severidade": "Critical"
+        },
+        {
+          "name": "silver_conteudos_carga_horaria_min_range",
+          "displayName": "Faixa Válida de Carga Horária",
+          "description": "A carga horária em minutos deve estar entre 1 minuto e 5.000 minutos.",
+          "column": "carga_horaria_min",
+          "testDefinition": "columnValuesToBeBetween",
+          "parameters": [
+            {"name": "minValue", "value": "1"},
+            {"name": "maxValue", "value": "5000"}
+          ],
+          "dimensao": "Validade",
+          "severidade": "Major"
+        },
+        {
+          "name": "silver_conteudos_row_count_1000",
+          "displayName": "Volume Exato de Ingestão (1.000 registros)",
+          "description": "Verifica se todos os 1.000 registros do arquivo CSV foram ingeridos com sucesso.",
+          "column": null,
+          "testDefinition": "tableRowCountToBeBetween",
+          "parameters": [
+            {"name": "minValue", "value": "1000"},
+            {"name": "maxValue", "value": "1000"}
+          ],
+          "dimensao": "Completude de Carga",
+          "severidade": "Critical"
+        }
+      ]
+    }
+  ]
+}
